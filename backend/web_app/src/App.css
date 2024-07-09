@@ -1,3 +1,11 @@
+
+@import url('./assets/font/helvaticaNeue-font-family.css');
+
+.App {
+
+  font-family: 'Helvetica Neue', sans-serif;
+}
+
 .App {
   text-align: center;
 }
