@@ -8,7 +8,7 @@ export default function Home() {
         height: "80vh" 
       }}
     >
-      <h1>Welcome!</h1>
+      <h1>Welcome!!</h1>
       <h3>This is the home page.</h3>
     </div>
   );
