@@ -1,0 +1,20 @@
+.input-error-style {
+    margin-top: 6px;
+    color: #ff6565;
+    font-size: 0.7rem;
+}
+
+.inputClass {
+    width: 100%;
+    height: 40px;
+    border: 1px solid rgb(214, 217, 225);
+    border-radius: 8px;
+    padding: 20px 10px;
+    box-sizing: border-box;
+    outline: none;
+    font-style: normal;
+    font-weight: 400;
+    font-size: 14px;
+    color: #000;
+    line-height: 57px;
+}
