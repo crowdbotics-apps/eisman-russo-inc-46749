@@ -63,10 +63,10 @@ class SignupSerializer(serializers.ModelSerializer):
         return super().save()
 
 
-class UserSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = User
-        fields = ["id", "email", "name"]
+# class UserSerializer(serializers.ModelSerializer):
+#     class Meta:
+#         model = User
+#         fields = ["id", "email", "name"]
 
 
 class PasswordSerializer(PasswordResetSerializer):
