@@ -1,0 +1,26 @@
+/* Sidebar.css */
+.ant-menu-item-selected {
+    position: relative;
+    background-color: #EBF0F7 !important;
+    color: black !important;
+    padding-left: 30px !important; /* Add padding to ensure text doesn't overlap the border */
+    /* Other styles as needed */
+  }
+
+  .ant-menu-item-selected::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 10px; /* Adjust top offset to control vertical positioning */
+    height: 50%; /* Set desired height for the border */
+    width: 4px; /* Set width for the border */
+    border-radius: 0 5px 5px 0; /* Optional: round the corners */
+    background-color: #3669AE !important; /* Set color for the border */
+  }
+
+  .ant-menu-title-content {
+    color: black !important;
+  }
+  .ant-menu-submenu-arrow {
+    color: black !important;
+  }

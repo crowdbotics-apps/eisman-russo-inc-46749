@@ -31,7 +31,7 @@ export default function ForgetPassword(props) {
   const forgetPassword = async (values) => {
     // setIsloading(true);
     // try {
-    //   const { data } = await axiosInstance.put(companyAPIsEndPoints.FORGOT_PASSWORD, values);
+    //   const { data } = await axiosInstance.put(adminAPIsEndPoints.FORGOT_PASSWORD, values);
     //   if (data.success) {
     //     pushNotification("Password Recovery Email Sent", "success");
     //   }
@@ -50,7 +50,8 @@ export default function ForgetPassword(props) {
     props.onBackToLoginClick();
   };
   return (
-    <div>
+    <>
+    
     <h4 onClick={handleBackToLoginClick} className="d-flex align-items-center gap-2" style={{ cursor: "pointer" }}>
       <BackIcon src={arrowBack} alt="Arrow Down Icon" /> 
     </h4>
@@ -71,7 +72,7 @@ export default function ForgetPassword(props) {
           {({ handleSubmit }) => (
             <Form onSubmit={handleSubmit}>
               <FormHeader>Reset password</FormHeader>
-              <FormSupportingText>Input your email ID or Phone Number to receive a reset link</FormSupportingText>
+              <FormSupportingText>Input your email ID to receive a reset link</FormSupportingText>
               <P20 />
               <FormikInputFloating label="Email ID" name="email" type="email" className="w-100" />
               <AuthButton btnText={" Send link"} margin="15px 0px 0px 0px" disabled={isLoading} />
@@ -80,13 +81,17 @@ export default function ForgetPassword(props) {
         </Formik>
       </FormList>
   
-  </div>
+    </>
+
   )
 }
 
 const BackIcon = styled.img`
   width: 20px;
   height: 14px;
+  position: relative;
+  bottom: 122px;
+  left: 18px;
   cursor: pointer;
 `;
 

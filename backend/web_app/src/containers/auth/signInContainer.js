@@ -1,4 +1,4 @@
-import Signin from "../../components/auth/animateAuth";
+import Signin from "../../components/auth/authentication";
 import { connect } from "react-redux";
 import { loginUserSlice } from "../../redux/slices/auth";
 
