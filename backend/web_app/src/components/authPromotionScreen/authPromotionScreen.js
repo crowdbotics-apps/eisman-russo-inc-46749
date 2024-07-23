@@ -33,7 +33,7 @@ const TextContainer = styled.div`
   bottom: 10%; 
   left: 50%; 
   transform: translateX(-50%); 
-  width: 80%;
+  width: 60%;
   padding: 20px;
   background: rgba(145, 145, 145, 0.54); 
   border-radius: 10px; 

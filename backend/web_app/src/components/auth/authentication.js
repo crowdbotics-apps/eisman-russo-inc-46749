@@ -8,7 +8,7 @@ import companyLogo from "../../assets/rawSvg/companyLogo.svg";
 import arrowBack from "../../assets/rawSvg/arrow-back.svg";
 import { useSpring } from "react-spring";
 
-export default function AnimateAuth(props) {
+export default function Authentication(props) {
 
     const [showLogin, setShowLogin] = useState(true);
   const [isAnimating, setIsAnimating] = useState(false);
@@ -78,9 +78,14 @@ const FormContainer = styled.div`
   padding: 36px 24px;
 `;
 
-const LogoContainer = styled.div`
-  position: absolute;
-  top: 25px;
-  left: 125px;
-`;
+// const LogoContainer = styled.div`
+//   position: relative;
+//   top: 25px;
+//   left: 250px;
+// `;
 
+const LogoContainer = styled.div`
+  position: relative;
+  bottom: 570px;
+  right: 170px;
+`;

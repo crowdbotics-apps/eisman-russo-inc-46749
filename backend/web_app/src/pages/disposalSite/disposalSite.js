@@ -1,6 +1,6 @@
-import React from 'react';
+import React from 'react'
 
-export default function Home() {
+export default function DisposalSite() {
   return (
     <div
       className='App d-flex justify-content-center align-items-center flex-column'
@@ -9,7 +9,7 @@ export default function Home() {
       }}
     >
       <h1>Welcome!!</h1>
-      <h3>This is the home page.</h3>
+      <h3>This is the DisposalSite page.</h3>
     </div>
-  );
+  )
 }
