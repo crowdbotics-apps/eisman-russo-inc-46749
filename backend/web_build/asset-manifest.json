@@ -1,18 +1,42 @@
 {
   "files": {
-    "main.css": "/static/css/main.68c898fc.css",
-    "main.js": "/static/js/main.0565fa0d.js",
-    "static/js/453.1965c8d6.chunk.js": "/static/js/453.1965c8d6.chunk.js",
+    "main.css": "/static/css/main.d1cf326d.css",
+    "main.js": "/static/js/main.7c964eca.js",
+    "static/js/453.77aef9b5.chunk.js": "/static/js/453.77aef9b5.chunk.js",
     "static/media/promotionSVG.svg": "/static/media/promotionSVG.ee0da3e0bd03b9c5e11897317465428b.svg",
     "static/media/companyLogo.svg": "/static/media/companyLogo.c22296dab7834cb48b66fc151fc629a8.svg",
+    "static/media/logoSmall.svg": "/static/media/logoSmall.14e3c2bf928fa8851d4369fc59a080db.svg",
+    "static/media/notification.svg": "/static/media/notification.052a3266359625ba3cbf58be02af861e.svg",
+    "static/media/dashboardIcon.svg": "/static/media/dashboardIcon.8b15f031b3133191f0a4aebf161c98fe.svg",
+    "static/media/truckManagementIcon.svg": "/static/media/truckManagementIcon.0f95ee9adde1de87fb33bf39efe915cf.svg",
+    "static/media/disposalTruckIcon.svg": "/static/media/disposalTruckIcon.f93043bfc7db462a759c07d9f605fc0c.svg",
+    "static/media/contractorManagementIcon.svg": "/static/media/contractorManagementIcon.b4884e977f33a7b9b0df566b7e8e6c1f.svg",
+    "static/media/eventManagementIcon.svg": "/static/media/eventManagementIcon.1806b72b02a0cc522c03e7e12b0f75dc.svg",
+    "static/media/userManagementIcon.svg": "/static/media/userManagementIcon.46bf815c4f66f78dbb678b0a9fcb26dc.svg",
+    "static/media/settingsIcon.svg": "/static/media/settingsIcon.d4bfd9cc3c8dcd3a1bc2f58fb14f2397.svg",
+    "static/media/ticketBadge.svg": "/static/media/ticketBadge.42155857f266aa7eca0520fadd2cf0ed.svg",
+    "static/media/successIcon.svg": "/static/media/successIcon.f76f02ef9d706e965dd1dd903786d1db.svg",
+    "static/media/usersBadge.svg": "/static/media/usersBadge.47316c7780ce80039d30ff09868e7d0d.svg",
+    "static/media/notesBadge.svg": "/static/media/notesBadge.3d97174fa1dd9831b78cf1b8ce97b663.svg",
+    "static/media/projectManagementIcon.svg": "/static/media/projectManagementIcon.d2f3025d565dd04f8cddf6952bf14795.svg",
+    "static/media/mapIcon.svg": "/static/media/mapIcon.a3a9216a3ca1a53815d75e49c6c99496.svg",
+    "static/media/headerBellIcon.svg": "/static/media/headerBellIcon.00bd9d1d99286d2336e4eed945b70181.svg",
+    "static/media/ticketManagementIcon.svg": "/static/media/ticketManagementIcon.ea3f24821ace4a7489f2ab88df7ceb35.svg",
+    "static/media/administrationIcon.svg": "/static/media/administrationIcon.aff604dc023a8ad5282447dd91053375.svg",
+    "static/media/legalAgreIcon.svg": "/static/media/legalAgreIcon.8a0be014b54b8298eeaffe8f81d5c1ce.svg",
+    "static/media/logouticon.svg": "/static/media/logouticon.5c81c2a7a26b35a37b3f0c05d9a8e9fa.svg",
     "index.html": "/index.html",
+    "static/media/arrowRight.svg": "/static/media/arrowRight.9d3396da8fbb558fc923040139f1a10d.svg",
+    "static/media/arrowLeft.svg": "/static/media/arrowLeft.34df9d8530df71e7f3f980668075d868.svg",
     "static/media/arrow-back.svg": "/static/media/arrow-back.cca1ec553749d03bb10869d7457df337.svg",
-    "main.68c898fc.css.map": "/static/css/main.68c898fc.css.map",
-    "main.0565fa0d.js.map": "/static/js/main.0565fa0d.js.map",
-    "453.1965c8d6.chunk.js.map": "/static/js/453.1965c8d6.chunk.js.map"
+    "static/media/greaterThanIcon.svg": "/static/media/greaterThanIcon.8ac6c036b0e2134f32ab518865c448eb.svg",
+    "static/media/lessThanIcon.svg": "/static/media/lessThanIcon.1d5b150ccf05f939ae1d8aa345e445e9.svg",
+    "main.d1cf326d.css.map": "/static/css/main.d1cf326d.css.map",
+    "main.7c964eca.js.map": "/static/js/main.7c964eca.js.map",
+    "453.77aef9b5.chunk.js.map": "/static/js/453.77aef9b5.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.68c898fc.css",
-    "static/js/main.0565fa0d.js"
+    "static/css/main.d1cf326d.css",
+    "static/js/main.7c964eca.js"
   ]
 }
