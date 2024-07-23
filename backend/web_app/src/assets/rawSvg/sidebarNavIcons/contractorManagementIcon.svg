@@ -1,0 +1,22 @@
+<svg width="20" height="21" viewBox="0 0 20 21" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g clip-path="url(#clip0_692_6875)">
+<mask id="mask0_692_6875" style="mask-type:luminance" maskUnits="userSpaceOnUse" x="1" y="1" width="18" height="19">
+<path d="M1 1.7002H19V19.7002H1V1.7002Z" fill="white"/>
+</mask>
+<g mask="url(#mask0_692_6875)">
+<path d="M6.48438 8.7029V10.7354C6.48438 12.677 8.05836 14.251 10 14.251C11.9416 14.251 13.5156 12.677 13.5156 10.7354V8.7029" stroke="#475467" stroke-width="1.3" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M14.5703 6.79785H5.42969V8.27441C8.47657 9.68066 11.5234 9.68066 14.5703 8.27441V6.79785Z" stroke="#475467" stroke-width="1.3" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M11.0547 3.08004V2.22754H8.94531V3.08004C7.32285 3.53961 6.13281 5.02823 6.13281 6.79785H13.8672C13.8672 5.02823 12.6771 3.53961 11.0547 3.08004Z" stroke="#475467" stroke-width="1.3" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M11.0547 3.08004V4.33691" stroke="#475467" stroke-width="1.3" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M8.94531 4.33691V3.08004" stroke="#475467" stroke-width="1.3" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M6.20703 14.0849L8.24219 19.1729H11.7578L13.793 14.0849" stroke="#475467" stroke-width="1.3" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M10 19.1729V14.251" stroke="#475467" stroke-width="1.3" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M7.9499 13.5874C5.14696 13.9073 2.96875 16.2843 2.96875 19.1728V19.1729H17.0312V19.1728C17.0312 16.2843 14.853 13.9073 12.0501 13.5874" stroke="#475467" stroke-width="1.3" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/>
+</g>
+</g>
+<defs>
+<clipPath id="clip0_692_6875">
+<rect width="18" height="18" fill="white" transform="translate(1 1.7002)"/>
+</clipPath>
+</defs>
+</svg>

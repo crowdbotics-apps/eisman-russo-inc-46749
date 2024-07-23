@@ -1,7 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
 import axiosInstance from "../../util/axiosConfig";
-import { companyAPIsEndPoints } from "../../constants/apiEndPoints";
+import { adminAPIsEndPoints } from "../../constants/apiEndPoints";
 import { main_api } from "../../api/axiosHelper";
 
 //----------------------- Initial state -----------------------//
@@ -39,7 +39,7 @@ export function loginUser(formValues) {
   return async (dispatch, getState) => {
     try {
       dispatch(slice.actions.loginUserSlice({ isLoading: true, error: "", loginResponse: {} }));
-      const { data } = await main_api.post(companyAPIsEndPoints.COMPANY_LOGIN, formValues);
+      const { data } = await main_api.post(adminAPIsEndPoints.COMPANY_LOGIN, formValues);
       dispatch(slice.actions.loginUserSlice({ isLoading: false, error: "", loginResponse: data.result }));
     } catch (error) {
       dispatch(slice.actions.loginUserSlice({ isLoading: false, error: error.message, loginResponse: {} }));

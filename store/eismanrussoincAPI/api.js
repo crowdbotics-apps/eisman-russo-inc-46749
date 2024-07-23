@@ -8,9 +8,6 @@ function api_docs_schema_retrieve(payload) {
     params: { lang: payload.lang }
   })
 }
-function api_v1_login_create(payload) {
-  return eismanrussoincAPI.post(`/api/v1/login/`, payload)
-}
 function api_v1_signup_create(payload) {
   return eismanrussoincAPI.post(`/api/v1/signup/`, payload)
 }
@@ -53,9 +50,14 @@ function rest_auth_user_update(payload) {
 function rest_auth_user_partial_update(payload) {
   return eismanrussoincAPI.patch(`/rest-auth/user/`, payload)
 }
+function users_login_create(payload) {
+  return eismanrussoincAPI.post(`/users/login/`, payload)
+}
+function users_test_retrieve(payload) {
+  return eismanrussoincAPI.get(`/users/test/`)
+}
 export const apiService = {
   api_docs_schema_retrieve,
-  api_v1_login_create,
   api_v1_signup_create,
   rest_auth_login_create,
   rest_auth_logout_create,
@@ -67,5 +69,7 @@ export const apiService = {
   rest_auth_registration_verify_email_create,
   rest_auth_user_retrieve,
   rest_auth_user_update,
-  rest_auth_user_partial_update
+  rest_auth_user_partial_update,
+  users_login_create,
+  users_test_retrieve
 }
