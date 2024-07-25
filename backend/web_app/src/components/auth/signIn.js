@@ -7,7 +7,7 @@ import * as Yup from "yup";
 import FormikInputFloating from "../../components/formikInputs/TextInput";
 import AuthButton from "../../components/buttons/authButton";
 import axiosInstance from "../../util/axiosConfig";
-import { companyAPIsEndPoints } from "../../constants/apiEndPoints";
+import { adminAPIsEndPoints } from "../../constants/apiEndPoints";
 import { pushNotification } from "../../util/notification";
 import { loginFormSchema } from "../../constants/authFormFieldsSchema/formSchema";
 
