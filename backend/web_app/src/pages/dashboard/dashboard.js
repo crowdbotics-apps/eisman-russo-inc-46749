@@ -9,6 +9,7 @@ import { ReactComponent as NotesBadge } from "../../assets/rawSvg/notesBadge.svg
 import { ReactComponent as TicketsBadge } from "../../assets/rawSvg/ticketBadge.svg";
 import { ReactComponent as UsersBadge } from "../../assets/rawSvg/usersBadge.svg";
 import moment from 'moment';
+import { dashboardProjectsColumns } from '../../util/antdTableColumns';
 
 const { RangePicker } = DatePicker;
 const { Search } = Input;
@@ -62,27 +63,6 @@ const dummyProjectsData = [
   },
 ];
 
-
-
-const projectsColumns = [
-  { title: 'PO Number', dataIndex: 'poNumber', key: 'poNumber' },
-  { title: 'Project Name', dataIndex: 'projectName', key: 'projectName' },
-  { title: 'Event Name', dataIndex: 'eventName', key: 'eventName' },
-  { title: 'Client Name', dataIndex: 'clientName', key: 'clientName' },
-  { title: 'City', dataIndex: 'city', key: 'city' },
-  { title: 'Status', dataIndex: 'status', key: 'status', render: status => {
-      let color;
-      switch(status) {
-        case 'Completed': color = 'green'; break;
-        case 'Cancelled': color = 'red'; break;
-        case 'unassigned': color = 'orange'; break;
-        case 'scheduled': color = 'blue'; break;
-        default: color = 'grey';
-      }
-      return <span style={{ color }}>{status}</span>;
-    } 
-  },
-];
 
 export default function Dashboard() {
   const [totalActiveProjects, setTotalActiveProjects] = useState(280);
@@ -153,7 +133,7 @@ export default function Dashboard() {
     setFilteredData(filteredData);
   };
   return (
-    <div style={{ marginTop: '20px' }}>
+    <div style={{ marginTop: '20px' ,marginLeft:"20px"}}>
       <div style={{ marginBlock: "8px" }}>
         <Heading text={greetings} fontSize='1.4rem'/>
         <Heading text="Here's what happening" color='lightgrey' fontSize='1.1rem'/>
@@ -197,12 +177,12 @@ export default function Dashboard() {
       <div style={{ marginBottom: '16px' }}>
         <div className="d-flex align-items-center">
           <SearchInputWrapper>
-            <SearchInput onChange={(e) => handleSearch(e.target.value)} placeholder="Type to search..." />
+            <SearchInput onChange={(e) => handleSearch(e)} placeholder="Type to search..." />
           </SearchInputWrapper>
         </div>
       </div>
       <div style={{ marginBottom: '22px', position: 'relative', top: 'auto', bottom: 0 }}>
-        <AntdesignTable columns={projectsColumns} data={filteredProjects} allowMultieSelectRows={false} />
+        <AntdesignTable columns={dashboardProjectsColumns} data={filteredProjects} allowMultieSelectRows={false} />
       </div>
     </Card>
   </div>

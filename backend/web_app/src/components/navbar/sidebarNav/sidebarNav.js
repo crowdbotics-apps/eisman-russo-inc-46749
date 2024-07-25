@@ -149,68 +149,22 @@ import { ReactComponent as CompanyBrandIcon } from "../../../assets/rawSvg/sideb
 import { ReactComponent as ArrowLeftIcon } from "../../../assets/rawSvg/arrowLeft.svg";
 import { ReactComponent as ArrowRightIcon } from "../../../assets/rawSvg/arrowRight.svg";
 import './sidebar.css';
+import { flattenMenuItems, generateMenuItems } from "../../../util/generateMenuItems";
 const { Sider } = Layout;
 
-function getItem(label, key, icon, children, navigateTo) {
-  return {
-    key,
-    icon,
-    children,
-    label,
-    navigateTo,
-  };
-}
 
-const generateMenuItems = (data) => {
-  return data
-    .map((menu, index) =>
-      menu.itemList.map((item, subIndex) =>
-        getItem(
-          item.itemName,
-          `${index}-${subIndex}`,
-          item.itemIcon,
-          item.children?.map((child, childIndex) =>
-            getItem(
-              child.itemName,
-              `${index}-${subIndex}-${childIndex}`,
-              null,
-              null,
-              child.navigateTo
-            )
-          ),
-          item.navigateTo
-        )
-      )
-    )
-    .flat();
-};
-
-const flattenMenuItems = (menuItems) => {
-  let flatItems = [];
-
-  menuItems.forEach(item => {
-    flatItems.push(item);
-    if (item.children) {
-      flatItems = flatItems.concat(flattenMenuItems(item.children));
-    }
-  });
-
-  return flatItems;
-};
-
-const items = generateMenuItems(adminSidebarNavData);
-const flatItems = flattenMenuItems(items);
-console.log("items", items);
-console.log("flatItems", flatItems);
 
 
 export default function Sidebar({ setIsExpanded}) {
   const [collapsed, setCollapsed] = useState(false);
   const navigate = useNavigate();
+  const items = generateMenuItems(adminSidebarNavData);
+  const flatItems = flattenMenuItems(items);
+  const [selectedKey, setSelectedKey] = useState('1'); // Set default selected key to '1'
+  
 
   const handleMenuClick = (e) => {
     const selectedItem = flatItems.find(item => item.key === e.key);
-    console.log("selectedItem", selectedItem);
     if (selectedItem && selectedItem.navigateTo) {
       navigate(selectedItem.navigateTo);
     }
@@ -270,3 +224,119 @@ export default function Sidebar({ setIsExpanded}) {
 
 /////////////////////////////
 
+// import React, { useState, useEffect } from "react";
+// import { Layout, Menu } from "antd";
+// import { useNavigate } from "react-router-dom";
+// import { adminSidebarNavData } from "../../../constants/sidebarNavData/SidebarNavData";
+// import { ReactComponent as CompanyBrandIcon } from "../../../assets/rawSvg/sidebarNavIcons/logoSmall.svg";
+// import { ReactComponent as ArrowLeftIcon } from "../../../assets/rawSvg/arrowLeft.svg";
+// import { ReactComponent as ArrowRightIcon } from "../../../assets/rawSvg/arrowRight.svg";
+// import { flattenMenuItems, generateMenuItems } from "../../../util/generateMenuItems";
+// import "./sidebar.css";  // Import the custom CSS file
+
+// const { Sider } = Layout;
+
+// export default function Sidebar({ setIsExpanded }) {
+//   const [collapsed, setCollapsed] = useState(false);
+//   const [selectedKey, setSelectedKey] = useState('1'); // Set default selected key to '1'
+//   const navigate = useNavigate();
+  
+//   const items = generateMenuItems(adminSidebarNavData);
+//   const flatItems = flattenMenuItems(items);
+
+//   useEffect(() => {
+//     const currentPath = window.location.pathname;
+//     const matchedItem = flatItems.find(item => item.navigateTo === currentPath);
+//     if (matchedItem) {
+//       setSelectedKey(matchedItem.key);
+//     }
+//   }, [flatItems]);
+
+//   const handleMenuClick = (e) => {
+//     const selectedItem = flatItems.find(item => item.key === e.key);
+//     if (selectedItem && selectedItem.navigateTo) {
+//       navigate(selectedItem.navigateTo);
+//       setSelectedKey(e.key);
+//     }
+//   };
+
+//   const toggleCollapse = () => {
+//     setIsExpanded(!collapsed);
+//     setCollapsed(!collapsed);
+//   };
+
+//   return (
+//     <Sider width={240} collapsible collapsed={collapsed} trigger={null} onCollapse={toggleCollapse}>
+//       <div style={{ display: "flex", flexDirection: "column", alignItems: "center", padding: 20, borderRight: "1px solid #e4eaf0" }}>
+//         <CompanyBrandIcon width={100} />
+//         <div
+//           style={{
+//             marginLeft: "auto",
+//             cursor: "pointer",
+//             color: "#000",
+//             zIndex: "200",
+//           }}
+//           onClick={toggleCollapse}
+//         >
+//           {collapsed ? 
+//             <ArrowRightIcon 
+//               style={{
+//                 position: "relative",
+//                 bottom: "55px",
+//                 left: "33px",
+//               }}
+//             /> 
+//             : 
+//             <ArrowLeftIcon 
+//               style={{
+//                 position: "relative",
+//                 bottom: "55px",
+//                 left: "35px",
+//               }}
+//             />}
+//         </div>
+//       </div>
+//       <Menu
+//         theme="light"
+//         mode="inline"
+//         selectedKeys={[selectedKey]}
+//         onClick={handleMenuClick}
+//         style={{ color: 'rgba(0, 0, 0, 0.85)', background: "#fff" }}
+//       >
+//         {items.map((item) => (
+//           <Menu.Item
+//             key={item.key}
+//             className={selectedKey === item.key ? 'selected-menu-item' : ''}
+//             style={{
+//               position: 'relative',
+//             }}
+//           >
+//             <span
+//               style={{
+//                 position: 'relative',
+//                 color: selectedKey === item.key ? '#000000' : 'rgba(0, 0, 0, 0.65)',
+//                 paddingLeft: selectedKey === item.key ? '10px' : '0', // Optional: to avoid text overlapping with the border
+//               }}
+//             >
+//               {item.label}
+//             </span>
+//             {selectedKey === item.key && (
+//               <span
+//                 style={{
+//                   content: '""',
+//                   position: 'absolute',
+//                   left: 0,
+//                   top: '10px', // Adjust top offset to control vertical positioning
+//                   height: '50%', // Set desired height for the border
+//                   width: '4px', // Set width for the border
+//                   borderRadius: '0 5px 5px 0', // Optional: round the corners
+//                   backgroundColor: '#3669AE', // Set color for the border
+//                 }}
+//               ></span>
+//             )}
+//           </Menu.Item>
+//         ))}
+//       </Menu>
+//     </Sider>
+//   );
+// }

@@ -24,3 +24,11 @@
   .ant-menu-submenu-arrow {
     color: black !important;
   }
+
+  .selected-menu-item {
+    background-color: #EBF0F7 !important;
+    color: black !important;
+    padding-left: 30px !important; /* Add padding to ensure text doesn't overlap the border */
+    position: relative;
+  }
+  
