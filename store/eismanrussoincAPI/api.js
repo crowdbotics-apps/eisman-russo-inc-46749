@@ -53,8 +53,71 @@ function rest_auth_user_partial_update(payload) {
 function users_login_create(payload) {
   return eismanrussoincAPI.post(`/users/login/`, payload)
 }
-function users_test_retrieve(payload) {
-  return eismanrussoincAPI.get(`/users/test/`)
+function users_position_list(payload) {
+  return eismanrussoincAPI.get(`/users/position/`, {
+    params: {
+      ordering: payload.ordering,
+      page: payload.page,
+      page_size: payload.page_size,
+      platform_type: payload.platform_type,
+      role: payload.role,
+      search: payload.search
+    }
+  })
+}
+function users_position_create(payload) {
+  return eismanrussoincAPI.post(`/users/position/`, payload)
+}
+function users_position_retrieve(payload) {
+  return eismanrussoincAPI.get(`/users/position/${payload.id}/`)
+}
+function users_position_update(payload) {
+  return eismanrussoincAPI.put(`/users/position/${payload.id}/`, payload)
+}
+function users_position_partial_update(payload) {
+  return eismanrussoincAPI.patch(`/users/position/${payload.id}/`, payload)
+}
+function users_position_destroy(payload) {
+  return eismanrussoincAPI.delete(`/users/position/${payload.id}/`)
+}
+function users_profile_list(payload) {
+  return eismanrussoincAPI.get(`/users/profile/`, {
+    params: {
+      is_active: payload.is_active,
+      ordering: payload.ordering,
+      page: payload.page,
+      page_size: payload.page_size,
+      role: payload.role,
+      search: payload.search
+    }
+  })
+}
+function users_profile_create(payload) {
+  return eismanrussoincAPI.post(`/users/profile/`, payload)
+}
+function users_profile_retrieve(payload) {
+  return eismanrussoincAPI.get(`/users/profile/${payload.id}/`)
+}
+function users_profile_update(payload) {
+  return eismanrussoincAPI.put(`/users/profile/${payload.id}/`, payload)
+}
+function users_profile_partial_update(payload) {
+  return eismanrussoincAPI.patch(`/users/profile/${payload.id}/`, payload)
+}
+function users_profile_destroy(payload) {
+  return eismanrussoincAPI.delete(`/users/profile/${payload.id}/`)
+}
+function users_role_list(payload) {
+  return eismanrussoincAPI.get(`/users/role/`, {
+    params: {
+      can_add_positions: payload.can_add_positions,
+      ordering: payload.ordering,
+      search: payload.search
+    }
+  })
+}
+function users_role_retrieve(payload) {
+  return eismanrussoincAPI.get(`/users/role/${payload.id}/`)
 }
 export const apiService = {
   api_docs_schema_retrieve,
@@ -71,5 +134,18 @@ export const apiService = {
   rest_auth_user_update,
   rest_auth_user_partial_update,
   users_login_create,
-  users_test_retrieve
+  users_position_list,
+  users_position_create,
+  users_position_retrieve,
+  users_position_update,
+  users_position_partial_update,
+  users_position_destroy,
+  users_profile_list,
+  users_profile_create,
+  users_profile_retrieve,
+  users_profile_update,
+  users_profile_partial_update,
+  users_profile_destroy,
+  users_role_list,
+  users_role_retrieve
 }
