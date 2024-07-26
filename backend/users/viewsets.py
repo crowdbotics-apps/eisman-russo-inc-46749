@@ -21,7 +21,6 @@ class LoginViewSet(ViewSet, TokenObtainPairView):
 
     serializer_class = TokenObtainPairSerializer
 
-    @transaction.atomic
     def create(self, request, *args, **kwargs):
         # Use the serializer to validate and get the token
         serializer = self.get_serializer(data=request.data)
@@ -60,7 +59,7 @@ class UserViewSet(ModelViewSet):
         if serializer.is_valid():
             user = serializer.save()
             user_serializer = self.serializer_class(user)
-            return Response(user_serializer.data, status=status.HTTP_201_CREATED)
+            return Response({'result': user_serializer.data, 'detail': 'User Created Successfully'}, status=status.HTTP_201_CREATED)
 
         message = error_handler(serializer.errors)
 
@@ -72,11 +71,17 @@ class UserViewSet(ModelViewSet):
         if serializer.is_valid():
             user = serializer.save()
             user_serializer = self.serializer_class(user)
-            return Response({'result': user_serializer.data}, status=status.HTTP_200_OK)
+            return Response({'result': user_serializer.data, 'detail': 'User Updated Successfully'}, status=status.HTTP_200_OK)
 
         message = error_handler(serializer.errors)
 
         return Response({'detail': message}, status=status.HTTP_400_BAD_REQUEST)
+
+    def destroy(self, request, *args, **kwargs):
+        instance = self.get_object()
+        instance.delete()
+
+        return Response({'detail': 'User Deleted Successfully'}, status=status.HTTP_200_OK)
 
 
 class PositionViewSet(ModelViewSet):
@@ -115,7 +120,8 @@ class PositionViewSet(ModelViewSet):
 
             position_serializer = PositionSerializer(position)
 
-            return Response(position_serializer.data, status=status.HTTP_201_CREATED)
+            return Response({'result': position_serializer.data, 'detail': 'Position Created Successfully'},
+                            status=status.HTTP_201_CREATED)
 
         message = error_handler(serializer.errors)
 
@@ -136,7 +142,8 @@ class PositionViewSet(ModelViewSet):
 
             position_serializer = PositionSerializer(position)
 
-            return Response(position_serializer.data, status=status.HTTP_200_OK)
+            return Response({'result': position_serializer.data, 'detail': 'Position Updated Successfully'},
+                            status=status.HTTP_200_OK)
 
         message = error_handler(serializer.errors)
         return Response({'detail': message}, status=status.HTTP_400_BAD_REQUEST)

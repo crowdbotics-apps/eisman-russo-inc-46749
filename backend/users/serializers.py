@@ -106,8 +106,8 @@ class UserUpdateSerializer(serializers.ModelSerializer):
     def validate(self, data):
         role = data.get('role')
         position = data.get('position')
-        password = data.get('password')
-        confirm_password = data.get('confirm_password')
+        # password = data.get('password')
+        # confirm_password = data.get('confirm_password')
 
         if role and position:
             if role != position.role:
@@ -120,11 +120,11 @@ class UserUpdateSerializer(serializers.ModelSerializer):
                 raise serializers.ValidationError("Role and Position should be same")
 
         # Check that the password and confirm_password fields match.
-        if password and confirm_password:
-            if password != confirm_password:
-                raise serializers.ValidationError("Passwords do not match")
-        elif password and not confirm_password:
-            raise serializers.ValidationError("Confirm Password is required")
-        elif confirm_password and not password:
-            raise serializers.ValidationError("Password is required")
+        # if password and confirm_password:
+        #     if password != confirm_password:
+        #         raise serializers.ValidationError("Passwords do not match")
+        # elif password and not confirm_password:
+        #     raise serializers.ValidationError("Confirm Password is required")
+        # elif confirm_password and not password:
+        #     raise serializers.ValidationError("Password is required")
         return data
