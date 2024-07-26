@@ -60,6 +60,8 @@ SITE_ID = 1
 SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
 SECURE_SSL_REDIRECT = env.bool("SECURE_REDIRECT", default=False)
 
+CORS_ORIGIN_ALLOW_ALL = True
+
 
 # Application definition
 
@@ -70,7 +72,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'django.contrib.sites'
+    'django.contrib.sites',
+    'corsheaders',
 ]
 LOCAL_APPS = [
     'home',
@@ -98,6 +101,7 @@ MODULES_APPS = get_modules()
 INSTALLED_APPS += LOCAL_APPS + THIRD_PARTY_APPS + MODULES_APPS
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
