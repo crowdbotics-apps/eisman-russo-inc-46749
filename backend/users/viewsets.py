@@ -11,7 +11,7 @@ from base.pagination import ListPagination
 from base.utils import error_handler
 from users.models import Role, Position
 from users.serializers import (RoleSerializer, UserCreateSerializer, UserReadSerializer, PositionSerializer,
-                               PositionCreateSerializer, PositionUpdateSerializer)
+                               PositionCreateSerializer, PositionUpdateSerializer, UserUpdateSerializer)
 
 User = get_user_model()
 
@@ -55,13 +55,24 @@ class UserViewSet(ModelViewSet):
         paginated_response = self.get_paginated_response(serializer.data)
         return paginated_response
 
-    @transaction.atomic
     def create(self, request, *args, **kwargs):
         serializer = UserCreateSerializer(data=request.data)
         if serializer.is_valid():
             user = serializer.save()
             user_serializer = self.serializer_class(user)
             return Response(user_serializer.data, status=status.HTTP_201_CREATED)
+
+        message = error_handler(serializer.errors)
+
+        return Response({'detail': message}, status=status.HTTP_400_BAD_REQUEST)
+
+    def update(self, request, *args, **kwargs):
+        instance = self.get_object()
+        serializer = UserUpdateSerializer(instance, data=request.data, partial=True)
+        if serializer.is_valid():
+            user = serializer.save()
+            user_serializer = self.serializer_class(user)
+            return Response({'result': user_serializer.data}, status=status.HTTP_200_OK)
 
         message = error_handler(serializer.errors)
 
@@ -85,7 +96,6 @@ class PositionViewSet(ModelViewSet):
         paginated_response = self.get_paginated_response(serializer.data)
         return paginated_response
 
-    @transaction.atomic
     def create(self, request, *args, **kwargs):
         serializer = PositionCreateSerializer(data=request.data)
 
@@ -111,7 +121,6 @@ class PositionViewSet(ModelViewSet):
 
         return Response({'detail': message}, status=status.HTTP_400_BAD_REQUEST)
 
-    @transaction.atomic
     def update(self, request, *args, **kwargs):
         position = self.get_object()
         serializer = PositionUpdateSerializer(position, data=request.data, partial=True)
@@ -120,7 +129,8 @@ class PositionViewSet(ModelViewSet):
                 position = serializer.save()
             except IntegrityError as e:
                 if 'unique constraint' in str(e).lower():
-                    return Response({'detail': "Position with this name and role already exists."}, status=status.HTTP_400_BAD_REQUEST)
+                    return Response({'detail': "Position with this name and role already exists."},
+                                    status=status.HTTP_400_BAD_REQUEST)
                 else:
                     return Response({'detail': "Something went wrong"}, status=status.HTTP_400_BAD_REQUEST)
 
@@ -146,10 +156,11 @@ class RoleViewSet(ModelViewSet):
     permission_classes = [IsAuthenticated]
     queryset = Role.objects.all()
     serializer_class = RoleSerializer
+    filterset_fields = ["can_add_positions"]
     http_method_names = ['get']
 
     def list(self, request, *args, **kwargs):
         roles = self.get_queryset()
+        roles = self.filter_queryset(roles)
         serializer = RoleSerializer(roles, many=True)
-        return Response(serializer.data, status=status.HTTP_200_OK)
-
+        return Response({'results': serializer.data}, status=status.HTTP_200_OK)

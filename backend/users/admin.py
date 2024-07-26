@@ -77,7 +77,7 @@ class PositionAdmin(admin.ModelAdmin):
     def create_default_positions(self, request):
         for role in ROLE_CHOICES:
             try:
-                role_type, name = role
+                role_type, name, can_add_positions = role
                 if role_type == 'client':
                     role = Role.objects.get(type=role_type)
                     Position.objects.get_or_create(
