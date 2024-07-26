@@ -82,8 +82,8 @@ class User(AbstractUser):
     created_at = models.DateTimeField(auto_now_add=True, null=True, blank=True)
     modified_at = models.DateTimeField(auto_now=True, null=True, blank=True)
 
-    USERNAME_FIELD = "email"
-    REQUIRED_FIELDS = []
+    # USERNAME_FIELD = "email"
+    # REQUIRED_FIELDS = []
 
     objects = CustomUserManager()
 
