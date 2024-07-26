@@ -4,9 +4,38 @@ from django.contrib.auth.validators import UnicodeUsernameValidator
 from django.db import models
 from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
+import uuid
 
-from base.models import TimeStampedModel
+from base.models import BaseFieldModel
 from users.managers import CustomUserManager
+
+
+class Role(BaseFieldModel):
+    name = models.CharField(
+        _("Role Name"), max_length=255, unique=True
+    )
+    type = models.CharField(
+        _("Role Type"), max_length=255, unique=True
+    )
+    can_add_positions = models.BooleanField(default=True)
+
+
+class Position(BaseFieldModel):
+    PLATFORM_TYPES = [
+        ('mobile', 'Mobile'),
+        ('web', 'Web'),
+        ('both', 'Both'),
+    ]
+
+    name = models.CharField(
+        _("Position Name"), max_length=255,
+    )
+    role = models.ForeignKey(Role, on_delete=models.SET_NULL, null=True)
+    platform_type = models.CharField(max_length=50, choices=PLATFORM_TYPES, default='web')
+    is_project_specific_position = models.BooleanField(default=False)
+
+    class Meta:
+        unique_together = ('role_id', 'name')
 
 
 class User(AbstractUser):
@@ -41,9 +70,20 @@ class User(AbstractUser):
     )
     name = models.CharField(_("Name of User"), blank=True, null=True, max_length=255)
     email = models.EmailField(_('email address'), unique=True)
+    role = models.ForeignKey(Role, on_delete=models.SET_NULL, null=True, related_name="user_role")
+    position = models.ForeignKey(Position, on_delete=models.SET_NULL, null=True, related_name="user_position")
+    phone_number = models.CharField(max_length=17, blank=True, null=True)
+    address = models.CharField(
+        _("Address"), blank=True, null=True, max_length=255
+    )
+    latitude = models.FloatField(null=True, blank=True)
+    longitude = models.FloatField(null=True, blank=True)
 
-    USERNAME_FIELD = "email"
-    REQUIRED_FIELDS = []
+    created_at = models.DateTimeField(auto_now_add=True, null=True, blank=True)
+    modified_at = models.DateTimeField(auto_now=True, null=True, blank=True)
+
+    # USERNAME_FIELD = "email"
+    # REQUIRED_FIELDS = []
 
     objects = CustomUserManager()
 
@@ -51,27 +91,3 @@ class User(AbstractUser):
         return reverse("users:detail", kwargs={"username": self.username})
 
 
-class Role(TimeStampedModel):
-    name = models.CharField(
-        _("Role Name"), max_length=255, unique=True
-    )
-    type = models.CharField(
-        _("Role Type"), max_length=255, unique=True
-    )
-
-
-class Position(TimeStampedModel):
-    PLATFORM_TYPES = [
-        ('mobile', 'Mobile'),
-        ('web', 'Web'),
-        ('both', 'Both'),
-    ]
-
-    name = models.CharField(
-        _("Position Name"), max_length=255,
-    )
-    role_id = models.ForeignKey(Role, on_delete=models.CASCADE)
-    platform_type = models.CharField(max_length=50, choices=PLATFORM_TYPES, default='web')
-
-    class Meta:
-        unique_together = ('role_id', 'name')

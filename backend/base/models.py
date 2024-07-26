@@ -1,8 +1,10 @@
 from django.db import models
+import uuid
 
 
 # Create your models here.
-class TimeStampedModel(models.Model):
+class BaseFieldModel(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     created_at = models.DateTimeField(auto_now_add=True, null=True, blank=True)
     modified_at = models.DateTimeField(auto_now=True, null=True, blank=True)
 
