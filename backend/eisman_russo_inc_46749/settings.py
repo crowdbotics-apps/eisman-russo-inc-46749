@@ -79,6 +79,7 @@ LOCAL_APPS = [
     'home',
     'users.apps.UsersConfig',
     'base',
+    'ticketing',
 ]
 THIRD_PARTY_APPS = [
     'rest_framework',
