@@ -50,6 +50,59 @@ function rest_auth_user_update(payload) {
 function rest_auth_user_partial_update(payload) {
   return eismanrussoincAPI.patch(`/rest-auth/user/`, payload)
 }
+function ticketing_debris_list(payload) {
+  return eismanrussoincAPI.get(`/ticketing/debris/`, {
+    params: {
+      is_active: payload.is_active,
+      ordering: payload.ordering,
+      page: payload.page,
+      page_size: payload.page_size,
+      search: payload.search
+    }
+  })
+}
+function ticketing_debris_create(payload) {
+  return eismanrussoincAPI.post(`/ticketing/debris/`, payload)
+}
+function ticketing_debris_retrieve(payload) {
+  return eismanrussoincAPI.get(`/ticketing/debris/${payload.id}/`)
+}
+function ticketing_debris_update(payload) {
+  return eismanrussoincAPI.put(`/ticketing/debris/${payload.id}/`, payload)
+}
+function ticketing_debris_partial_update(payload) {
+  return eismanrussoincAPI.patch(`/ticketing/debris/${payload.id}/`, payload)
+}
+function ticketing_debris_destroy(payload) {
+  return eismanrussoincAPI.delete(`/ticketing/debris/${payload.id}/`)
+}
+function ticketing_event_list(payload) {
+  return eismanrussoincAPI.get(`/ticketing/event/`, {
+    params: {
+      event_date: payload.event_date,
+      is_active: payload.is_active,
+      ordering: payload.ordering,
+      page: payload.page,
+      page_size: payload.page_size,
+      search: payload.search
+    }
+  })
+}
+function ticketing_event_create(payload) {
+  return eismanrussoincAPI.post(`/ticketing/event/`, payload)
+}
+function ticketing_event_retrieve(payload) {
+  return eismanrussoincAPI.get(`/ticketing/event/${payload.id}/`)
+}
+function ticketing_event_update(payload) {
+  return eismanrussoincAPI.put(`/ticketing/event/${payload.id}/`, payload)
+}
+function ticketing_event_partial_update(payload) {
+  return eismanrussoincAPI.patch(`/ticketing/event/${payload.id}/`, payload)
+}
+function ticketing_event_destroy(payload) {
+  return eismanrussoincAPI.delete(`/ticketing/event/${payload.id}/`)
+}
 function users_login_create(payload) {
   return eismanrussoincAPI.post(`/users/login/`, payload)
 }
@@ -107,6 +160,9 @@ function users_profile_partial_update(payload) {
 function users_profile_destroy(payload) {
   return eismanrussoincAPI.delete(`/users/profile/${payload.id}/`)
 }
+function users_profile_details_retrieve(payload) {
+  return eismanrussoincAPI.get(`/users/profile/details/`)
+}
 function users_role_list(payload) {
   return eismanrussoincAPI.get(`/users/role/`, {
     params: {
@@ -133,6 +189,18 @@ export const apiService = {
   rest_auth_user_retrieve,
   rest_auth_user_update,
   rest_auth_user_partial_update,
+  ticketing_debris_list,
+  ticketing_debris_create,
+  ticketing_debris_retrieve,
+  ticketing_debris_update,
+  ticketing_debris_partial_update,
+  ticketing_debris_destroy,
+  ticketing_event_list,
+  ticketing_event_create,
+  ticketing_event_retrieve,
+  ticketing_event_update,
+  ticketing_event_partial_update,
+  ticketing_event_destroy,
   users_login_create,
   users_position_list,
   users_position_create,
@@ -146,6 +214,7 @@ export const apiService = {
   users_profile_update,
   users_profile_partial_update,
   users_profile_destroy,
+  users_profile_details_retrieve,
   users_role_list,
   users_role_retrieve
 }

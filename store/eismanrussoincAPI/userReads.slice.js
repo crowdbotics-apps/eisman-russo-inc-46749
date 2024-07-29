@@ -35,6 +35,13 @@ export const users_profile_destroy = createAsyncThunk(
     return response.data
   }
 )
+export const users_profile_details_retrieve = createAsyncThunk(
+  "userReads/users_profile_details_retrieve",
+  async payload => {
+    const response = await apiService.users_profile_details_retrieve(payload)
+    return response.data
+  }
+)
 const initialState = { entities: [], api: { loading: "idle", error: null } }
 const userReadsSlice = createSlice({
   name: "userReads",
@@ -136,6 +143,26 @@ const userReadsSlice = createSlice({
           state.api.loading = "idle"
         }
       })
+      .addCase(users_profile_details_retrieve.pending, (state, action) => {
+        if (state.api.loading === "idle") {
+          state.api.loading = "pending"
+        }
+      })
+      .addCase(users_profile_details_retrieve.fulfilled, (state, action) => {
+        if (state.api.loading === "pending") {
+          state.entities = [
+            ...state.entities.filter(record => record.id !== action.payload.id),
+            action.payload
+          ]
+          state.api.loading = "idle"
+        }
+      })
+      .addCase(users_profile_details_retrieve.rejected, (state, action) => {
+        if (state.api.loading === "pending") {
+          state.api.error = action.error
+          state.api.loading = "idle"
+        }
+      })
   }
 })
 export default {
@@ -144,5 +171,6 @@ export default {
   users_profile_update,
   users_profile_partial_update,
   users_profile_destroy,
+  users_profile_details_retrieve,
   slice: userReadsSlice
 }
