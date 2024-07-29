@@ -24,14 +24,11 @@ class FemaDatesSerializer(serializers.ModelSerializer):
 
 
 class EventSerializer(serializers.ModelSerializer):
-    fema_dates = serializers.SerializerMethodField()
+    fema_dates = FemaDatesSerializer(many=True, read_only=True)
 
     class Meta:
         model = Event
         fields = '__all__'
-
-    def get_fema_dates(self, obj):
-        return FemaDatesSerializer(obj.fema_dates.all(), many=True).data
 
 
 class EventCreateSerializer(serializers.ModelSerializer):
