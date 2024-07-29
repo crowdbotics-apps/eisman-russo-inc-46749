@@ -8,11 +8,11 @@
 
 /* Begin PBXBuildFile section */
 		00E356F31AD99517003FC87E /* eisman_russo_inc_46749Tests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* eisman_russo_inc_46749Tests.m */; };
-		0C80B921A6F3F58F76C31292 /* libPods-eisman_russo_inc_46749.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5DCACB8F33CDC322A6C60F78 /* libPods-eisman_russo_inc_46749.a */; };
 		13B07FBC1A68108700A75B9A /* AppDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB01A68108700A75B9A /* AppDelegate.mm */; };
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
-		7699B88040F8A987B510C191 /* libPods-eisman_russo_inc_46749-eisman_russo_inc_46749Tests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 19F6CBCC0A4E27FBF8BF4A61 /* libPods-eisman_russo_inc_46749-eisman_russo_inc_46749Tests.a */; };
+		1F5A0CA319161763B740815F /* libPods-eisman_russo_inc_46749-eisman_russo_inc_46749Tests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 138B858701CE9218A88933F7 /* libPods-eisman_russo_inc_46749-eisman_russo_inc_46749Tests.a */; };
+		53AA8E96623F1637BBD772F1 /* libPods-eisman_russo_inc_46749.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F79356A411BEAAF5DB93841F /* libPods-eisman_russo_inc_46749.a */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
 /* End PBXBuildFile section */
 
@@ -30,20 +30,20 @@
 		00E356EE1AD99517003FC87E /* eisman_russo_inc_46749Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = eisman_russo_inc_46749Tests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		00E356F11AD99517003FC87E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		00E356F21AD99517003FC87E /* eisman_russo_inc_46749Tests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = eisman_russo_inc_46749Tests.m; sourceTree = "<group>"; };
+		07B14D795D3F518847291321 /* Pods-eisman_russo_inc_46749.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-eisman_russo_inc_46749.release.xcconfig"; path = "Target Support Files/Pods-eisman_russo_inc_46749/Pods-eisman_russo_inc_46749.release.xcconfig"; sourceTree = "<group>"; };
+		138B858701CE9218A88933F7 /* libPods-eisman_russo_inc_46749-eisman_russo_inc_46749Tests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-eisman_russo_inc_46749-eisman_russo_inc_46749Tests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		13B07F961A680F5B00A75B9A /* eisman_russo_inc_46749.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = eisman_russo_inc_46749.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		13B07FAF1A68108700A75B9A /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppDelegate.h; path = eisman_russo_inc_46749/AppDelegate.h; sourceTree = "<group>"; };
 		13B07FB01A68108700A75B9A /* AppDelegate.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = AppDelegate.mm; path = eisman_russo_inc_46749/AppDelegate.mm; sourceTree = "<group>"; };
 		13B07FB51A68108700A75B9A /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = eisman_russo_inc_46749/Images.xcassets; sourceTree = "<group>"; };
 		13B07FB61A68108700A75B9A /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = eisman_russo_inc_46749/Info.plist; sourceTree = "<group>"; };
 		13B07FB71A68108700A75B9A /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = eisman_russo_inc_46749/main.m; sourceTree = "<group>"; };
-		19F6CBCC0A4E27FBF8BF4A61 /* libPods-eisman_russo_inc_46749-eisman_russo_inc_46749Tests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-eisman_russo_inc_46749-eisman_russo_inc_46749Tests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
-		3B4392A12AC88292D35C810B /* Pods-eisman_russo_inc_46749.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-eisman_russo_inc_46749.debug.xcconfig"; path = "Target Support Files/Pods-eisman_russo_inc_46749/Pods-eisman_russo_inc_46749.debug.xcconfig"; sourceTree = "<group>"; };
-		5709B34CF0A7D63546082F79 /* Pods-eisman_russo_inc_46749.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-eisman_russo_inc_46749.release.xcconfig"; path = "Target Support Files/Pods-eisman_russo_inc_46749/Pods-eisman_russo_inc_46749.release.xcconfig"; sourceTree = "<group>"; };
-		5B7EB9410499542E8C5724F5 /* Pods-eisman_russo_inc_46749-eisman_russo_inc_46749Tests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-eisman_russo_inc_46749-eisman_russo_inc_46749Tests.debug.xcconfig"; path = "Target Support Files/Pods-eisman_russo_inc_46749-eisman_russo_inc_46749Tests/Pods-eisman_russo_inc_46749-eisman_russo_inc_46749Tests.debug.xcconfig"; sourceTree = "<group>"; };
-		5DCACB8F33CDC322A6C60F78 /* libPods-eisman_russo_inc_46749.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-eisman_russo_inc_46749.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		4459FEEAB8ACE98891A200D5 /* Pods-eisman_russo_inc_46749.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-eisman_russo_inc_46749.debug.xcconfig"; path = "Target Support Files/Pods-eisman_russo_inc_46749/Pods-eisman_russo_inc_46749.debug.xcconfig"; sourceTree = "<group>"; };
 		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = eisman_russo_inc_46749/LaunchScreen.storyboard; sourceTree = "<group>"; };
-		89C6BE57DB24E9ADA2F236DE /* Pods-eisman_russo_inc_46749-eisman_russo_inc_46749Tests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-eisman_russo_inc_46749-eisman_russo_inc_46749Tests.release.xcconfig"; path = "Target Support Files/Pods-eisman_russo_inc_46749-eisman_russo_inc_46749Tests/Pods-eisman_russo_inc_46749-eisman_russo_inc_46749Tests.release.xcconfig"; sourceTree = "<group>"; };
+		AA301F28C343444F0271ADF2 /* Pods-eisman_russo_inc_46749-eisman_russo_inc_46749Tests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-eisman_russo_inc_46749-eisman_russo_inc_46749Tests.debug.xcconfig"; path = "Target Support Files/Pods-eisman_russo_inc_46749-eisman_russo_inc_46749Tests/Pods-eisman_russo_inc_46749-eisman_russo_inc_46749Tests.debug.xcconfig"; sourceTree = "<group>"; };
+		D22B08E9573693B0C3058887 /* Pods-eisman_russo_inc_46749-eisman_russo_inc_46749Tests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-eisman_russo_inc_46749-eisman_russo_inc_46749Tests.release.xcconfig"; path = "Target Support Files/Pods-eisman_russo_inc_46749-eisman_russo_inc_46749Tests/Pods-eisman_russo_inc_46749-eisman_russo_inc_46749Tests.release.xcconfig"; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
+		F79356A411BEAAF5DB93841F /* libPods-eisman_russo_inc_46749.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-eisman_russo_inc_46749.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -51,7 +51,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				7699B88040F8A987B510C191 /* libPods-eisman_russo_inc_46749-eisman_russo_inc_46749Tests.a in Frameworks */,
+				1F5A0CA319161763B740815F /* libPods-eisman_russo_inc_46749-eisman_russo_inc_46749Tests.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -59,7 +59,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				0C80B921A6F3F58F76C31292 /* libPods-eisman_russo_inc_46749.a in Frameworks */,
+				53AA8E96623F1637BBD772F1 /* libPods-eisman_russo_inc_46749.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -100,8 +100,8 @@
 			isa = PBXGroup;
 			children = (
 				ED297162215061F000B7C4FE /* JavaScriptCore.framework */,
-				5DCACB8F33CDC322A6C60F78 /* libPods-eisman_russo_inc_46749.a */,
-				19F6CBCC0A4E27FBF8BF4A61 /* libPods-eisman_russo_inc_46749-eisman_russo_inc_46749Tests.a */,
+				F79356A411BEAAF5DB93841F /* libPods-eisman_russo_inc_46749.a */,
+				138B858701CE9218A88933F7 /* libPods-eisman_russo_inc_46749-eisman_russo_inc_46749Tests.a */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -140,10 +140,10 @@
 		BBD78D7AC51CEA395F1C20DB /* Pods */ = {
 			isa = PBXGroup;
 			children = (
-				3B4392A12AC88292D35C810B /* Pods-eisman_russo_inc_46749.debug.xcconfig */,
-				5709B34CF0A7D63546082F79 /* Pods-eisman_russo_inc_46749.release.xcconfig */,
-				5B7EB9410499542E8C5724F5 /* Pods-eisman_russo_inc_46749-eisman_russo_inc_46749Tests.debug.xcconfig */,
-				89C6BE57DB24E9ADA2F236DE /* Pods-eisman_russo_inc_46749-eisman_russo_inc_46749Tests.release.xcconfig */,
+				4459FEEAB8ACE98891A200D5 /* Pods-eisman_russo_inc_46749.debug.xcconfig */,
+				07B14D795D3F518847291321 /* Pods-eisman_russo_inc_46749.release.xcconfig */,
+				AA301F28C343444F0271ADF2 /* Pods-eisman_russo_inc_46749-eisman_russo_inc_46749Tests.debug.xcconfig */,
+				D22B08E9573693B0C3058887 /* Pods-eisman_russo_inc_46749-eisman_russo_inc_46749Tests.release.xcconfig */,
 			);
 			path = Pods;
 			sourceTree = "<group>";
@@ -155,12 +155,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 00E357021AD99517003FC87E /* Build configuration list for PBXNativeTarget "eisman_russo_inc_46749Tests" */;
 			buildPhases = (
-				A55EABD7B0C7F3A422A6CC61 /* [CP] Check Pods Manifest.lock */,
+				DB66AEB9CC6B45E8118F2B15 /* [CP] Check Pods Manifest.lock */,
 				00E356EA1AD99517003FC87E /* Sources */,
 				00E356EB1AD99517003FC87E /* Frameworks */,
 				00E356EC1AD99517003FC87E /* Resources */,
-				C59DA0FBD6956966B86A3779 /* [CP] Embed Pods Frameworks */,
-				F6A41C54EA430FDDC6A6ED99 /* [CP] Copy Pods Resources */,
+				E62663B771E3C51946B545E3 /* [CP] Embed Pods Frameworks */,
+				4C5AEDEBA9A2FFEC33318725 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -176,14 +176,14 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 13B07F931A680F5B00A75B9A /* Build configuration list for PBXNativeTarget "eisman_russo_inc_46749" */;
 			buildPhases = (
-				C38B50BA6285516D6DCD4F65 /* [CP] Check Pods Manifest.lock */,
+				E443AA504808EFC74B328CC8 /* [CP] Check Pods Manifest.lock */,
 				FD10A7F022414F080027D42C /* Start Packager */,
 				13B07F871A680F5B00A75B9A /* Sources */,
 				13B07F8C1A680F5B00A75B9A /* Frameworks */,
 				13B07F8E1A680F5B00A75B9A /* Resources */,
 				00DD1BFF1BD5951E006B06BC /* Bundle React Native code and images */,
-				00EEFC60759A1932668264C0 /* [CP] Embed Pods Frameworks */,
-				E235C05ADACE081382539298 /* [CP] Copy Pods Resources */,
+				746182A40EED08E0548C7080 /* [CP] Embed Pods Frameworks */,
+				6366A04BC795B4785BDE9282 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -266,7 +266,41 @@
 			shellPath = /bin/sh;
 			shellScript = "set -e\n\nWITH_ENVIRONMENT=\"../node_modules/react-native/scripts/xcode/with-environment.sh\"\nREACT_NATIVE_XCODE=\"../node_modules/react-native/scripts/react-native-xcode.sh\"\n\n/bin/sh -c \"$WITH_ENVIRONMENT $REACT_NATIVE_XCODE\"\n";
 		};
-		00EEFC60759A1932668264C0 /* [CP] Embed Pods Frameworks */ = {
+		4C5AEDEBA9A2FFEC33318725 /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-eisman_russo_inc_46749-eisman_russo_inc_46749Tests/Pods-eisman_russo_inc_46749-eisman_russo_inc_46749Tests-resources-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Copy Pods Resources";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-eisman_russo_inc_46749-eisman_russo_inc_46749Tests/Pods-eisman_russo_inc_46749-eisman_russo_inc_46749Tests-resources-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-eisman_russo_inc_46749-eisman_russo_inc_46749Tests/Pods-eisman_russo_inc_46749-eisman_russo_inc_46749Tests-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		6366A04BC795B4785BDE9282 /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-eisman_russo_inc_46749/Pods-eisman_russo_inc_46749-resources-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Copy Pods Resources";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-eisman_russo_inc_46749/Pods-eisman_russo_inc_46749-resources-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-eisman_russo_inc_46749/Pods-eisman_russo_inc_46749-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		746182A40EED08E0548C7080 /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -283,7 +317,7 @@
 			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-eisman_russo_inc_46749/Pods-eisman_russo_inc_46749-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		A55EABD7B0C7F3A422A6CC61 /* [CP] Check Pods Manifest.lock */ = {
+		DB66AEB9CC6B45E8118F2B15 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -305,7 +339,7 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
-		C38B50BA6285516D6DCD4F65 /* [CP] Check Pods Manifest.lock */ = {
+		E443AA504808EFC74B328CC8 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -327,7 +361,7 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
-		C59DA0FBD6956966B86A3779 /* [CP] Embed Pods Frameworks */ = {
+		E62663B771E3C51946B545E3 /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -342,40 +376,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-eisman_russo_inc_46749-eisman_russo_inc_46749Tests/Pods-eisman_russo_inc_46749-eisman_russo_inc_46749Tests-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		E235C05ADACE081382539298 /* [CP] Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-eisman_russo_inc_46749/Pods-eisman_russo_inc_46749-resources-${CONFIGURATION}-input-files.xcfilelist",
-			);
-			name = "[CP] Copy Pods Resources";
-			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-eisman_russo_inc_46749/Pods-eisman_russo_inc_46749-resources-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-eisman_russo_inc_46749/Pods-eisman_russo_inc_46749-resources.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		F6A41C54EA430FDDC6A6ED99 /* [CP] Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-eisman_russo_inc_46749-eisman_russo_inc_46749Tests/Pods-eisman_russo_inc_46749-eisman_russo_inc_46749Tests-resources-${CONFIGURATION}-input-files.xcfilelist",
-			);
-			name = "[CP] Copy Pods Resources";
-			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-eisman_russo_inc_46749-eisman_russo_inc_46749Tests/Pods-eisman_russo_inc_46749-eisman_russo_inc_46749Tests-resources-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-eisman_russo_inc_46749-eisman_russo_inc_46749Tests/Pods-eisman_russo_inc_46749-eisman_russo_inc_46749Tests-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		FD10A7F022414F080027D42C /* Start Packager */ = {
@@ -430,7 +430,7 @@
 /* Begin XCBuildConfiguration section */
 		00E356F61AD99517003FC87E /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 5B7EB9410499542E8C5724F5 /* Pods-eisman_russo_inc_46749-eisman_russo_inc_46749Tests.debug.xcconfig */;
+			baseConfigurationReference = AA301F28C343444F0271ADF2 /* Pods-eisman_russo_inc_46749-eisman_russo_inc_46749Tests.debug.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				GCC_PREPROCESSOR_DEFINITIONS = (
@@ -457,7 +457,7 @@
 		};
 		00E356F71AD99517003FC87E /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 89C6BE57DB24E9ADA2F236DE /* Pods-eisman_russo_inc_46749-eisman_russo_inc_46749Tests.release.xcconfig */;
+			baseConfigurationReference = D22B08E9573693B0C3058887 /* Pods-eisman_russo_inc_46749-eisman_russo_inc_46749Tests.release.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				COPY_PHASE_STRIP = NO;
@@ -481,11 +481,12 @@
 		};
 		13B07F941A680F5B00A75B9A /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 3B4392A12AC88292D35C810B /* Pods-eisman_russo_inc_46749.debug.xcconfig */;
+			baseConfigurationReference = 4459FEEAB8ACE98891A200D5 /* Pods-eisman_russo_inc_46749.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 8NMQ9TQM2N;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = eisman_russo_inc_46749/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -500,19 +501,25 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = eisman_russo_inc_46749;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 1;
 				VERSIONING_SYSTEM = "apple-generic";
 			};
 			name = Debug;
 		};
 		13B07F951A680F5B00A75B9A /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 5709B34CF0A7D63546082F79 /* Pods-eisman_russo_inc_46749.release.xcconfig */;
+			baseConfigurationReference = 07B14D795D3F518847291321 /* Pods-eisman_russo_inc_46749.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 8NMQ9TQM2N;
 				INFOPLIST_FILE = eisman_russo_inc_46749/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -526,7 +533,12 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = eisman_russo_inc_46749;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 1;
 				VERSIONING_SYSTEM = "apple-generic";
 			};
 			name = Release;
