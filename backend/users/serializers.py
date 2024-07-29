@@ -57,6 +57,15 @@ class UserReadSerializer(serializers.ModelSerializer):
         fields = ["id", "name", "email", "role", "position", "phone_number", "address", "latitude", "longitude"]
 
 
+class UserProfileSerializer(serializers.ModelSerializer):
+    role = RoleSerializer()
+    position = PositionSerializer()
+
+    class Meta:
+        model = User
+        fields = ["id", "name", "email", "role", "position", "phone_number", "address", "latitude", "longitude"]
+
+
 class UserCreateSerializer(serializers.ModelSerializer):
     password = serializers.CharField(write_only=True)
     confirm_password = serializers.CharField(write_only=True)
@@ -99,6 +108,14 @@ class UserCreateSerializer(serializers.ModelSerializer):
 
 
 class UserUpdateSerializer(serializers.ModelSerializer):
+    role = serializers.PrimaryKeyRelatedField(
+        queryset=Role.objects.all(),
+        allow_null=False
+    )
+    position = serializers.PrimaryKeyRelatedField(
+        queryset=Position.objects.all(),
+        allow_null=False
+    )
     class Meta:
         model = User
         fields = ['name', 'phone_number', 'address', 'latitude', 'longitude', 'role', 'position', 'is_active']

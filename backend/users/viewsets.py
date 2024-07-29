@@ -1,6 +1,7 @@
 from django.contrib.auth import get_user_model
 from django.db import IntegrityError, transaction
 from rest_framework import status
+from rest_framework.decorators import action
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.viewsets import ModelViewSet, ViewSet
 from rest_framework.response import Response
@@ -11,7 +12,8 @@ from base.pagination import ListPagination
 from base.utils import error_handler
 from users.models import Role, Position
 from users.serializers import (RoleSerializer, UserCreateSerializer, UserReadSerializer, PositionSerializer,
-                               PositionCreateSerializer, PositionUpdateSerializer, UserUpdateSerializer)
+                               PositionCreateSerializer, PositionUpdateSerializer, UserUpdateSerializer,
+                               UserProfileSerializer)
 
 User = get_user_model()
 
@@ -80,8 +82,13 @@ class UserViewSet(ModelViewSet):
     def destroy(self, request, *args, **kwargs):
         instance = self.get_object()
         instance.delete()
-
         return Response({'detail': 'User Deleted Successfully'}, status=status.HTTP_200_OK)
+
+    @action(detail=False, methods=["get"])
+    def details(self, request, *args, **kwargs):
+        user = request.user
+        serializer = UserProfileSerializer(user)
+        return Response({'result': serializer.data}, status=status.HTTP_200_OK)
 
 
 class PositionViewSet(ModelViewSet):
