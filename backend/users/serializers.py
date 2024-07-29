@@ -57,6 +57,15 @@ class UserReadSerializer(serializers.ModelSerializer):
         fields = ["id", "name", "email", "role", "position", "phone_number", "address", "latitude", "longitude"]
 
 
+class UserProfileSerializer(serializers.ModelSerializer):
+    role = RoleSerializer()
+    position = PositionSerializer()
+
+    class Meta:
+        model = User
+        fields = ["id", "name", "email", "role", "position", "phone_number", "address", "latitude", "longitude"]
+
+
 class UserCreateSerializer(serializers.ModelSerializer):
     password = serializers.CharField(write_only=True)
     confirm_password = serializers.CharField(write_only=True)
@@ -99,6 +108,14 @@ class UserCreateSerializer(serializers.ModelSerializer):
 
 
 class UserUpdateSerializer(serializers.ModelSerializer):
+    role = serializers.PrimaryKeyRelatedField(
+        queryset=Role.objects.all(),
+        allow_null=False
+    )
+    position = serializers.PrimaryKeyRelatedField(
+        queryset=Position.objects.all(),
+        allow_null=False
+    )
     class Meta:
         model = User
         fields = ['name', 'phone_number', 'address', 'latitude', 'longitude', 'role', 'position', 'is_active']
@@ -106,8 +123,8 @@ class UserUpdateSerializer(serializers.ModelSerializer):
     def validate(self, data):
         role = data.get('role')
         position = data.get('position')
-        password = data.get('password')
-        confirm_password = data.get('confirm_password')
+        # password = data.get('password')
+        # confirm_password = data.get('confirm_password')
 
         if role and position:
             if role != position.role:
@@ -120,11 +137,11 @@ class UserUpdateSerializer(serializers.ModelSerializer):
                 raise serializers.ValidationError("Role and Position should be same")
 
         # Check that the password and confirm_password fields match.
-        if password and confirm_password:
-            if password != confirm_password:
-                raise serializers.ValidationError("Passwords do not match")
-        elif password and not confirm_password:
-            raise serializers.ValidationError("Confirm Password is required")
-        elif confirm_password and not password:
-            raise serializers.ValidationError("Password is required")
+        # if password and confirm_password:
+        #     if password != confirm_password:
+        #         raise serializers.ValidationError("Passwords do not match")
+        # elif password and not confirm_password:
+        #     raise serializers.ValidationError("Confirm Password is required")
+        # elif confirm_password and not password:
+        #     raise serializers.ValidationError("Password is required")
         return data

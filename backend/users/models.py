@@ -4,7 +4,6 @@ from django.contrib.auth.validators import UnicodeUsernameValidator
 from django.db import models
 from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
-import uuid
 
 from base.models import BaseFieldModel
 from users.managers import CustomUserManager
