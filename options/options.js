@@ -6,7 +6,8 @@ export const globalOptions = {
   api: "https://eisman-russo-inc-46749.botics.co/api/v1",
   screenOptions: {
     headerShown: false
-  }
+  },
+  initialRoute: "SplashScreen"
 }
 export const modulesOptions = {
   "@modules/app-menu": {

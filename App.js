@@ -3,7 +3,7 @@ import { Provider } from "react-redux"
 import "react-native-gesture-handler"
 import { NavigationContainer } from "@react-navigation/native"
 import { createStackNavigator } from "@react-navigation/stack"
-import { Provider as PaperProvider } from "react-native-paper";
+import { Provider as PaperProvider } from "react-native-paper"
 import {
   configureStore,
   createReducer,
@@ -19,6 +19,9 @@ import {
   getOptions,
   getGlobalOptions
 } from "@options"
+import { StackNames } from "./utils/constants"
+import { RootStackScreen } from "./navigation/rootNavigation"
+import { SafeAreaProvider } from "react-native-safe-area-context"
 
 const Stack = createStackNavigator()
 
@@ -51,6 +54,10 @@ const getNavigation = modules => {
           initialRouteName={initialRoute}
           screenOptions={screenOptions}
         >
+          <Stack.Screen
+            name={StackNames.RootStack}
+            component={RootStackScreen}
+          />
           {routes}
         </Stack.Navigator>
       </NavigationContainer>
@@ -87,11 +94,13 @@ const App = () => {
   })
 
   return (
-    <Provider store={store}>
-      <PaperProvider>
-        <Navigation />
-      </PaperProvider>
-    </Provider>
+    <SafeAreaProvider>
+      <Provider store={store}>
+        <PaperProvider>
+          <Navigation />
+        </PaperProvider>
+      </Provider>
+    </SafeAreaProvider>
   )
 }
 

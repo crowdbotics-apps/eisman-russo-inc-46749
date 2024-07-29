@@ -4,6 +4,9 @@
  *
  * @format
  */
+
+const { getDefaultConfig } = require("metro-config")
+
 const path = require("path")
 
 const extraNodeModules = {
@@ -24,41 +27,48 @@ const watchFolders = [
   path.resolve(__dirname, "helpers")
 ]
 
-module.exports = {
-  transformer: {
-    getTransformOptions: async () => ({
-      transform: {
-        experimentalImportSupport: false,
-        inlineRequires: false
-      }
-    })
-  },
-  resolver: {
-    sourceExts: ["js", "jsx", "ts", "tsx", "json"],
-    extraNodeModules: new Proxy(extraNodeModules, {
-      get: (target, name) => {
-        const namePaths = name.split(path.sep)
-        const scope = namePaths[0]
-
-        // import ... from "@components";
-        if (namePaths.length == 1 && name in target) {
-          return target[name]
+module.exports = (async () => {
+  const {
+    resolver: { sourceExts, assetExts }
+  } = await getDefaultConfig()
+  return {
+    transformer: {
+      babelTransformerPath: require.resolve("react-native-svg-transformer"), // Add this line for SVG support
+      getTransformOptions: async () => ({
+        transform: {
+          experimentalImportSupport: false,
+          inlineRequires: false
         }
+      })
+    },
+    resolver: {
+      assetExts: assetExts.filter(ext => ext !== "svg"),
+      sourceExts: ["js", "jsx", "ts", "tsx", "json", "svg"],
+      extraNodeModules: new Proxy(extraNodeModules, {
+        get: (target, name) => {
+          const namePaths = name.split(path.sep)
+          const scope = namePaths[0]
 
-        // import ... from "@components/sub";
-        // import ... from "@components/sub/path";
-        // import ... from "@components/sub/path/file";
-        if (scope in target) {
-          const base = namePaths.slice(1).join(path.sep)
-          return path.join(target[scope], base)
+          // import ... from "@components";
+          if (namePaths.length == 1 && name in target) {
+            return target[name]
+          }
+
+          // import ... from "@components/sub";
+          // import ... from "@components/sub/path";
+          // import ... from "@components/sub/path/file";
+          if (scope in target) {
+            const base = namePaths.slice(1).join(path.sep)
+            return path.join(target[scope], base)
+          }
+
+          // import ... from "react"
+          // import ... from "@react-navigation/native"
+          return path.join(process.cwd(), "node_modules", name)
         }
-
-        // import ... from "react"
-        // import ... from "@react-navigation/native"
-        return path.join(process.cwd(), "node_modules", name)
-      }
-    })
-  },
-  watchFolders,
-  resetCache: true
-}
+      })
+    },
+    watchFolders,
+    resetCache: true
+  }
+})()
