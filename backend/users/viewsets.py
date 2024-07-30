@@ -13,7 +13,7 @@ from base.utils import error_handler
 from users.models import Role, Position
 from users.serializers import (RoleSerializer, UserCreateSerializer, UserReadSerializer, PositionSerializer,
                                PositionCreateSerializer, PositionUpdateSerializer, UserUpdateSerializer,
-                               UserProfileSerializer)
+                               UserProfileSerializer, ChangePasswordSerializer)
 
 User = get_user_model()
 
@@ -31,6 +31,28 @@ class LoginViewSet(ViewSet, TokenObtainPairView):
         user = serializer.user
         if not user.position or not user.role:
             return Response({'detail': "The user does not have an assigned role."}, status=status.HTTP_400_BAD_REQUEST)
+
+        if request.is_mobile:
+            if user.position.platform_type == 'web':
+                return Response({'detail': "The user dont not have necessary permissions to login to mobile "
+                                           "platform."},
+                                status=status.HTTP_400_BAD_REQUEST)
+            if request.device_id:
+                if not user.device_id:
+                    user.device_id = request.device_id
+                    user.save()
+                elif user.device_id != request.device_id:
+                    return Response({'detail': "Device Id Don't Match"},
+                                    status=status.HTTP_400_BAD_REQUEST)
+            else:
+                return Response({'detail': "Device Id is required"},
+                                status=status.HTTP_400_BAD_REQUEST)
+
+        else:
+            if user.position.platform_type == 'mobile':
+                return Response({'detail': "The user does not have necessary permissions to login to web "
+                                           "platform."},
+                                status=status.HTTP_400_BAD_REQUEST)
 
         response_data = {
             'access': str(access)
@@ -89,6 +111,23 @@ class UserViewSet(ModelViewSet):
         user = request.user
         serializer = UserProfileSerializer(user)
         return Response({'result': serializer.data}, status=status.HTTP_200_OK)
+
+    @action(detail=False, methods=["post"])
+    def change_password(self, request, *args, **kwargs):
+        serializer = ChangePasswordSerializer(data=request.data)
+        if serializer.is_valid():
+
+            user = request.user
+            new_password = serializer.validated_data['new_password']
+
+            # Set the new password
+            user.set_password(new_password)
+            user.save()
+            return Response({"detail": "Password has been changed successfully."}, status=status.HTTP_200_OK)
+
+        message = error_handler(serializer.errors)
+
+        return Response({'detail': message}, status=status.HTTP_400_BAD_REQUEST)
 
 
 class PositionViewSet(ModelViewSet):

@@ -36,7 +36,9 @@ class PositionUpdateSerializer(serializers.ModelSerializer):
             if self.instance.role != data['role']:
                 total_user_position = self.instance.user_position.count()
                 if total_user_position > 0:
-                    raise serializers.ValidationError("Role cannot be changes as users are associated with it")
+                    raise serializers.ValidationError({
+                        'role': ["Role cannot be changed as users are associated with it"]
+                    })
         return data
 
 
@@ -54,7 +56,8 @@ class UserReadSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ["id", "name", "email", "role", "position", "phone_number", "address", "latitude", "longitude"]
+        fields = ["id", "name", "email", "role", "position", "phone_number", "address", "latitude", "longitude",
+                  "is_active"]
 
 
 class UserProfileSerializer(serializers.ModelSerializer):
@@ -88,7 +91,10 @@ class UserCreateSerializer(serializers.ModelSerializer):
         Check that the password and confirm_password fields match.
         """
         if data['password'] != data['confirm_password']:
-            raise serializers.ValidationError("Passwords do not match")
+            raise serializers.ValidationError({
+                'password': ["Passwords do not match"]
+            })
+
         return data
 
     def create(self, validated_data):
@@ -128,13 +134,19 @@ class UserUpdateSerializer(serializers.ModelSerializer):
 
         if role and position:
             if role != position.role:
-                raise serializers.ValidationError("Role and Position should be same")
+                raise serializers.ValidationError({
+                    'role': ["Role and Position role should be same"]
+                })
         elif position:
             if self.instance.role != position.role:
-                raise serializers.ValidationError("Role and Position should be same")
+                raise serializers.ValidationError({
+                    'role': ["Role and Position role should be same"]
+                })
         elif role:
             if role != self.instance.position.role:
-                raise serializers.ValidationError("Role and Position should be same")
+                raise serializers.ValidationError({
+                    'role': ["Role and Position role should be same"]
+                })
 
         # Check that the password and confirm_password fields match.
         # if password and confirm_password:
@@ -144,4 +156,21 @@ class UserUpdateSerializer(serializers.ModelSerializer):
         #     raise serializers.ValidationError("Confirm Password is required")
         # elif confirm_password and not password:
         #     raise serializers.ValidationError("Password is required")
+        return data
+
+
+class ChangePasswordSerializer(serializers.Serializer):
+    new_password = serializers.CharField(required=True, write_only=True)
+    confirm_new_password = serializers.CharField(required=True, write_only=True)
+
+    def validate(self, data):
+        new_password = data.get('new_password')
+        confirm_new_password = data.get('confirm_new_password')
+
+        # Check if new password and confirm new password match
+        if new_password != confirm_new_password:
+            raise serializers.ValidationError({
+                'password': ["Passwords do not match."]
+            })
+
         return data
