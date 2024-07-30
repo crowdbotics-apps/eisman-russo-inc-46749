@@ -1,4 +1,4 @@
-import React, { useContext } from "react"
+import React, { useContext, useEffect } from "react"
 import { Provider } from "react-redux"
 import "react-native-gesture-handler"
 import { NavigationContainer } from "@react-navigation/native"
@@ -22,6 +22,9 @@ import {
 import { StackNames } from "./utils/constants"
 import { RootStackScreen } from "./navigation/rootNavigation"
 import { SafeAreaProvider } from "react-native-safe-area-context"
+import { isMountedRef, navigationRef } from "./utils/NavigationUtils"
+import { AuthStackScreen } from "./navigation/authNavigation"
+import { AppStackScreen } from "./navigation/appNavigation"
 
 const Stack = createStackNavigator()
 
@@ -53,11 +56,17 @@ const getNavigation = modules => {
         <Stack.Navigator
           initialRouteName={initialRoute}
           screenOptions={screenOptions}
+          ref={navigationRef}
         >
           <Stack.Screen
             name={StackNames.RootStack}
             component={RootStackScreen}
           />
+          <Stack.Screen
+            name={StackNames.AuthStack}
+            component={AuthStackScreen}
+          />
+          <Stack.Screen name={StackNames.AppStack} component={AppStackScreen} />
           {routes}
         </Stack.Navigator>
       </NavigationContainer>
@@ -92,6 +101,13 @@ const App = () => {
   hooks.map(hook => {
     effects[hook.name] = hook.value()
   })
+
+  useEffect(() => {
+    isMountedRef.current = true
+    return () => {
+      isMountedRef.current = false
+    }
+  }, [])
 
   return (
     <SafeAreaProvider>

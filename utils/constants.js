@@ -1,8 +1,12 @@
 export const ScreenNames = {
   SplashScreen: "SplashScreen",
-  OnboardingScreen: "OnboardingScreen"
+  OnboardingScreen: "OnboardingScreen",
+  LoginScreen: "LoginScreen",
+  HomeScreen: "HomeScreen"
 }
 
 export const StackNames = {
-  RootStack: "RootStack"
+  RootStack: "RootStack",
+  AuthStack: "AuthStack",
+  AppStack: "AppStack"
 }
