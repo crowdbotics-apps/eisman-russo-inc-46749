@@ -78,6 +78,8 @@ class User(AbstractUser):
     latitude = models.FloatField(null=True, blank=True)
     longitude = models.FloatField(null=True, blank=True)
 
+    device_id = models.CharField(max_length=255, null=True, blank=True)
+
     created_at = models.DateTimeField(auto_now_add=True, null=True, blank=True)
     modified_at = models.DateTimeField(auto_now=True, null=True, blank=True)
 
