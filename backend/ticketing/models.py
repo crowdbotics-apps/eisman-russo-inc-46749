@@ -51,6 +51,21 @@ class HazardName(BaseFieldModel):
     name = models.CharField(max_length=255, unique=True)
     is_active = models.BooleanField(default=True)
     type = models.ForeignKey(HazardType, on_delete=models.CASCADE,related_name="name")
+    def __str__(self):
+        return self.name
 
+
+
+class TruckType(BaseFieldModel):
+    type = models.CharField(max_length=255, unique=True)
+    description = models.TextField(null=True, blank=True)
+    is_active = models.BooleanField(default=True)
+    def __str__(self):
+        return self.type
+    
+
+class SubActivity(BaseFieldModel):
+    name = models.CharField(max_length=255, unique=True)
+    is_active = models.BooleanField(default=True)
     def __str__(self):
         return self.name

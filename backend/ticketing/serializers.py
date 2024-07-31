@@ -3,25 +3,40 @@ from django.utils import timezone
 from rest_framework import serializers
 from rest_framework.exceptions import ValidationError
 
-from .models import DebrisType, Event, FemaDates , HazardType, HazardName
+from .models import DebrisType, Event, FemaDates , HazardType, HazardName , TruckType ,SubActivity
+
+
+
+class SubActivitySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = SubActivity
+        fields = '__all__'
+        
+
+class TruckTypeSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = TruckType
+        fields = '__all__'
+        
 
 class HazardNameSerializer(serializers.ModelSerializer):
     class Meta:
         model = HazardName
         fields = '__all__'
+        
 
 class HazardTypeSerializer(serializers.ModelSerializer):
     name = HazardNameSerializer(read_only=True,many=True)
     class Meta:
         model = HazardType
         fields = '__all__'
-
-
+        
 
 class DebrisSerializer(serializers.ModelSerializer):
     class Meta:
         model = DebrisType
         fields = '__all__'
+        
 
 
 class FemaDatesSerializer(serializers.ModelSerializer):
