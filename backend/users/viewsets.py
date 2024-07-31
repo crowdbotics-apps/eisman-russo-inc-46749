@@ -67,7 +67,7 @@ class UserViewSet(ModelViewSet):
     serializer_class = UserReadSerializer
     queryset = User.objects.all()
     pagination_class = ListPagination
-    filterset_fields = ["role", "is_active"]
+    filterset_fields = ["role", "is_active", "position"]
     search_fields = ["name"]
     ordering = ["-created_at"]
 
