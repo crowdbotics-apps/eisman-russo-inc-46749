@@ -6,6 +6,8 @@ from rest_framework_simplejwt.exceptions import InvalidToken, TokenError
 from rest_framework.response import Response
 from rest_framework import status
 
+from users.utils import WEB, MOBILE
+
 
 class DeviceMiddlewareMiddleware(MiddlewareMixin):
 
@@ -45,7 +47,7 @@ class DeviceMiddlewareMiddleware(MiddlewareMixin):
 
                 user = request.user
                 if request.is_mobile:
-                    if user.position.platform_type == 'web':
+                    if user.position.platform_type == WEB:
                         return JsonResponse({'detail': 'The user dont not have necessary permissions to use '
                                                        'mobile platform.'}, status=status.HTTP_400_BAD_REQUEST)
                     if request.device_id:
@@ -56,7 +58,7 @@ class DeviceMiddlewareMiddleware(MiddlewareMixin):
                                             status=status.HTTP_400_BAD_REQUEST)
 
                 else:
-                    if user.position.platform_type == 'mobile':
+                    if user.position.platform_type == MOBILE:
                         return JsonResponse({'detail': "The user does not have necessary permissions to login "
                                                        "to web platform."}, status=status.HTTP_400_BAD_REQUEST)
 
