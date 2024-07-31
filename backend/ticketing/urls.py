@@ -10,8 +10,8 @@ router.register('debris', DebrisViewSet, basename="debris")
 router.register('event', EventViewSet, basename="event")
 router.register('hazard-name', HazardNameViewSet, basename="hazard-name")
 router.register('hazard-type', HazardTypeViewSet, basename="hazard-type")
-router.register('truck-type', views.TruckTypeViewSet, basename="truck-type")
-router.register('sub-activity', views.SubActivityViewSet, basename="sub-activity")
+router.register('truck-type', TruckTypeViewSet, basename="truck-type")
+router.register('sub-activity', SubActivityViewSet, basename="sub-activity")
 
 app_name = "ticketing"
 
