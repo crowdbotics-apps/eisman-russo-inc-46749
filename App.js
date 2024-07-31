@@ -4,17 +4,9 @@ import "react-native-gesture-handler"
 import { NavigationContainer } from "@react-navigation/native"
 import { createStackNavigator } from "@react-navigation/stack"
 import { Provider as PaperProvider } from "react-native-paper"
-import {
-  configureStore,
-  createReducer,
-  combineReducers
-} from "@reduxjs/toolkit"
-
 import { screens } from "@screens"
-import { modules, reducers, hooks } from "@modules"
-import { connectors } from "@store"
+import { modules, hooks } from "@modules"
 import {
-  GlobalOptionsContext,
   OptionsContext,
   getOptions,
   getGlobalOptions
@@ -22,6 +14,9 @@ import {
 import { StackNames } from "./utils/constants"
 import { RootStackScreen } from "./navigation/rootNavigation"
 import { SafeAreaProvider } from "react-native-safe-area-context"
+import { persistor, store } from "./redux/Store"
+import {PersistGate} from 'redux-persist/integration/react';
+
 
 const Stack = createStackNavigator()
 
@@ -66,28 +61,8 @@ const getNavigation = modules => {
   return Navigation
 }
 
-const getStore = globalState => {
-  const appReducer = createReducer(globalState, _ => {
-    return globalState
-  })
-
-  const reducer = combineReducers({
-    app: appReducer,
-    ...reducers,
-    ...connectors
-  })
-
-  return configureStore({
-    reducer: reducer,
-    middleware: getDefaultMiddleware => getDefaultMiddleware()
-  })
-}
-
 const App = () => {
-  const global = useContext(GlobalOptionsContext)
   const Navigation = getNavigation(modules.concat(screens))
-  const store = getStore(global)
-
   let effects = {}
   hooks.map(hook => {
     effects[hook.name] = hook.value()
@@ -96,9 +71,11 @@ const App = () => {
   return (
     <SafeAreaProvider>
       <Provider store={store}>
-        <PaperProvider>
-          <Navigation />
-        </PaperProvider>
+        <PersistGate loading={null} persistor={persistor}>
+          <PaperProvider>
+            <Navigation />
+          </PaperProvider>
+        </PersistGate>
       </Provider>
     </SafeAreaProvider>
   )
