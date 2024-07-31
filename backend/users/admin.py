@@ -8,7 +8,7 @@ from users.forms import UserChangeForm, UserCreationForm
 from users.models import Role, Position
 from django.urls import path
 
-from users.utils import ROLE_CHOICES
+from users.utils import ROLE_CHOICES, CLIENT, CONTRACTOR, ER_USER, PRIME_CONTRACTOR, SUB_CONTRACTOR
 
 User = get_user_model()
 
@@ -78,36 +78,31 @@ class PositionAdmin(admin.ModelAdmin):
         for role in ROLE_CHOICES:
             try:
                 role_type, name, can_add_positions = role
-                if role_type == 'client':
+                if role_type == CLIENT:
                     role = Role.objects.get(type=role_type)
                     Position.objects.get_or_create(
                         name="Client",
                         role=role
                     )
 
-                if role_type == 'contractor':
+                if role_type == CONTRACTOR:
                     role = Role.objects.get(type=role_type)
                     Position.objects.get_or_create(
-                        name="Prime Contractor",
+                        name=PRIME_CONTRACTOR,
                         role=role
                     )
                     Position.objects.get_or_create(
-                        name="Sub Contractor",
+                        name=SUB_CONTRACTOR,
                         role=role
                     )
-                if role_type == 'er_user':
+
+                if role_type == ER_USER:
                     role = Role.objects.get(type=role_type)
                     Position.objects.get_or_create(
                         name="Admin",
                         role=role
                     )
 
-                if role_type == 'er_user':
-                    role = Role.objects.get(type=role_type)
-                    Position.objects.get_or_create(
-                        name="Admin",
-                        role=role
-                    )
             except Exception as e:
                 error_message = str(e)
                 self.message_user(request, error_message, messages.ERROR)
