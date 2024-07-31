@@ -6,11 +6,12 @@ from .models import DebrisType, Event , HazardName, HazardType , SubActivity, Tr
 from .serializers import DebrisSerializer, EventSerializer, EventCreateSerializer , HazardNameSerializer, HazardTypeSerializer, SubActivitySerializer, TruckTypeSerializer
 from base.pagination import ListPagination
 from base.utils import error_handler
+from .permissions import DebrisTypePermissions
 
 
 
 class DebrisViewSet(viewsets.ModelViewSet):
-    permission_classes = [IsAuthenticated]
+    permission_classes = [DebrisTypePermissions,IsAuthenticated]
     queryset = DebrisType.objects.all()
     serializer_class = DebrisSerializer
     filterset_fields = ['is_active']
@@ -255,7 +256,7 @@ class SubActivityViewSet(viewsets.ModelViewSet):
 
 
 class TruckTypeViewSet(viewsets.ModelViewSet):
-    permission_classes = [IsAuthenticated]
+    # permission_classes = [IsAuthenticated]
     queryset = TruckType.objects.all()
     serializer_class = TruckTypeSerializer
     filterset_fields = ['is_active']
