@@ -160,6 +160,9 @@ function users_profile_partial_update(payload) {
 function users_profile_destroy(payload) {
   return eismanrussoincAPI.delete(`/users/profile/${payload.id}/`)
 }
+function users_profile_change_password_create(payload) {
+  return eismanrussoincAPI.post(`/users/profile/change_password/`, payload)
+}
 function users_profile_details_retrieve(payload) {
   return eismanrussoincAPI.get(`/users/profile/details/`)
 }
@@ -214,6 +217,7 @@ export const apiService = {
   users_profile_update,
   users_profile_partial_update,
   users_profile_destroy,
+  users_profile_change_password_create,
   users_profile_details_retrieve,
   users_role_list,
   users_role_retrieve
