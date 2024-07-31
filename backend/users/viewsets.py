@@ -14,6 +14,7 @@ from users.models import Role, Position
 from users.serializers import (RoleSerializer, UserCreateSerializer, UserReadSerializer, PositionSerializer,
                                PositionCreateSerializer, PositionUpdateSerializer, UserUpdateSerializer,
                                UserProfileSerializer, ChangePasswordSerializer)
+from users.utils import WEB, MOBILE
 
 User = get_user_model()
 
@@ -33,7 +34,7 @@ class LoginViewSet(ViewSet, TokenObtainPairView):
             return Response({'detail': "The user does not have an assigned role."}, status=status.HTTP_400_BAD_REQUEST)
 
         if request.is_mobile:
-            if user.position.platform_type == 'web':
+            if user.position.platform_type == WEB:
                 return Response({'detail': "The user dont not have necessary permissions to login to mobile "
                                            "platform."},
                                 status=status.HTTP_400_BAD_REQUEST)
@@ -49,7 +50,7 @@ class LoginViewSet(ViewSet, TokenObtainPairView):
                                 status=status.HTTP_400_BAD_REQUEST)
 
         else:
-            if user.position.platform_type == 'mobile':
+            if user.position.platform_type == MOBILE:
                 return Response({'detail': "The user does not have necessary permissions to login to web "
                                            "platform."},
                                 status=status.HTTP_400_BAD_REQUEST)
@@ -64,9 +65,9 @@ class LoginViewSet(ViewSet, TokenObtainPairView):
 class UserViewSet(ModelViewSet):
     permission_classes = [IsAuthenticated]
     serializer_class = UserReadSerializer
-    queryset = User.objects.all()
+    queryset = User.objects.filter(role__isnull=False, position__isnull=False)
     pagination_class = ListPagination
-    filterset_fields = ["role", "is_active"]
+    filterset_fields = ["role", "is_active", "position"]
     search_fields = ["name"]
     ordering = ["-created_at"]
 
@@ -78,12 +79,14 @@ class UserViewSet(ModelViewSet):
         paginated_response = self.get_paginated_response(serializer.data)
         return paginated_response
 
+    @transaction.atomic
     def create(self, request, *args, **kwargs):
         serializer = UserCreateSerializer(data=request.data)
         if serializer.is_valid():
             user = serializer.save()
             user_serializer = self.serializer_class(user)
-            return Response({'result': user_serializer.data, 'detail': 'User Created Successfully'}, status=status.HTTP_201_CREATED)
+            return Response({'result': user_serializer.data, 'detail': 'User Created Successfully'},
+                            status=status.HTTP_201_CREATED)
 
         message = error_handler(serializer.errors)
 
@@ -95,7 +98,8 @@ class UserViewSet(ModelViewSet):
         if serializer.is_valid():
             user = serializer.save()
             user_serializer = self.serializer_class(user)
-            return Response({'result': user_serializer.data, 'detail': 'User Updated Successfully'}, status=status.HTTP_200_OK)
+            return Response({'result': user_serializer.data, 'detail': 'User Updated Successfully'},
+                            status=status.HTTP_200_OK)
 
         message = error_handler(serializer.errors)
 
@@ -116,7 +120,6 @@ class UserViewSet(ModelViewSet):
     def change_password(self, request, *args, **kwargs):
         serializer = ChangePasswordSerializer(data=request.data)
         if serializer.is_valid():
-
             user = request.user
             new_password = serializer.validated_data['new_password']
 

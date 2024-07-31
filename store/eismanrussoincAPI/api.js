@@ -140,6 +140,7 @@ function users_profile_list(payload) {
       ordering: payload.ordering,
       page: payload.page,
       page_size: payload.page_size,
+      position: payload.position,
       role: payload.role,
       search: payload.search
     }

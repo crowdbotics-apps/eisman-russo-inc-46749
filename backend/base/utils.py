@@ -7,6 +7,8 @@ def error_handler(errors):
                                              message.code == 'null' or message.code == 'max_value' or
                                              message.code == 'min_value'):
                 error_message = f"{field}: {message}"
+            elif hasattr(message, 'code') and message.code == 'does_not_exist':
+                error_message = f"{field}: Not Found"
             elif type(message) == dict:
                 return error_handler(message)
             else:

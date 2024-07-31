@@ -1,7 +1,9 @@
 from django.contrib.auth import get_user_model
+from django.db import IntegrityError
 from rest_framework import serializers
 
-from users.models import Role, Position
+from users.models import Role, Position, UserAdditionalData
+from users.utils import CONTRACTOR, SUB_CONTRACTOR, PRIME_CONTRACTOR
 
 User = get_user_model()
 
@@ -50,14 +52,34 @@ class PositionSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
+class PrimeContractorSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ['id', 'name']
+
+
+class UserAdditionalDataSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = UserAdditionalData
+        fields = '__all__'
+
+
+class UserAdditionalDataModifySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = UserAdditionalData
+        fields = ['company_name', 'prefix']
+
+
 class UserReadSerializer(serializers.ModelSerializer):
     role = RoleSerializer()
     position = PositionSerializer()
+    prime_contractor = PrimeContractorSerializer()
+    additional_data = UserAdditionalDataSerializer()
 
     class Meta:
         model = User
         fields = ["id", "name", "email", "role", "position", "phone_number", "address", "latitude", "longitude",
-                  "is_active"]
+                  "is_active", "prime_contractor", "additional_data"]
 
 
 class UserProfileSerializer(serializers.ModelSerializer):
@@ -80,11 +102,16 @@ class UserCreateSerializer(serializers.ModelSerializer):
         queryset=Position.objects.all(),
         required=True
     )
+    prime_contractor = serializers.PrimaryKeyRelatedField(
+        queryset=User.objects.filter(role__type=CONTRACTOR, position__name=PRIME_CONTRACTOR),
+        required=False
+    )
+    additional_data = UserAdditionalDataModifySerializer(required=False)
 
     class Meta:
         model = User
         fields = ['email', 'password', 'confirm_password', 'role', 'position', 'is_active', 'phone_number', 'name',
-                  'address', 'latitude', 'longitude']
+                  'address', 'latitude', 'longitude', 'prime_contractor', 'additional_data']
 
     def validate(self, data):
         """
@@ -94,6 +121,27 @@ class UserCreateSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError({
                 'password': ["Passwords do not match"]
             })
+
+        if data['role'] and data['role'].type == CONTRACTOR:
+            prime_contractor = data.get('prime_contractor', None)
+            additional_data = data.get('additional_data', None)
+
+            company_name = additional_data.get('company_name', None) if additional_data else None
+            prefix = additional_data.get('prefix', None) if additional_data else None
+            if not company_name:
+                raise serializers.ValidationError({
+                    'company_name': ["Company Name is required"]
+                })
+            if not prefix:
+                raise serializers.ValidationError({
+                    'prefix': ["Prefix is required"]
+                })
+
+            if data['position'] and data['position'].name == SUB_CONTRACTOR:
+                if not prime_contractor:
+                    raise serializers.ValidationError({
+                        'prime_contractor': ["Prime Contractor is required"]
+                    })
 
         return data
 
@@ -109,7 +157,30 @@ class UserCreateSerializer(serializers.ModelSerializer):
             address=validated_data.get('address', ""),
             latitude=validated_data.get('latitude', None),
             longitude=validated_data.get('longitude', None),
+            prime_contractor=validated_data.get('prime_contractor', None),
         )
+        additional_data = validated_data.get('additional_data', None)
+
+        company_name = additional_data.get('company_name', None) if additional_data else None
+        prefix = additional_data.get('prefix', None) if additional_data else None
+        if user.role.type == CONTRACTOR and company_name and prefix:
+            try:
+                UserAdditionalData.objects.create(
+                    user=user,
+                    company_name=company_name,
+                    prefix=prefix
+                )
+            except IntegrityError as e:
+                if 'unique_company_name' in str(e):
+                    raise serializers.ValidationError({
+                        'company_name': ["Company Name already exists"]
+                    })
+
+                if 'unique_prefix' in str(e):
+                    raise serializers.ValidationError({
+                        'prefix': ["Prefix already exists"]
+                    })
+
         return user
 
 
@@ -122,15 +193,20 @@ class UserUpdateSerializer(serializers.ModelSerializer):
         queryset=Position.objects.all(),
         allow_null=False
     )
+    additional_data = UserAdditionalDataModifySerializer(required=False)
+    prime_contractor = serializers.PrimaryKeyRelatedField(
+        queryset=User.objects.filter(role__type=CONTRACTOR, position__name=PRIME_CONTRACTOR),
+        required=False
+    )
+
     class Meta:
         model = User
-        fields = ['name', 'phone_number', 'address', 'latitude', 'longitude', 'role', 'position', 'is_active']
+        fields = ['name', 'phone_number', 'address', 'latitude', 'longitude', 'role', 'position', 'is_active',
+                  'prime_contractor', 'additional_data']
 
     def validate(self, data):
-        role = data.get('role')
-        position = data.get('position')
-        # password = data.get('password')
-        # confirm_password = data.get('confirm_password')
+        role = data.get('role', self.instance.role)
+        position = data.get('position', self.instance.position)
 
         if role and position:
             if role != position.role:
@@ -148,15 +224,55 @@ class UserUpdateSerializer(serializers.ModelSerializer):
                     'role': ["Role and Position role should be same"]
                 })
 
-        # Check that the password and confirm_password fields match.
-        # if password and confirm_password:
-        #     if password != confirm_password:
-        #         raise serializers.ValidationError("Passwords do not match")
-        # elif password and not confirm_password:
-        #     raise serializers.ValidationError("Confirm Password is required")
-        # elif confirm_password and not password:
-        #     raise serializers.ValidationError("Password is required")
+        if role and role.type == CONTRACTOR:
+            prime_contractor = data.get('prime_contractor', self.instance.prime_contractor)
+            if position.name == SUB_CONTRACTOR:
+                if not prime_contractor:
+                    raise serializers.ValidationError({
+                        'prime_contractor': ["Prime Contractor is required"]
+                    })
+            additional_data = data.get('additional_data', None)
+
+            company_name = additional_data.get('company_name', None) if additional_data else None
+            prefix = additional_data.get('prefix', None) if additional_data else None
+            if not company_name:
+                raise serializers.ValidationError({
+                    'company_name': ["Company Name is required"]
+                })
+            if not prefix:
+                raise serializers.ValidationError({
+                    'prefix': ["Prefix is required"]
+                })
+
         return data
+
+    def update(self, instance, validated_data):
+        additional_data = validated_data.pop('additional_data', None)
+        user = super().update(instance, validated_data)
+
+        if additional_data:
+            user_additional_data = user.additional_data
+            try:
+
+                if user_additional_data:
+                    for attr, value in additional_data.items():
+                        setattr(user_additional_data, attr, value)
+                    user_additional_data.save()
+                else:
+                    UserAdditionalData.objects.create(user=user, **additional_data)
+
+            except IntegrityError as e:
+                if 'unique_company_name' in str(e):
+                    raise serializers.ValidationError({
+                        'company_name': ["Company Name already exists"]
+                    })
+
+                if 'unique_prefix' in str(e):
+                    raise serializers.ValidationError({
+                        'prefix': ["Prefix already exists"]
+                    })
+
+        return user
 
 
 class ChangePasswordSerializer(serializers.Serializer):

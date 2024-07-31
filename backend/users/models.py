@@ -7,6 +7,7 @@ from django.utils.translation import gettext_lazy as _
 
 from base.models import BaseFieldModel
 from users.managers import CustomUserManager
+from users.utils import WEB, BOTH, MOBILE
 
 
 class Role(BaseFieldModel):
@@ -21,16 +22,16 @@ class Role(BaseFieldModel):
 
 class Position(BaseFieldModel):
     PLATFORM_TYPES = [
-        ('mobile', 'Mobile'),
-        ('web', 'Web'),
-        ('both', 'Both'),
+        (MOBILE, 'Mobile'),
+        (WEB, 'Web'),
+        (BOTH, 'Both'),
     ]
 
     name = models.CharField(
         _("Position Name"), max_length=255,
     )
     role = models.ForeignKey(Role, on_delete=models.SET_NULL, null=True)
-    platform_type = models.CharField(max_length=50, choices=PLATFORM_TYPES, default='web')
+    platform_type = models.CharField(max_length=50, choices=PLATFORM_TYPES, default=WEB)
     is_project_specific_position = models.BooleanField(default=False)
 
     class Meta:
@@ -79,6 +80,8 @@ class User(AbstractUser):
     longitude = models.FloatField(null=True, blank=True)
 
     device_id = models.CharField(max_length=255, null=True, blank=True)
+    prime_contractor = models.ForeignKey('self', null=True, blank=True, on_delete=models.CASCADE,
+                                         related_name='user_prime_contractor')
 
     created_at = models.DateTimeField(auto_now_add=True, null=True, blank=True)
     modified_at = models.DateTimeField(auto_now=True, null=True, blank=True)
@@ -90,5 +93,20 @@ class User(AbstractUser):
 
     def get_absolute_url(self):
         return reverse("users:detail", kwargs={"username": self.username})
+
+
+class UserAdditionalData(BaseFieldModel):
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name="additional_data")
+    company_name = models.CharField(max_length=255, blank=True, null=True)
+    prefix = models.CharField(max_length=255, blank=True, null=True)
+    notes = models.TextField(null=True, blank=True)
+
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(fields=['company_name'], name='unique_company_name'),
+            models.UniqueConstraint(fields=['prefix'], name='unique_prefix')
+        ]
+
+
 
 
