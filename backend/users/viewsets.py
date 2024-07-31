@@ -65,7 +65,7 @@ class LoginViewSet(ViewSet, TokenObtainPairView):
 class UserViewSet(ModelViewSet):
     permission_classes = [IsAuthenticated]
     serializer_class = UserReadSerializer
-    queryset = User.objects.all()
+    queryset = User.objects.filter(role__isnull=False, position__isnull=False)
     pagination_class = ListPagination
     filterset_fields = ["role", "is_active", "position"]
     search_fields = ["name"]
