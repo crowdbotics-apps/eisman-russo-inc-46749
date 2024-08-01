@@ -9,6 +9,7 @@ import {
   createReducer,
   combineReducers
 } from "@reduxjs/toolkit"
+import Toaster from "react-native-toast-message"
 
 import { screens } from "@screens"
 import { modules, reducers, hooks } from "@modules"
@@ -25,6 +26,7 @@ import { SafeAreaProvider } from "react-native-safe-area-context"
 import { isMountedRef, navigationRef } from "./utils/NavigationUtils"
 import { AuthStackScreen } from "./navigation/authNavigation"
 import { AppStackScreen } from "./navigation/appNavigation"
+import { toastConfig } from "./components/core/toast/ToastConfig"
 
 const Stack = createStackNavigator()
 
@@ -114,6 +116,7 @@ const App = () => {
       <Provider store={store}>
         <PaperProvider>
           <Navigation />
+          <Toaster config={toastConfig} visibilityTime={4000} />
         </PaperProvider>
       </Provider>
     </SafeAreaProvider>

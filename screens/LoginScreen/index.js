@@ -4,6 +4,7 @@ import { styles } from "./styles"
 import { Fonts } from "../../theme/Typography"
 import InputField from "../../components/core/inputField"
 import Button from "../../components/core/button"
+import Toast from "../../components/core/toast/Toast"
 
 const LoginScreen = () => {
   return (
@@ -26,7 +27,13 @@ const LoginScreen = () => {
         </View>
       </View>
       <View style={styles.buttonContainer}>
-        <Button title={"Login"} onPress={() => {}} />
+        <Button
+          title={"Login"}
+          onPress={() => {
+            //Toast.successor("Success", "Message")
+            Toast.errorList("Error", ["Message"])
+          }}
+        />
       </View>
     </View>
   )
