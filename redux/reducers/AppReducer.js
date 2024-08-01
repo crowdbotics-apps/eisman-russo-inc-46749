@@ -1,28 +1,28 @@
-const { createSlice } = require("@reduxjs/toolkit")
+const { createSlice } = require("@reduxjs/toolkit");
 
 const initialState = {
   isAuthorized: false,
   accessToken: null,
   deviceId: null
-}
+};
 
 const ezDebriApp = createSlice({
   name: "ezDebriApp",
   initialState,
   reducers: {
     setIsAuthorized: (state, action) => {
-      state.isAuthorized = action?.payload?.isAuthorized
+      state.isAuthorized = action?.payload?.isAuthorized;
     },
     setAccessToken: (state, action) => {
-      state.accessToken = action?.payload?.accessToken
+      state.accessToken = action?.payload?.accessToken;
     },
     setDeviceId: (state, action) => {
-      state.deviceId = action?.payload?.deviceId
+      state.deviceId = action?.payload?.deviceId;
     }
   }
-})
+});
 
 export const { setIsAuthorized, setAccessToken, setDeviceId } =
-  ezDebriApp.actions
+  ezDebriApp.actions;
 
-export default ezDebriApp.reducer
+export default ezDebriApp.reducer;

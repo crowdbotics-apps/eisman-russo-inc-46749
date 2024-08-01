@@ -1,6 +1,8 @@
 import OnboardingScreen from "../screens/OnboardingScreen"
 import SplashScreen from "../screens/SplashScreen"
-import { ScreenNames } from "../utils/constants"
+import { ScreenNames, StackNames } from "../utils/constants"
+import { AppStackScreen } from "./appNavigation"
+import { AuthStackScreen } from "./authNavigation"
 
 const { createStackNavigator } = require("@react-navigation/stack")
 
@@ -12,12 +14,10 @@ export const RootStackScreen = () => {
       <RootStack.Screen
         name={ScreenNames.SplashScreen}
         component={SplashScreen}
-        options={navOptionHandler}
       />
       <RootStack.Screen
         name={ScreenNames.OnboardingScreen}
         component={OnboardingScreen}
-        options={navOptionHandler}
       />
     </RootStack.Navigator>
   )

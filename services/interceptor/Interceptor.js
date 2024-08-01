@@ -1,7 +1,8 @@
-import NetInfo from "@react-native-community/netinfo"
-import axios from "axios"
-import { store } from "../../redux/Store"
-import { Constants } from "../../utils/constants"
+import NetInfo from "@react-native-community/netinfo";
+import axios from "axios";
+import { store } from "../../redux/Store";
+import { Constants } from "../../utils/constants";
+import DeviceInfo from "react-native-device-info";
 
 const API = axios.create({
   baseURL: Constants.BASE_URL,
@@ -13,68 +14,73 @@ const API = axios.create({
   },
   timeout: 30000,
   timeoutErrorMessage: "Request Timeout"
-})
+});
 
 API.interceptors.request.use(
   async config => {
-    const isConnected = await checkInternetConnection()
+    const isConnected = await checkInternetConnection();
     if (!isConnected) {
-      return Promise.reject({ response: { status: Constants.NETWORK_ERROR } })
+      return Promise.reject({ response: { status: Constants.NETWORK_ERROR } });
     }
 
-    const props = config.headers
+    const props = config.headers;
     if (props?.contentType === "multipart/form-data") {
-      config.headers["Content-Type"] = "multipart/form-data"
+      config.headers["Content-Type"] = "multipart/form-data";
     }
 
-    const accessToken = store.getState()?.appReducer?.accessToken
-    // if (accessToken) {
-    //   config.headers.Authorization = `Bearer ${accessToken}`
-    // }
-    const deviceId = store.getState()?.appReducer?.deviceId
+    const accessToken = store.getState()?.appReducer?.accessToken;
+    if (accessToken) {
+      config.headers.Authorization = `Bearer ${accessToken}`;
+    }
+    const deviceId = await getDeviceID();
     if (deviceId) {
       // config.headers["deviceId"] = deviceId;
-      console.log("deviceID", deviceId)
-      config.headers["deviceId"] = "0x00123"
+      config.headers["deviceId"] = "0x00123";
     }
-    console.log("API Call:", `${config?.baseURL}${config.url}`)
-    return config
+    console.log("API Call:", `${config?.baseURL}${config.url}`);
+    return config;
   },
   error => {
-    return Promise.reject(error)
+    return Promise.reject(error);
   }
-)
+);
 
 API.interceptors.response.use(
   response => {
-    return response
+    return response;
   },
   error => {
     if (error?.response?.config?.url.includes("login?success")) {
-      return Promise.reject(error)
+      return Promise.reject(error);
     } else if (error?.response?.status === Constants.UN_AUTHORIZED) {
-      console.log("logout user")
+      console.log("logout user");
       //   logOutUser()
       //   setTimeout(() => {
       // ToastMessage("error", "Unauthorized access.")
       //   }, 200)
       //   return
     }
-    return Promise.reject(error)
+    return Promise.reject(error);
   }
-)
+);
 
 export const checkInternetConnection = async () => {
-  const netInfo = await NetInfo.fetch()
+  const netInfo = await NetInfo.fetch();
   if (netInfo.isConnected) {
     if (netInfo.type !== "none" || netInfo.type !== "unknown") {
-      return true
+      return true;
     } else {
-      return false
+      return false;
     }
   } else {
-    return false
+    return false;
   }
-}
+};
 
-export { API }
+export const getDeviceID = async () => {
+  const deviceId = await DeviceInfo.getUniqueId();
+  console.log("device id", deviceId);
+  return deviceId;
+};
+
+export { API };
