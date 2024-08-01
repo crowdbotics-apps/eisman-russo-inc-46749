@@ -10,7 +10,7 @@ import { useSpring } from "react-spring";
 
 export default function Authentication(props) {
 
-    const [showLogin, setShowLogin] = useState(true);
+  const [showLogin, setShowLogin] = useState(true);
   const [isAnimating, setIsAnimating] = useState(false);
 
   const fade = useSpring({
@@ -37,10 +37,6 @@ export default function Authentication(props) {
         <SignIn
           onForgotPasswordClick={() => setShowLogin(false)}
           setIsAnimating={setIsAnimating}
-          loginUser={props.loginUser}
-          loginUserSlice={props.loginResponse}
-          error={props.error}
-          isLoading={props.isLoading}
         />
       ) : (
         <ForgetPassword

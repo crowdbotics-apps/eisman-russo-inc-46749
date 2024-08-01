@@ -9,6 +9,7 @@ import { ReactComponent as TruckManagementIcon } from "../../assets/rawSvg/sideb
 import { ReactComponent as DisposalTruckIcon } from "../../assets/rawSvg/sidebarNavIcons/disposalTruckIcon.svg";
 import { ReactComponent as MapIcon } from "../../assets/rawSvg/sidebarNavIcons/mapIcon.svg";
 import { ReactComponent as SettingsIcon } from "../../assets/rawSvg/sidebarNavIcons/settingsIcon.svg";
+import { ReactComponent as TreeIcon } from "../../assets/rawSvg/sidebarNavIcons/tree.svg";
 
 export const adminSidebarNavData = [
   {
@@ -34,6 +35,10 @@ export const adminSidebarNavData = [
         itemIcon: <ProjectManagementIcon/>,
         navigateTo: "/project-management",
         children: [
+          {
+            itemName: "Manage Project",
+            navigateTo: "/project-management/manage-project",
+          },
           {
             itemName: "Manage Project",
             navigateTo: "/project-management/manage-project",

@@ -117,7 +117,7 @@ export default function HeaderNav({expanded}) {
         {convertToTitle(pathName)}
       </PageTitle>
       <HeaderRightContainer>
-        <Dropdown ref={notificationDropdownRef} onToggle={onToggle}>
+        {/* <Dropdown ref={notificationDropdownRef} onToggle={onToggle}>
           <Dropdown.Toggle
             variant="success"
             id="dropdown-basic-1"
@@ -148,7 +148,7 @@ export default function HeaderNav({expanded}) {
           </div>
         </Dropdown>
        
-       <span style={{borderRight:"1px solid #e4eaf0"}}/>
+       <span style={{borderRight:"1px solid #e4eaf0"}}/> */}
 
         <Dropdown ref={dropdownRef}>
           <Dropdown.Toggle
