@@ -92,6 +92,7 @@ class UserProfileSerializer(serializers.ModelSerializer):
 
 
 class UserCreateSerializer(serializers.ModelSerializer):
+    name = serializers.CharField(required=True)
     password = serializers.CharField(write_only=True)
     confirm_password = serializers.CharField(write_only=True)
     role = serializers.PrimaryKeyRelatedField(
@@ -185,6 +186,7 @@ class UserCreateSerializer(serializers.ModelSerializer):
 
 
 class UserUpdateSerializer(serializers.ModelSerializer):
+    name = serializers.CharField(allow_null=False)
     role = serializers.PrimaryKeyRelatedField(
         queryset=Role.objects.all(),
         allow_null=False
@@ -232,17 +234,17 @@ class UserUpdateSerializer(serializers.ModelSerializer):
                         'prime_contractor': ["Prime Contractor is required"]
                     })
             additional_data = data.get('additional_data', None)
-
-            company_name = additional_data.get('company_name', None) if additional_data else None
-            prefix = additional_data.get('prefix', None) if additional_data else None
-            if not company_name:
-                raise serializers.ValidationError({
-                    'company_name': ["Company Name is required"]
-                })
-            if not prefix:
-                raise serializers.ValidationError({
-                    'prefix': ["Prefix is required"]
-                })
+            if additional_data:
+                company_name = additional_data.get('company_name', None) if additional_data else None
+                prefix = additional_data.get('prefix', None) if additional_data else None
+                if not company_name:
+                    raise serializers.ValidationError({
+                        'company_name': ["Company Name is required"]
+                    })
+                if not prefix:
+                    raise serializers.ValidationError({
+                        'prefix': ["Prefix is required"]
+                    })
 
         return data
 
