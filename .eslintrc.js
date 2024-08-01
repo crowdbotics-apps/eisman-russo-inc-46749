@@ -7,7 +7,7 @@ module.exports = {
       {
         semi: true,
         parser: "babel",
-        trailingComma: "none",
+        trailingComma: "allow",
         arrowParens: "avoid"
       }
     ],
@@ -16,6 +16,11 @@ module.exports = {
       {
         additionalHooks: "(useAnimatedStyle|useDerivedValue|useAnimatedProps)"
       }
+    ],
+    quotes: [
+      "error",
+      "double",
+      { avoidEscape: true, allowTemplateLiterals: true }
     ]
   }
-}
+};

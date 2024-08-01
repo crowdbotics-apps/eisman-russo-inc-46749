@@ -11,7 +11,6 @@ import { useSelector } from "react-redux";
 const SplashScreen = () => {
   const navigation = useNavigation();
   const redux = useSelector(state => state?.appReducer);
-
   const firstLogin = false;
 
   const auth = !!redux?.accessToken;
