@@ -251,7 +251,7 @@ class UserUpdateSerializer(serializers.ModelSerializer):
         user = super().update(instance, validated_data)
 
         if additional_data:
-            user_additional_data = user.additional_data
+            user_additional_data = user.additional_data if hasattr(user, 'additional_data') else None
             try:
 
                 if user_additional_data:
