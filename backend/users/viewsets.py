@@ -15,7 +15,7 @@ from users.models import Role, Position
 from users.serializers import (RoleSerializer, UserCreateSerializer, UserReadSerializer, PositionSerializer,
                                PositionCreateSerializer, PositionUpdateSerializer, UserUpdateSerializer,
                                UserProfileSerializer, ChangePasswordSerializer)
-from users.utils import WEB, MOBILE
+from users.utils import WEB, MOBILE, validate_platform
 
 User = get_user_model()
 
@@ -34,27 +34,9 @@ class LoginViewSet(ViewSet, TokenObtainPairView):
         if not user.position or not user.role:
             return Response({'detail': "The user does not have an assigned role."}, status=status.HTTP_400_BAD_REQUEST)
 
-        if request.is_mobile:
-            if user.position.platform_type == WEB:
-                return Response({'detail': "The user dont not have necessary permissions to login to mobile "
-                                           "platform."},
-                                status=status.HTTP_400_BAD_REQUEST)
-            if request.device_id:
-                if not user.device_id:
-                    user.device_id = request.device_id
-                    user.save()
-                elif user.device_id != request.device_id:
-                    return Response({'detail': "Device Id Don't Match"},
-                                    status=status.HTTP_400_BAD_REQUEST)
-            else:
-                return Response({'detail': "Device Id is required"},
-                                status=status.HTTP_400_BAD_REQUEST)
-
-        else:
-            if user.position.platform_type == MOBILE:
-                return Response({'detail': "The user does not have necessary permissions to login to web "
-                                           "platform."},
-                                status=status.HTTP_400_BAD_REQUEST)
+        validate, detail = validate_platform(request.is_mobile, request.device_id, user)
+        if not validate:
+            return Response({'detail': detail}, status=status.HTTP_400_BAD_REQUEST)
 
         response_data = {
             'access': str(access)
