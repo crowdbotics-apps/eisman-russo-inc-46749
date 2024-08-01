@@ -1,0 +1,10 @@
+{% extends "admin/change_list.html" %}
+
+{% block object-tools %}
+     {{ block.super }}
+
+    <div style="margin-right: 150px;" class="object-tools">
+        <a class="button" href="{% url 'admin:create_default_positions' %}">Create Default Position</a>
+    </div>
+
+{% endblock %}
