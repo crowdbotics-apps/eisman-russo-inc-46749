@@ -30,30 +30,9 @@ export const dashboardProjectsColumns = [
 
 //-------------------- User Roles Table Columns --------------------//
 
-export const userRolesColumns = ({handleEditRow}) => {
-    let columns = [
-        { title: 'Role Name', dataIndex: 'roleName', key: 'roleName' },
-        {
-            title: "Actions",
-            key: "action",
-            render: (_, record) => (
-              <Space size="middle" className="d-flex">
-                <Button
-                  onClick={(event) => {
-                    event.stopPropagation();
-                    handleEditRow(record);
-                  }}
-                >
-                  <EditIcon />
-                </Button>
-              </Space>
-            ),
-          },
+export const userRolesColumns =  [
+        { title: 'Role Name', dataIndex: 'name', key: 'name' },
       ];
-
-    return columns;
-};
-
 
 
 //-------------------- User Positions Table Columns --------------------//
@@ -61,8 +40,8 @@ export const userRolesColumns = ({handleEditRow}) => {
 export const userPositionsColumns = ({handleEditRow}) => {
   let columns = [
       { title: 'User Type', dataIndex: 'userType', key: 'userType' },
-      { title: 'Position Name', dataIndex: 'positionName', key: 'positionName' },
-      { title: 'Access Permission', dataIndex: 'accessPermission', key: 'accessPermission' },
+      { title: 'Position Name', dataIndex: 'name', key: 'name' },
+      { title: 'Access Permission', dataIndex: 'platform_type', key: 'platform_type' },
       {
           title: "Actions",
           key: "action",
@@ -86,8 +65,50 @@ export const userPositionsColumns = ({handleEditRow}) => {
 
 
 
+//-------------------- User Management Table Columns --------------------//
 
-
+export const userManagementColumns = ({handleEditRow}) => {
+  let columns = [
+      { title: 'Name', dataIndex: 'name', key: 'name' },
+      { title: 'Role', dataIndex: 'role', key: 'role' },
+      { title: 'Position', dataIndex: 'position', key: 'position' },
+      { title: 'Email', dataIndex: 'email', key: 'email' },
+      {
+        title: "Status",
+        dataIndex: "status",
+        key: "status",
+        render: (_, record) =>
+          record.status === true ? (
+            <Tag bordered={false} color="green" style={{borderRadius:"12px"}}>
+              Active
+            </Tag>
+          ) : (
+            <Tag bordered={false} color="red" style={{borderRadius:"12px"}}>
+              InActive
+            </Tag>
+          ),
+      },
+      {
+          title: "Actions",
+          key: "action",
+          render: (_, record) => (
+            <Space size="middle" className="d-flex">
+              <Button
+                onClick={(event) => {
+                  event.stopPropagation();
+                  handleEditRow(record);
+                }}
+              >
+                <EditIcon />
+              </Button>
+            </Space>
+          ),
+        },
+    ];
+  
+  return columns;
+};
+  
 
 
 //-------------------- Styled Button Component --------------------//

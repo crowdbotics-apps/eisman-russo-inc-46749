@@ -5,6 +5,7 @@ import CustomButton from "../../../customButton/customButton";
 import HeadingComponent from "../../../headingComponent/heading";
 import { CustomModal } from '../../../customModal/customModal';
 import CustomSwitch from '../../../customSwitch/customSwitch';
+import { useSelector } from 'react-redux';
 
 export default function EditUserRole({
     isModalOpen,
@@ -13,17 +14,20 @@ export default function EditUserRole({
     padding = "20px",
   }) {
 
+    
     const [form] = Form.useForm();
     const editRoleNameValue = "Client";
     const [active, setActive] = useState(true);
+    const rolesState = useSelector((state) => state.roles.roles);
+
+    const roles = rolesState.map((role) => {
+      return {
+        label: role.name,
+        value: role.id,
+      };
+    });
     form.setFieldsValue({roleName: editRoleNameValue});
 
-    const roles = [
-      { label: "Client", value: "Client" },
-      { label: "Contractor", value: "Contractor" },
-      { label: "E&R Sub Consultant", value: "E&R Sub Consultant" },
-      { label: "E&R User", value: "E&R User" },
-    ];
 
     const handleSwitchChange = (checked) => {
       setActive(checked);

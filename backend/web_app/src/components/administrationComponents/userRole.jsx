@@ -1,27 +1,35 @@
 import React, { useEffect, useState } from 'react'
-import { Card } from 'antd'
+import { Card, Divider } from 'antd'
 import styled from 'styled-components';
 import HeadingComponent from '../headingComponent/heading';
 import SearchInput from '../searchInput/SearchInput';
 import { AntdesignTable } from '../antDesignTable/AntdesignTable';
 import { userRolesColumns } from '../../util/antdTableColumns';
 import { pushNotification } from '../../util/notification';
+import { getRoles } from "../../redux/slices/roles";
+import { getUserRoleList } from '../../util/dataService';
+import { useDispatch, useSelector } from 'react-redux';
 
 export default function UserRole({editUserRoleNameModal,setEditUserRoleNameModal}) {
   const [selectedRole, setSelectedRole] = useState(null);
   const [filteredData, setFilteredData] = useState([]);
+  const [data, setData] = useState();
   
-  const data = [
-    { key: '1', roleName: 'Client' },
-    { key: '2', roleName: 'Contractor' },
-    { key: '3', roleName: 'E&R Sub Consultant' },
-    { key: '4', roleName: 'E&R User' },
-  ];
+  const dispatch = useDispatch();
+  const rolesState = useSelector((state) => state.roles.roles);
   
+ useEffect(() => {
+    const fetchData = async () => {
+      await dispatch(getRoles());
+    };
+
+    fetchData();
+  }, [dispatch]);
 
   useEffect(() => {
-    setFilteredData(data);
-  }, []);
+    setData(rolesState);
+    setFilteredData(rolesState);
+  }, [rolesState]);
 
 
   const handleEditRow = (role) => {
@@ -48,10 +56,8 @@ export default function UserRole({editUserRoleNameModal,setEditUserRoleNameModal
   return (
     <CustomCard style={{ boxShadow: '0px 4px 12px rgba(0, 0, 0, 0.1)' }}>
         <Heading text="Manage User Roles" margin="0px 0px 0px 20px" fontSize="1.3rem" color="#3B3B3B" />
-        <SearchInputWrapper>
-            <SearchInput onChange={(e) => handleSearch(e)} placeholder="Type to search..." />
-        </SearchInputWrapper>
-        <AntdesignTable columns={userRolesColumns({handleEditRow})} data={filteredData} allowMultieSelectRows={false} pagination={false}/>
+        <Divider/>
+        <AntdesignTable columns={userRolesColumns} data={filteredData} allowMultieSelectRows={false} pagination={false}/>
     </CustomCard>
   )
 }
@@ -88,3 +94,6 @@ const SearchInputWrapper = styled.div`
   width: 350px;
   margin-left: 10px;
 `;
+
+
+

@@ -1,3 +1,8 @@
+
+import { ReactComponent as TreeContinueIcon } from "../assets/rawSvg/sidebarNavIcons/treeContinue.svg";
+import { ReactComponent as TreeEndIcon } from "../assets/rawSvg/sidebarNavIcons/treeEnd.svg";
+
+
 export function getItem (label, key, icon, children, navigateTo) {
     return {
       key,
@@ -8,7 +13,7 @@ export function getItem (label, key, icon, children, navigateTo) {
     };
   }
   
-  export function generateMenuItems (data) {
+  export function generateMenuItems(data) {
     return data
       .map((menu, index) =>
         menu.itemList.map((item, subIndex) =>
@@ -16,21 +21,23 @@ export function getItem (label, key, icon, children, navigateTo) {
             item.itemName,
             `${index}-${subIndex}`,
             item.itemIcon,
-            item.children?.map((child, childIndex) =>
-              getItem(
+            item.children?.map((child, childIndex) => {
+              const isLastChild = childIndex === item.children.length - 1; 
+              return getItem(
                 child.itemName,
                 `${index}-${subIndex}-${childIndex}`,
-                null,
+                isLastChild ? <TreeEndIcon /> : <TreeContinueIcon />, 
                 null,
                 child.navigateTo
-              )
-            ),
+              );
+            }),
             item.navigateTo
           )
         )
       )
       .flat();
-  };
+  }
+  
   
   export function flattenMenuItems (menuItems) {
     let flatItems = [];

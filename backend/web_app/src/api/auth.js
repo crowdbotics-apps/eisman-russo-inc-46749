@@ -1,6 +1,5 @@
 export const userHasValidToken = () => {
   const token = getJWTToken();
-console.log("token", token);
   return !!token;
 };
 

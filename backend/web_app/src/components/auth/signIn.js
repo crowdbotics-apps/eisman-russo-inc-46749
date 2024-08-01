@@ -12,6 +12,7 @@ import { pushNotification } from "../../util/notification";
 import { loginFormSchema } from "../../constants/authFormFieldsSchema/formSchema";
 
 export default function SignIn(props) {
+  const navigate = useNavigate();
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [loggedInData, setLoggedInData] = useState(undefined);
   const [loader, setLoginLoader] = useState(false);
@@ -32,7 +33,21 @@ export default function SignIn(props) {
   }, []);
 
   const signin = async (values) => {
-    console.log("values", values);
+    setLoginLoader(true);
+    axiosInstance
+      .post(adminAPIsEndPoints.LOGIN, values)
+      .then((response) => {
+        if (response.status === 200) {
+          const token =   `Bearer ${response.data.access}`;
+          localStorage.setItem("token", token);
+          setLoginLoader(false);
+          navigate("/dashboard");
+        }
+      })
+      .catch((error) => {
+        setLoginLoader(false);
+        pushNotification("error", "Invalid credentials");
+      });
   };
 
   const handleForgotPasswordClick = () => {
