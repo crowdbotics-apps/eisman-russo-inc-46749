@@ -12,6 +12,7 @@ import { styles } from "./styles";
 import { Formik } from "formik";
 import { loginValidationSchema } from "../../utils/validations";
 import Loader from "../../components/core/loader/Loader";
+import Toast from "../../components/core/toast/Toast";
 
 const LoginScreen = ({ navigation }) => {
   const dispatch = useDispatch();
@@ -36,11 +37,13 @@ const LoginScreen = ({ navigation }) => {
     } catch (error) {
       // console.log("error", error);
       if (error?.status === Constants.NOT_FOUND_CODE) {
-        console.log(error?.data?.detail);
+        Toast.errorList("Error", [error?.data?.detail]);
       } else if (error?.status === Constants.NETWORK_ERROR) {
         console.log("offline mode");
       } else {
         console.log("something went wrong");
+        //Toast.successor("Success", "Message")
+        Toast.errorList("Error", ["Something went wrong"]);
       }
     } finally {
       setIsLoading(false);
@@ -60,8 +63,8 @@ const LoginScreen = ({ navigation }) => {
         <Formik
           onSubmit={handleLogin}
           initialValues={{
-            email: "saad.bukhtiar@crowdbotics.com",
-            password: "botics123"
+            email: "",
+            password: ""
           }}
           validationSchema={loginValidationSchema}
         >

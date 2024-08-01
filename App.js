@@ -1,21 +1,36 @@
-import React, { useContext, useEffect } from "react";
-import { Provider } from "react-redux";
-import "react-native-gesture-handler";
-import { NavigationContainer } from "@react-navigation/native";
-import { createStackNavigator } from "@react-navigation/stack";
-import { Provider as PaperProvider } from "react-native-paper";
-import { screens } from "@screens";
-import { modules, hooks } from "@modules";
-import { OptionsContext, getOptions, getGlobalOptions } from "@options";
-import { StackNames } from "./utils/constants";
-import { RootStackScreen } from "./navigation/rootNavigation";
-import { SafeAreaProvider } from "react-native-safe-area-context";
-import { isMountedRef, navigationRef } from "./utils/NavigationUtils";
-import { AuthStackScreen } from "./navigation/authNavigation";
-import { AppStackScreen } from "./navigation/appNavigation";
 import { persistor, store } from "./redux/Store";
 import { PersistGate } from "redux-persist/integration/react";
-const Stack = createStackNavigator();
+import React, { useContext, useEffect } from "react"
+import { Provider } from "react-redux"
+import "react-native-gesture-handler"
+import { NavigationContainer } from "@react-navigation/native"
+import { createStackNavigator } from "@react-navigation/stack"
+import { Provider as PaperProvider } from "react-native-paper"
+import {
+  configureStore,
+  createReducer,
+  combineReducers
+} from "@reduxjs/toolkit"
+import Toaster from "react-native-toast-message"
+
+import { screens } from "@screens"
+import { modules, reducers, hooks } from "@modules"
+import { connectors } from "@store"
+import {
+  GlobalOptionsContext,
+  OptionsContext,
+  getOptions,
+  getGlobalOptions
+} from "@options"
+import { StackNames } from "./utils/constants"
+import { RootStackScreen } from "./navigation/rootNavigation"
+import { SafeAreaProvider } from "react-native-safe-area-context"
+import { isMountedRef, navigationRef } from "./utils/NavigationUtils"
+import { AuthStackScreen } from "./navigation/authNavigation"
+import { AppStackScreen } from "./navigation/appNavigation"
+import { toastConfig } from "./components/core/toast/ToastConfig"
+
+const Stack = createStackNavigator()
 
 const getNavigation = modules => {
   const globalOptions = getGlobalOptions();
@@ -84,6 +99,7 @@ const App = () => {
         <PersistGate loading={null} persistor={persistor}>
           <PaperProvider>
             <Navigation />
+            <Toaster config={toastConfig} visibilityTime={4000} />
           </PaperProvider>
         </PersistGate>
       </Provider>
