@@ -1,7 +1,19 @@
 
+CONTRACTOR = 'contractor'
+CLIENT = 'client'
+ER_USER = 'er_user'
+ER_SUB_CONSULTANT = 'er_sub_consultant'
+
+PRIME_CONTRACTOR = "Prime Contractor"
+SUB_CONTRACTOR = "Sub Contractor"
+
+WEB = 'web'
+MOBILE = 'mobile'
+BOTH = 'both'
+
 ROLE_CHOICES = [
-    ("er_user", "E&R User"),
-    ("er_sub_contractor", "E&R Sub Contractor"),
-    ("client", "Client"),
-    ("contractor", "Contractor"),
+    (ER_USER, "E&R User", True),
+    (ER_SUB_CONSULTANT, "E&R Sub Consultant", True),
+    (CLIENT, "Client", False),
+    (CONTRACTOR, "Contractor", False),
 ]

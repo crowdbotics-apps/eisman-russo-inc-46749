@@ -1,20 +1,21 @@
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
-from rest_framework_simplejwt.views import TokenObtainPairView
 
 from users.views import (
     user_redirect_view,
     user_update_view,
     user_detail_view,
 )
-from users.viewsets import LoginViewSet, TestViewSet
+from users.viewsets import (LoginViewSet, RoleViewSet, PositionViewSet, UserViewSet)
 
 app_name = "users"
 
 
 router = DefaultRouter()
+router.register("profile", UserViewSet, basename="profile")
 router.register("login", LoginViewSet, basename="login")
-router.register("test", TestViewSet, basename="test")
+router.register("position", PositionViewSet, basename="position")
+router.register("role", RoleViewSet, basename="role")
 
 
 urlpatterns = [

@@ -28,11 +28,11 @@ const ProtectedRoute = ({ Page }) => {
   };
   const [adminUser, setAdminUser] = useState(false);
 
-  // useEffect(() => {
-  //   if (!hasValidToken) {
-  //     navigate("/signin");
-  //   }
-  // }, []);
+  useEffect(() => {
+    if (!hasValidToken) {
+      navigate("/signin");
+    }
+  }, []);
 
   useEffect(() => {
     if (permissionManagment && permissionManagment.role) {
@@ -89,8 +89,10 @@ const Body = styled.div`
 const Content = styled.div`
   flex: 1;
   overflow: auto;
+  height: calc(100vh - 60px);
   margin-top: 60px;
   padding: 1rem;
+  background-color: #F5F5F5;
 
   
 
