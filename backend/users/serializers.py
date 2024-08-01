@@ -1,4 +1,5 @@
 from django.contrib.auth import get_user_model
+from django.core.exceptions import ValidationError
 from django.db import IntegrityError
 from rest_framework import serializers
 
@@ -65,9 +66,15 @@ class UserAdditionalDataSerializer(serializers.ModelSerializer):
 
 
 class UserAdditionalDataModifySerializer(serializers.ModelSerializer):
+    email_ticket_receipt = serializers.ListField(
+        child=serializers.EmailField(error_messages={
+            'invalid': 'Please enter a valid email address for email ticket receipt.'
+        }),
+        required=False
+    )
     class Meta:
         model = UserAdditionalData
-        fields = ['company_name', 'prefix']
+        fields = ['company_name', 'prefix', 'notes', 'email_ticket_receipt']
 
 
 class UserReadSerializer(serializers.ModelSerializer):
@@ -169,7 +176,9 @@ class UserCreateSerializer(serializers.ModelSerializer):
                 UserAdditionalData.objects.create(
                     user=user,
                     company_name=company_name,
-                    prefix=prefix
+                    prefix=prefix,
+                    notes=additional_data.get('notes', None),
+                    email_ticket_receipt=additional_data.get('email_ticket_receipt', [])
                 )
             except IntegrityError as e:
                 if 'unique_company_name' in str(e):

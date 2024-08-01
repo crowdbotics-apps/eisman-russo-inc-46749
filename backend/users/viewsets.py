@@ -51,7 +51,7 @@ class UserViewSet(ModelViewSet):
     queryset = User.objects.filter(role__isnull=False, position__isnull=False)
     pagination_class = ListPagination
     filterset_fields = ["role", "is_active", "position"]
-    search_fields = ["name"]
+    search_fields = ["name", "additional_data__company_name",]
     ordering = ["-created_at"]
 
     def list(self, request, *args, **kwargs):
@@ -203,3 +203,4 @@ class RoleViewSet(ModelViewSet):
         roles = self.filter_queryset(roles)
         serializer = RoleSerializer(roles, many=True)
         return Response({'results': serializer.data}, status=status.HTTP_200_OK)
+

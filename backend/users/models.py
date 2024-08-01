@@ -1,6 +1,7 @@
 from django.contrib.auth.base_user import BaseUserManager
 from django.contrib.auth.models import AbstractUser
 from django.contrib.auth.validators import UnicodeUsernameValidator
+from django.contrib.postgres.fields import ArrayField
 from django.db import models
 from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
@@ -100,13 +101,12 @@ class UserAdditionalData(BaseFieldModel):
     company_name = models.CharField(max_length=255, blank=True, null=True)
     prefix = models.CharField(max_length=255, blank=True, null=True)
     notes = models.TextField(null=True, blank=True)
+    email_ticket_receipt = ArrayField(models.EmailField(), blank=True, null=True)
 
     class Meta:
         constraints = [
             models.UniqueConstraint(fields=['company_name'], name='unique_company_name'),
             models.UniqueConstraint(fields=['prefix'], name='unique_prefix')
         ]
-
-
 
 
