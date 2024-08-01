@@ -103,6 +103,126 @@ function ticketing_event_partial_update(payload) {
 function ticketing_event_destroy(payload) {
   return eismanrussoincAPI.delete(`/ticketing/event/${payload.id}/`)
 }
+function ticketing_hazard_name_list(payload) {
+  return eismanrussoincAPI.get(`/ticketing/hazard-name/`, {
+    params: {
+      is_active: payload.is_active,
+      ordering: payload.ordering,
+      page: payload.page,
+      page_size: payload.page_size,
+      search: payload.search,
+      type: payload.type
+    }
+  })
+}
+function ticketing_hazard_name_create(payload) {
+  return eismanrussoincAPI.post(`/ticketing/hazard-name/`, payload)
+}
+function ticketing_hazard_name_retrieve(payload) {
+  return eismanrussoincAPI.get(`/ticketing/hazard-name/${payload.id}/`)
+}
+function ticketing_hazard_name_update(payload) {
+  return eismanrussoincAPI.put(`/ticketing/hazard-name/${payload.id}/`, payload)
+}
+function ticketing_hazard_name_partial_update(payload) {
+  return eismanrussoincAPI.patch(
+    `/ticketing/hazard-name/${payload.id}/`,
+    payload
+  )
+}
+function ticketing_hazard_name_destroy(payload) {
+  return eismanrussoincAPI.delete(`/ticketing/hazard-name/${payload.id}/`)
+}
+function ticketing_hazard_type_list(payload) {
+  return eismanrussoincAPI.get(`/ticketing/hazard-type/`, {
+    params: {
+      is_active: payload.is_active,
+      ordering: payload.ordering,
+      page: payload.page,
+      page_size: payload.page_size,
+      search: payload.search
+    }
+  })
+}
+function ticketing_hazard_type_create(payload) {
+  return eismanrussoincAPI.post(`/ticketing/hazard-type/`, payload)
+}
+function ticketing_hazard_type_retrieve(payload) {
+  return eismanrussoincAPI.get(`/ticketing/hazard-type/${payload.id}/`)
+}
+function ticketing_hazard_type_update(payload) {
+  return eismanrussoincAPI.put(`/ticketing/hazard-type/${payload.id}/`, payload)
+}
+function ticketing_hazard_type_partial_update(payload) {
+  return eismanrussoincAPI.patch(
+    `/ticketing/hazard-type/${payload.id}/`,
+    payload
+  )
+}
+function ticketing_hazard_type_destroy(payload) {
+  return eismanrussoincAPI.delete(`/ticketing/hazard-type/${payload.id}/`)
+}
+function ticketing_sub_activity_list(payload) {
+  return eismanrussoincAPI.get(`/ticketing/sub-activity/`, {
+    params: {
+      is_active: payload.is_active,
+      ordering: payload.ordering,
+      page: payload.page,
+      page_size: payload.page_size,
+      search: payload.search
+    }
+  })
+}
+function ticketing_sub_activity_create(payload) {
+  return eismanrussoincAPI.post(`/ticketing/sub-activity/`, payload)
+}
+function ticketing_sub_activity_retrieve(payload) {
+  return eismanrussoincAPI.get(`/ticketing/sub-activity/${payload.id}/`)
+}
+function ticketing_sub_activity_update(payload) {
+  return eismanrussoincAPI.put(
+    `/ticketing/sub-activity/${payload.id}/`,
+    payload
+  )
+}
+function ticketing_sub_activity_partial_update(payload) {
+  return eismanrussoincAPI.patch(
+    `/ticketing/sub-activity/${payload.id}/`,
+    payload
+  )
+}
+function ticketing_sub_activity_destroy(payload) {
+  return eismanrussoincAPI.delete(`/ticketing/sub-activity/${payload.id}/`)
+}
+function ticketing_truck_type_list(payload) {
+  return eismanrussoincAPI.get(`/ticketing/truck-type/`, {
+    params: {
+      is_active: payload.is_active,
+      ordering: payload.ordering,
+      page: payload.page,
+      page_size: payload.page_size,
+      search: payload.search
+    }
+  })
+}
+function ticketing_truck_type_create(payload) {
+  return eismanrussoincAPI.post(`/ticketing/truck-type/`, payload)
+}
+function ticketing_truck_type_retrieve(payload) {
+  return eismanrussoincAPI.get(`/ticketing/truck-type/${payload.id}/`)
+}
+function ticketing_truck_type_update(payload) {
+  return eismanrussoincAPI.put(`/ticketing/truck-type/${payload.id}/`, payload)
+}
+function ticketing_truck_type_partial_update(payload) {
+  return eismanrussoincAPI.patch(
+    `/ticketing/truck-type/${payload.id}/`,
+    payload
+  )
+}
+function ticketing_truck_type_destroy(payload) {
+  return eismanrussoincAPI.delete(`/ticketing/truck-type/${payload.id}/`)
+}
 function users_login_create(payload) {
   return eismanrussoincAPI.post(`/users/login/`, payload)
 }
@@ -205,6 +325,30 @@ export const apiService = {
   ticketing_event_update,
   ticketing_event_partial_update,
   ticketing_event_destroy,
+  ticketing_hazard_name_list,
+  ticketing_hazard_name_create,
+  ticketing_hazard_name_retrieve,
+  ticketing_hazard_name_update,
+  ticketing_hazard_name_partial_update,
+  ticketing_hazard_name_destroy,
+  ticketing_hazard_type_list,
+  ticketing_hazard_type_create,
+  ticketing_hazard_type_retrieve,
+  ticketing_hazard_type_update,
+  ticketing_hazard_type_partial_update,
+  ticketing_hazard_type_destroy,
+  ticketing_sub_activity_list,
+  ticketing_sub_activity_create,
+  ticketing_sub_activity_retrieve,
+  ticketing_sub_activity_update,
+  ticketing_sub_activity_partial_update,
+  ticketing_sub_activity_destroy,
+  ticketing_truck_type_list,
+  ticketing_truck_type_create,
+  ticketing_truck_type_retrieve,
+  ticketing_truck_type_update,
+  ticketing_truck_type_partial_update,
+  ticketing_truck_type_destroy,
   users_login_create,
   users_position_list,
   users_position_create,
