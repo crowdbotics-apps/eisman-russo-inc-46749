@@ -8,6 +8,7 @@ from rest_framework.response import Response
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from rest_framework_simplejwt.views import TokenObtainPairView
 
+from base.decorators import check_permissions
 from base.pagination import ListPagination
 from base.utils import error_handler
 from users.models import Role, Position
