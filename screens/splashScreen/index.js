@@ -9,7 +9,7 @@ import { useNavigation } from "@react-navigation/native"
 
 const SplashScreen = () => {
   const navigation = useNavigation()
-  const firstLogin = false
+  const firstLogin = true
 
   const auth = true
 
