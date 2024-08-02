@@ -202,7 +202,7 @@ const CustomCard = styled(Card)`
   width: calc(100vw - 40px);
   max-width: 1274px;
   height: calc(100vh - 40px);
-  max-height: 720px;
+  max-height: 912px;
   margin: 20px;
   background-color: white;
   

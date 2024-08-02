@@ -12,8 +12,7 @@ import HeaderNav from "../navbar/headerNav/headerNav";
 
 
 const ProtectedRoute = ({ Page }) => {
-  // const hasValidToken = userHasValidToken();
-  const hasValidToken = true;
+  const hasValidToken = userHasValidToken();
 
   const [isExpanded, setIsExpanded] = useState(true);
   let navigate = useNavigate();
