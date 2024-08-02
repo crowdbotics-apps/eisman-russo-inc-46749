@@ -5,8 +5,11 @@ import { Fonts } from "../../theme/Typography"
 import InputField from "../../components/core/inputField"
 import Button from "../../components/core/button"
 import Toast from "../../components/core/toast/Toast"
+import { useNavigation } from "@react-navigation/native"
+import { StackNames } from "../../utils/constants"
 
 const LoginScreen = () => {
+  const navigation = useNavigation()
   return (
     <View style={styles.mainContainer}>
       <View style={styles.headingStyle}>
@@ -30,8 +33,16 @@ const LoginScreen = () => {
         <Button
           title={"Login"}
           onPress={() => {
+            navigation.reset({
+              index: 0,
+              routes: [
+                {
+                  name: StackNames.AppStack
+                }
+              ]
+            })
             //Toast.successor("Success", "Message")
-            Toast.errorList("Error", ["Message"])
+            // Toast.errorList("Error", ["Message"])
           }}
         />
       </View>
