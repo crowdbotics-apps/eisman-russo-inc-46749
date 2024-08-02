@@ -13,6 +13,7 @@ from base.models import BaseFieldModel
 #         "reduction_rate": false
 # }
 
+
 class DebrisType(BaseFieldModel):
     name = models.CharField(max_length=255, unique=True)
     is_active = models.BooleanField(default=True)
@@ -38,16 +39,18 @@ class FemaDates(BaseFieldModel):
     start_date = models.DateField()
     end_date = models.DateField()
     percentage = models.PositiveIntegerField(
-        validators=[
-            MinValueValidator(1),
-            MaxValueValidator(100)
-        ]
+        validators=[MinValueValidator(1), MaxValueValidator(100)]
     )
-    event = models.ForeignKey(Event, on_delete=models.CASCADE, related_name="fema_dates")
+    event = models.ForeignKey(
+        Event, on_delete=models.CASCADE, related_name="fema_dates"
+    )
 
     class Meta:
         constraints = [
-            models.UniqueConstraint(fields=['event', 'start_date', 'end_date'], name='unique_event_start_date_end_date')
+            models.UniqueConstraint(
+                fields=["event", "start_date", "end_date"],
+                name="unique_event_start_date_end_date",
+            )
         ]
 
 
@@ -83,21 +86,3 @@ class SubActivity(BaseFieldModel):
 
     def __str__(self):
         return self.name
-
-
-# class ContractorRateMatrix(BaseFieldModel):
-#     contractor = models.ForeignKey('users.User', on_delete=models.CASCADE, related_name="contractor_rate_matrix")
-#     client = models.ForeignKey('users.User', on_delete=models.CASCADE, related_name="client_rate_matrix")
-#     debris_type = models.ForeignKey(DebrisType, on_delete=models.CASCADE, related_name="debris_rate_matrix")
-#     mileage = models.FloatField(null=True, blank=True)
-#     diameter = models.FloatField(null=True, blank=True)
-#     unit = models.FloatField(null=True, blank=True)
-#     weight = models.FloatField(null=True, blank=True)
-#     reduction_rate = models.FloatField(null=True, blank=True)
-#     unit_type = models.CharField(max_length=50, choices=PLATFORM_TYPES, default=WEB)
-#
-#     class Meta:
-#         constraints = [
-#             models.UniqueConstraint(fields=['contractor', 'debris_type',],
-#                                     name='unique_contractor_debris_type_truck_type_sub_activity')
-#         ]

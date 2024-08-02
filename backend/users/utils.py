@@ -1,14 +1,14 @@
-CONTRACTOR = 'contractor'
-CLIENT = 'client'
-ER_USER = 'er_user'
-ER_SUB_CONSULTANT = 'er_sub_consultant'
+CONTRACTOR = "contractor"
+CLIENT = "client"
+ER_USER = "er_user"
+ER_SUB_CONSULTANT = "er_sub_consultant"
 
 PRIME_CONTRACTOR = "Prime Contractor"
 SUB_CONTRACTOR = "Sub Contractor"
 
-WEB = 'web'
-MOBILE = 'mobile'
-BOTH = 'both'
+WEB = "web"
+MOBILE = "mobile"
+BOTH = "both"
 
 ROLE_CHOICES = [
     (ER_USER, "E&R User", True),
@@ -21,7 +21,10 @@ ROLE_CHOICES = [
 def validate_platform(is_mobile, device_id, user):
     if is_mobile:
         if user.position.platform_type == WEB:
-            return False, "The user dont not have necessary permissions to login to mobile."
+            return (
+                False,
+                "The user dont not have necessary permissions to login to mobile.",
+            )
         if device_id:
             if not user.device_id:
                 user.device_id = device_id
@@ -33,6 +36,9 @@ def validate_platform(is_mobile, device_id, user):
 
     else:
         if user.position.platform_type == MOBILE:
-            return False, "The user does not have necessary permissions to login to web platform."
+            return (
+                False,
+                "The user does not have necessary permissions to login to web platform.",
+            )
 
     return True, None
