@@ -30,7 +30,7 @@ def validate_platform(is_mobile, device_id, user):
                 user.device_id = device_id
                 user.save()
             elif user.device_id != device_id:
-                return False, "Device Id Don't Match"
+                return False, "Your account is not associated with this device id."
         else:
             return False, "Device Id is required"
 

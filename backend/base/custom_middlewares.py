@@ -52,7 +52,7 @@ class DeviceMiddlewareMiddleware(MiddlewareMixin):
                     if user.position.platform_type == WEB:
                         return JsonResponse(
                             {
-                                "detail": "The user dont not have necessary permissions to use "
+                                "detail": "The user dont have necessary permissions to use "
                                 "mobile platform."
                             },
                             status=status.HTTP_400_BAD_REQUEST,
@@ -60,7 +60,9 @@ class DeviceMiddlewareMiddleware(MiddlewareMixin):
                     if request.device_id:
                         if user.device_id != request.device_id:
                             return JsonResponse(
-                                {"detail": "Device Id Dont Match"},
+                                {
+                                    "detail": "Your account is not associated with this device id."
+                                },
                                 status=status.HTTP_401_UNAUTHORIZED,
                             )
                     else:
