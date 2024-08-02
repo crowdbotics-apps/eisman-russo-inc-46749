@@ -10,7 +10,7 @@ const AppStack = createStackNavigator();
 export const AppStackScreen = () => {
   return (
     <AppStack.Navigator
-      initialRouteName={ScreenNames.ProfileScreen}
+      initialRouteName={ScreenNames.HomeScreen}
       screenOptions={{ headerShown: false }}
     >
       <AppStack.Screen name={ScreenNames.HomeScreen} component={HomeScreen} />

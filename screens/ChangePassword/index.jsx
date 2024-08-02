@@ -23,7 +23,7 @@ import Spacing from "../../components/core/spacing/Spacing";
 import {
   heightPercentageToDP as hp,
   widthPercentageToDP as wp
-} from "react-native-responsive-screen"
+} from "react-native-responsive-screen";
 const ChangePassword = () => {
   const dispatch = useDispatch();
   const [isLoading, setIsLoading] = useState(false);
@@ -50,20 +50,7 @@ const ChangePassword = () => {
       if (error?.status === Constants.NOT_FOUND_CODE) {
         Toast.errorList("Error", [error?.data?.detail]);
       } else if (error?.status === Constants.NETWORK_ERROR) {
-        // const deviceId = await getDeviceID();
-        const deviceId = "0x00123";
-        const user = { ...values, deviceId };
-        if (authenticateUser(user)) {
-          dispatch(appActions.setAccessToken({ accessToken: "accessToken" }));
-          navigation.reset({
-            index: 0,
-            routes: [
-              {
-                name: StackNames.AppStack
-              }
-            ]
-          });
-        }
+        console.log("network error");
       } else {
         //Toast.successor("Success", "Message")
         Toast.errorList("Error", [
@@ -94,7 +81,7 @@ const ChangePassword = () => {
         >
           {formik => {
             return (
-              <View style={{flex:1,justifyContent:"space-between"}}>
+              <View style={{ flex: 1, justifyContent: "space-between" }}>
                 <View style={styles.formContainer}>
                   <InputField
                     label={"Old Password"}
@@ -131,17 +118,17 @@ const ChangePassword = () => {
                   />
                 </View>
                 <View
-                  style={[styles.buttonContainer, CommonStyles.spaceBetweenH,]}
+                  style={[styles.buttonContainer, CommonStyles.spaceBetweenH]}
                 >
                   <Button
                     customStyle={{
                       backgroundColor: "white",
                       borderWidth: 1,
                       borderColor: Colors.greyScale300,
-                      borderRadius:8,
+                      borderRadius: 8
                     }}
                     customTextStyle={{
-                      color:Colors.grey700
+                      color: Colors.grey700
                     }}
                     smallBtn={true}
                     title={"Cancel"}
@@ -158,7 +145,7 @@ const ChangePassword = () => {
                       formik.submitForm();
                     }}
                   />
-                  <Spacing height={hp(10)}/>
+                  <Spacing height={hp(10)} />
                 </View>
               </View>
             );

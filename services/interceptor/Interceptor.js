@@ -35,8 +35,8 @@ API.interceptors.request.use(
     }
     const deviceId = await getDeviceID();
     if (deviceId) {
-      // config.headers["deviceId"] = deviceId;
-      config.headers["deviceId"] = "0x00123";
+      config.headers["deviceId"] = deviceId;
+      // config.headers["deviceId"] = "0x00123";
     }
     console.log("API Call:", `${config?.baseURL}${config.url}`);
     return config;

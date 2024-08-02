@@ -12,8 +12,10 @@ import { store } from "../../redux/Store";
 import { Colors } from "../../theme/Colors";
 import Lock from "../../assets/svgs/Lock.svg";
 import ArrowForward from "../../assets/svgs/ArrowForward.svg";
+import { appActions } from "../../redux/actions/AppAction";
+import { StackNames } from "../../utils/constants";
 
-const ProfileScreen = () => {
+const ProfileScreen = ({navigation}) => {
   return (
     <SafeAreaView
       style={styles.mainContainer}

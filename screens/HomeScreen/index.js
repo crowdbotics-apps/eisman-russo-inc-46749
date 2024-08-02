@@ -36,6 +36,7 @@ const HomeScreen = ({ navigation }) => {
     try {
       const resp = await GET(END_POINTS.USER_PROFILE);
       let userProfile = resp?.data?.result;
+      console.log("userProfile",userProfile)
       dispatch(appActions.setUserProfile({ userProfile: userProfile }));
       setUser(userProfile);
     } catch (error) {

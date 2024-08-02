@@ -15,13 +15,19 @@ import Loader from "../../components/core/loader/Loader";
 import Toast from "../../components/core/toast/Toast";
 import { getDeviceID } from "../../services/interceptor/Interceptor";
 import { authenticateUser } from "../../utils/helperFunctions";
-
+import Spacing from "../../components/core/spacing/Spacing";
+import {
+  heightPercentageToDP as hp,
+  widthPercentageToDP as wp
+} from "react-native-responsive-screen"
 const LoginScreen = ({ navigation }) => {
   const dispatch = useDispatch();
   const [isLoading, setIsLoading] = useState(false);
+  const [isError, setIsError] = useState(false);
 
   const handleLogin = async values => {
     setIsLoading(true);
+    setIsError(false);
 
     try {
       const response = await POST(END_POINTS.LOGIN, values);
@@ -42,8 +48,8 @@ const LoginScreen = ({ navigation }) => {
       if (error?.status === Constants.NOT_FOUND_CODE) {
         Toast.errorList("Error", [error?.data?.detail]);
       } else if (error?.status === Constants.NETWORK_ERROR) {
-        // const deviceId = await getDeviceID();
-        const deviceId = "0x00123";
+        const deviceId = await getDeviceID();
+        // const deviceId = "0x00123";
         const user = { ...values, deviceId };
         if (authenticateUser(user)) {
           dispatch(appActions.setAccessToken({ accessToken: "accessToken" }));
@@ -87,33 +93,38 @@ const LoginScreen = ({ navigation }) => {
         >
           {formik => {
             return (
-              <>
-                <Text style={[Fonts.dSmallRegular, styles.subHeadingStyle]}>
-                  Enter your email and password to login your account
-                </Text>
-                <View style={styles.formContainer}>
-                  <InputField
-                    label={"Email"}
-                    placeholder={"Input your registered email"}
-                    error={formik.errors.email}
-                    value={formik.values.email}
-                    onChangeText={formik.handleChange("email")}
-                    onBlur={() => formik.handleBlur("email")}
-                    autoCapitalize="none"
-                    autoCorrect={false}
-                    keyboardType={"email-address"}
-                  />
-                  <InputField
-                    label={"Password"}
-                    placeholder={"Input your password account"}
-                    password={true}
-                    error={formik.errors.password}
-                    value={formik.values.password}
-                    onChangeText={formik.handleChange("password")}
-                    onBlur={() => formik.handleBlur("password")}
-                    autoCapitalize="none"
-                    autoCorrect={false}
-                  />
+              <View style={{ flex: 1, justifyContent: "space-between" }}>
+                <View>
+                  <Text style={[Fonts.dSmallRegular, styles.subHeadingStyle]}>
+                    Enter your email and password to login your account
+                  </Text>
+                  <View style={styles.formContainer}>
+                    <InputField
+                      isError={isError}
+                      label={"Email"}
+                      placeholder={"Input your registered email"}
+                      error={formik.errors.email}
+                      value={formik.values.email}
+                      onChangeText={formik.handleChange("email")}
+                      onBlur={() => formik.handleBlur("email")}
+                      autoCapitalize="none"
+                      autoCorrect={false}
+                      keyboardType={"email-address"}
+                    />
+                    <Spacing height={hp(3)}/>
+                    <InputField
+                      isError={isError}
+                      label={"Password"}
+                      placeholder={"Input your password account"}
+                      password={true}
+                      error={formik.errors.password}
+                      value={formik.values.password}
+                      onChangeText={formik.handleChange("password")}
+                      onBlur={() => formik.handleBlur("password")}
+                      autoCapitalize="none"
+                      autoCorrect={false}
+                    />
+                  </View>
                 </View>
                 <View style={styles.buttonContainer}>
                   <Button
@@ -121,10 +132,11 @@ const LoginScreen = ({ navigation }) => {
                     onPress={() => {
                       Keyboard.dismiss();
                       formik.submitForm();
+                      setIsError(true);
                     }}
                   />
                 </View>
-              </>
+              </View>
             );
           }}
         </Formik>
