@@ -9,8 +9,10 @@ def check_permissions(permissions):
         def wrapped(self, request, *args, **kwargs):
             for permission in permissions:
                 if not request.user.has_perm(permission):
-                    return Response({'detail': 'You do not have the required permissions.'},
-                                    status=status.HTTP_403_FORBIDDEN)
+                    return Response(
+                        {"detail": "You do not have the required permissions."},
+                        status=status.HTTP_403_FORBIDDEN,
+                    )
             return func(self, request, *args, **kwargs)
 
         return wrapped
