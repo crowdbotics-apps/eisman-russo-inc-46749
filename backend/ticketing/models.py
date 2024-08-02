@@ -5,10 +5,19 @@ from base.models import BaseFieldModel
 
 
 # Create your models here.
+# "rate_matrix_fields": {
+#         "mileage": false,
+#         "diameter": false,
+#         "unit": false,
+#         "weight": false,
+#         "reduction_rate": false
+# }
+
 
 class DebrisType(BaseFieldModel):
     name = models.CharField(max_length=255, unique=True)
     is_active = models.BooleanField(default=True)
+    rate_matrix_fields = models.JSONField(null=True, blank=True)
 
     def __str__(self):
         return self.name
@@ -22,20 +31,26 @@ class Event(BaseFieldModel):
     notes = models.TextField(null=True, blank=True)
 
 
+class Project(BaseFieldModel):
+    event = models.ForeignKey(Event, on_delete=models.CASCADE, related_name="projects")
+
+
 class FemaDates(BaseFieldModel):
     start_date = models.DateField()
     end_date = models.DateField()
     percentage = models.PositiveIntegerField(
-        validators=[
-            MinValueValidator(1),
-            MaxValueValidator(100)
-        ]
+        validators=[MinValueValidator(1), MaxValueValidator(100)]
     )
-    event = models.ForeignKey(Event, on_delete=models.CASCADE, related_name="fema_dates")
+    event = models.ForeignKey(
+        Event, on_delete=models.CASCADE, related_name="fema_dates"
+    )
 
     class Meta:
         constraints = [
-            models.UniqueConstraint(fields=['event', 'start_date', 'end_date'], name='unique_event_start_date_end_date')
+            models.UniqueConstraint(
+                fields=["event", "start_date", "end_date"],
+                name="unique_event_start_date_end_date",
+            )
         ]
 
 

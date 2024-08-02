@@ -22,7 +22,6 @@ from rest_framework import permissions
 from drf_spectacular.views import SpectacularJSONAPIView, SpectacularSwaggerView
 
 urlpatterns = [
-    
     path("accounts/", include("allauth.urls")),
     path("modules/", include("modules.urls")),
     path("api/v1/", include("home.api.v1.urls")),
@@ -42,8 +41,10 @@ admin.site.index_title = "Eisman Russo Inc Admin"
 # swagger
 urlpatterns += [
     path("api-docs/schema/", SpectacularJSONAPIView.as_view(), name="schema"),
-    path("api-docs/", SpectacularSwaggerView.as_view(url_name='schema'), name="api_docs")
+    path(
+        "api-docs/", SpectacularSwaggerView.as_view(url_name="schema"), name="api_docs"
+    ),
 ]
 
 
-urlpatterns += [re_path(r".*",TemplateView.as_view(template_name='index.html'))]
+urlpatterns += [re_path(r".*", TemplateView.as_view(template_name="index.html"))]

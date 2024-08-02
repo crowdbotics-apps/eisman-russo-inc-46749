@@ -1,8 +1,11 @@
 //-------------------- Import Components --------------------//
 
-import { Tag, Space } from "antd";
+import { Tag, Space, Dropdown } from "antd";
 import styled from "styled-components";
 import { ReactComponent as EditIcon } from "../assets/rawSvg/editIcon.svg";
+import { ReactComponent as DropDownDots } from "../assets/rawSvg/dropdownDots.svg";
+import { ReactComponent as ChangePassword } from "../assets/rawSvg/lock.svg";
+
 
 //-------------------- Dashboard Projects Table Columns --------------------//
 
@@ -67,7 +70,7 @@ export const userPositionsColumns = ({handleEditRow}) => {
 
 //-------------------- User Management Table Columns --------------------//
 
-export const userManagementColumns = ({handleEditRow}) => {
+export const userManagementColumns = ({handleEditRow,handleChangePassword}) => {
   let columns = [
       { title: 'Name', dataIndex: 'name', key: 'name' },
       { title: 'Role', dataIndex: 'role', key: 'role' },
@@ -88,22 +91,83 @@ export const userManagementColumns = ({handleEditRow}) => {
             </Tag>
           ),
       },
+      // {
+      //     title: "Actions",
+      //     key: "action",
+      //     render: (_, record) => (
+      //       <Space size="middle" className="d-flex">
+      //         <Button
+      //           onClick={(event) => {
+      //             event.stopPropagation();
+      //             handleEditRow(record);
+      //           }}
+      //         >
+      //           <EditIcon />
+      //         </Button>
+      //       </Space>
+      //     ),
+      //   },
       {
-          title: "Actions",
-          key: "action",
-          render: (_, record) => (
-            <Space size="middle" className="d-flex">
-              <Button
-                onClick={(event) => {
-                  event.stopPropagation();
-                  handleEditRow(record);
+        title: "Actions",
+        key: "action",
+        align: "center",
+        render: (_, record) => (
+          <>
+            <Dropdown
+              menu={{
+                items: [
+                  {
+                    label: (
+                      <div
+                        style={{ width: "180px", padding: "2px 8px" }}
+                        onClick={(e) => {
+                          handleEditRow(record);
+                          
+                        }}
+                      >
+                        <span className="me-3">
+                          <EditIcon />
+                        </span>
+                        Edit
+                      </div>
+                    ),
+                    key: "0",
+                  },
+                  {
+                    label: (
+                      <div
+                        style={{ width: "180px", padding: "2px 2px" }}
+                        className="d-flex justify-content-evenly"
+                        onClick={(e) => {
+                          
+                            handleChangePassword(record);
+                
+                        }}
+                      >
+                        <span className="me-2"><ChangePassword/></span>
+                        Change Password
+                      </div>
+                    ),
+                    key: "1",
+                  },
+                ],
+              }}
+              trigger={["click"]}
+            >
+              <a
+                onClick={(e) => {
+                  e.preventDefault();
                 }}
               >
-                <EditIcon />
-              </Button>
-            </Space>
-          ),
-        },
+                <Space size="middle" className="cursorPointer" style={{ transform: "rotate(270deg)" }}>
+                  <DropDownDots />
+                </Space>
+              </a>
+            </Dropdown>
+            
+          </>
+        ),
+      },
     ];
   
   return columns;

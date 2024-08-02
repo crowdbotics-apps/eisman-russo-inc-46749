@@ -8,7 +8,7 @@ import styled from 'styled-components';
 import { CustomModal } from '../customModal/customModal';
 import CustomGoogleMap from '../customMapComponent/customGoogleMap';
 
-const LocationSelector = ({ label = "", address = "", setAddress = () => {}, setAddressLatAndLong, form, checked, style }) => {
+const LocationSelector = ({ label = "", address = "", setAddress = () => {}, setAddressLatAndLong, form, checked, formItemStyles,style }) => {
   const [isModalOpen, setModalOpen] = useState(false);
   const [position, setPosition] = useState({ lat: 48.8584, lng: 2.2945 }); // Default position
   // const [address, setAddress] = useState('');
@@ -73,6 +73,7 @@ const LocationSelector = ({ label = "", address = "", setAddress = () => {}, set
         name="address_1"
         label={label}
         colon={false}
+        style={formItemStyles}
         rules={checked ? [
           {
             required: true,

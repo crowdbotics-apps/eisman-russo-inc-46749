@@ -51,7 +51,6 @@ export default function SignIn(props) {
   };
 
   const handleForgotPasswordClick = () => {
-    console.log("forgot password");
     props.setIsAnimating(true);
     props.onForgotPasswordClick();
   };
@@ -93,12 +92,12 @@ export default function SignIn(props) {
                         autoComplete="off"
                         passwordField={true}
                       />
-                      <FormSupportingText
+                      {/* <FormSupportingText
                         onClick={handleForgotPasswordClick}
                         style={{ marginLeft: "auto", marginTop: "10px", cursor: "pointer" }}
                       >
                         Forgot password?
-                      </FormSupportingText>
+                      </FormSupportingText> */}
                       <Flex flexDirection={"column"}>
                         <FlexedInput>
                           <AuthButton btnText={"Login"} type="submit" disabled={loader} />

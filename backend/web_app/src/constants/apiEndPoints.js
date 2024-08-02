@@ -5,7 +5,8 @@ export const adminAPIsEndPoints = {
   RESET_PASSWORD: "",
   CREATE_USER: "/users/profile/",
   LIST_USER: "/users/profile/",
-  UPDATE_USER: (id) => `/users/profile/?${id}/`,
+  UPDATE_USER: (id) => `/users/profile/${id}/`,
+  CHANGE_PASSWORD: (id) => `/users/profile/change_password/${id}/`,
 
   //----------------------- User Role APIs -----------------------//
 
@@ -15,7 +16,7 @@ export const adminAPIsEndPoints = {
 
   ADD_POSITION: "/users/position/",
   LIST_POSITION: (query) => `/users/position/?${query}`,
-  UPDATE_POSITION: (id) => `/users/position/?id=${id}/`,
+  UPDATE_POSITION: (id) => `/users/position/${id}/`,
   DELETE_POSITION: (id) => `/users/position/?${id}/`,
 
   

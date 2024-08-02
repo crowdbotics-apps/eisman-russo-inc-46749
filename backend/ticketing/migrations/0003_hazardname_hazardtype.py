@@ -8,35 +8,58 @@ import uuid
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('ticketing', '0002_auto_20240729_0617'),
+        ("ticketing", "0002_auto_20240729_0617"),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='HazardType',
+            name="HazardType",
             fields=[
-                ('id', models.UUIDField(default=uuid.uuid4, editable=False, primary_key=True, serialize=False)),
-                ('created_at', models.DateTimeField(auto_now_add=True, null=True)),
-                ('modified_at', models.DateTimeField(auto_now=True, null=True)),
-                ('type', models.CharField(max_length=255, unique=True)),
-                ('is_active', models.BooleanField(default=True)),
+                (
+                    "id",
+                    models.UUIDField(
+                        default=uuid.uuid4,
+                        editable=False,
+                        primary_key=True,
+                        serialize=False,
+                    ),
+                ),
+                ("created_at", models.DateTimeField(auto_now_add=True, null=True)),
+                ("modified_at", models.DateTimeField(auto_now=True, null=True)),
+                ("type", models.CharField(max_length=255, unique=True)),
+                ("is_active", models.BooleanField(default=True)),
             ],
             options={
-                'abstract': False,
+                "abstract": False,
             },
         ),
         migrations.CreateModel(
-            name='HazardName',
+            name="HazardName",
             fields=[
-                ('id', models.UUIDField(default=uuid.uuid4, editable=False, primary_key=True, serialize=False)),
-                ('created_at', models.DateTimeField(auto_now_add=True, null=True)),
-                ('modified_at', models.DateTimeField(auto_now=True, null=True)),
-                ('name', models.CharField(max_length=255, unique=True)),
-                ('is_active', models.BooleanField(default=True)),
-                ('type', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='name', to='ticketing.hazardtype')),
+                (
+                    "id",
+                    models.UUIDField(
+                        default=uuid.uuid4,
+                        editable=False,
+                        primary_key=True,
+                        serialize=False,
+                    ),
+                ),
+                ("created_at", models.DateTimeField(auto_now_add=True, null=True)),
+                ("modified_at", models.DateTimeField(auto_now=True, null=True)),
+                ("name", models.CharField(max_length=255, unique=True)),
+                ("is_active", models.BooleanField(default=True)),
+                (
+                    "type",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="name",
+                        to="ticketing.hazardtype",
+                    ),
+                ),
             ],
             options={
-                'abstract': False,
+                "abstract": False,
             },
         ),
     ]

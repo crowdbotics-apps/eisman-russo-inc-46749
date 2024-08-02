@@ -26,7 +26,7 @@ export function getItem (label, key, icon, children, navigateTo) {
               return getItem(
                 child.itemName,
                 `${index}-${subIndex}-${childIndex}`,
-                isLastChild ? <TreeEndIcon /> : <TreeContinueIcon />, 
+                isLastChild ? <TreeEndIcon style={{position:"relative", top:"0px",right:"30px"}} /> : <TreeContinueIcon style={{position:"relative", top:"5px",right:"30px"}}/>, 
                 null,
                 child.navigateTo
               );
