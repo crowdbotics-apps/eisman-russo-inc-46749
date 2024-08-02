@@ -10,10 +10,11 @@ import { AntdesignTablePagination } from '../../components/antDesignTable/Antdes
 import UpdateUser from '../../components/modals/userManagement/updateUser';
 import { pushNotification } from '../../util/notification';
 import { useSelector } from 'react-redux';
-import { addUser, getUserList } from '../../util/dataService';
+import { addUser, getUserList, updateUser } from '../../util/dataService';
 import { main_api } from '../../api/axiosHelper';
 import { adminAPIsEndPoints } from '../../constants/apiEndPoints';
 import { status } from '../../util/dropdownData';
+import ResetPassword from '../../components/auth/resetPassword';
 
 export default function UserManagement() {
 
@@ -26,6 +27,7 @@ export default function UserManagement() {
   const [data, setData] = useState();
   const [count, setCount] = useState(0);
   const [updateUserModal, setUpdateUserModal] = useState(false);
+  const [changePasswordModal, setChangePasswordModal] = useState(false);
   const rolesState = useSelector((state) => state.roles.roles);
 
   const roles = rolesState.map((role) => ({
@@ -47,9 +49,9 @@ export default function UserManagement() {
           key: item?.id, 
           name: item?.name || '---', 
           role: item?.role?.name || '---',
-          roleId: item?.role?.id || '---',
+          roleData: item?.role,
           position: item?.position?.name || '---',
-          positionId: item?.position?.id || '---', 
+          positionData: item?.position,
           email: item?.email || '---',
           status: item?.is_active, 
         }));
@@ -84,12 +86,11 @@ export default function UserManagement() {
 
   //------------------ Functions for Update User Modal ---------------------//
 
-  const handleEditRow = (position) => {
-    if (position) {
-        setSelectedUser(position);
+  const handleEditRow = (user) => {
+    if (user) {
+        
+        setSelectedUser(user);
         setUpdateUserModal(true);
-    } else {
-        pushNotification("error", "No role selected!");
     }
   };
 
@@ -98,6 +99,17 @@ export default function UserManagement() {
     setUpdateUserModal(true);
   };
 
+
+  //-------------------- Function for Change Password Modal -----------------//
+
+  const handleChangePassword = (user) => {
+    if (user) {
+      setSelectedUser(user);
+      setChangePasswordModal(true);
+    }
+  };
+
+  
 
   //------------------ Search ---------------------//
 
@@ -111,37 +123,66 @@ export default function UserManagement() {
 
   //------------------ Functions to Handle Add and Edit User ---------------------//
 
-  const handleEditUser = (values) => {
+  const handleEditUser = (values, selectedRoleType, selectedPositionName) => {
     const payload = {
+      name: values?.name || '',
       email: values?.email || '',
+      phone_number: values?.telephone_number || '',
+      is_active: values?.is_active || '',
       password: values?.password || '',
       confirm_password: values?.confirm_password || '',
       role: values?.role || '',
       position: values?.position || '',
-      prime_contractor: values?.prime_contractor || '',
-      additional_data:{
+    }
+
+    if(selectedRoleType === "Contractor" && selectedPositionName === "Sub Contractor"){
+      payload = {
+        ...payload, 
+        prime_contractor: values?.prime_contractor || '',
+        additional_data:{
           company_name: values?.company_name || '',
           prefix: values?.prefix || '',
-      },
+        },
+      };
     }
-    // addUser(selectedUser.key, payload);
+    const id = selectedUser.key;
+    try {
+      updateUser(id, payload);
+      fetchData();
+    } catch (error) {
+      pushNotification('Error updating user', "error");
+    }
     setUpdateUserModal(false);
   }
 
-  const handleAddUser = (values) => {
+  const handleAddUser = async (values, selectedRoleType, selectedPositionName) => {
     const payload = {
+      name: values?.name || '',
       email: values?.email || '',
+      phone_number: values?.telephone_number || '',
+      is_active: values?.is_active || '',
       password: values?.password || '',
       confirm_password: values?.confirm_password || '',
       role: values?.role || '',
       position: values?.position || '',
-      prime_contractor: values?.prime_contractor || '',
-      additional_data:{
+    }
+    
+    if(selectedRoleType === "Contractor" && selectedPositionName === "Sub Contractor"){
+      payload = {
+        ...payload, 
+        prime_contractor: values?.prime_contractor || '',
+        additional_data:{
           company_name: values?.company_name || '',
           prefix: values?.prefix || '',
-      },
+        },
+      };
     }
-    // addUser(payload);
+    try {
+      await addUser(payload);
+      fetchData(); 
+    } catch (error) {
+      pushNotification('Error adding user', "error");
+    }
     setUpdateUserModal(false);
   }
 
@@ -192,7 +233,7 @@ export default function UserManagement() {
         </div>
         </div>
         <AntdesignTablePagination 
-          columns={userManagementColumns({handleEditRow})} 
+          columns={userManagementColumns({handleEditRow,handleChangePassword})} 
           data={data}
           totalCount={count}
           loadPaginatedData={fetchData} 
@@ -200,6 +241,7 @@ export default function UserManagement() {
         />
     </CustomCard>
     {updateUserModal && <UpdateUser isModalOpen={updateUserModal} title={selectedUser ? "Edit User" : "Add User"} onFinish={selectedUser ? handleEditUser : handleAddUser  } setModalOpen={setUpdateUserModal} editUserValues={selectedUser}/>}
+    {changePasswordModal && <ResetPassword isModalOpen={changePasswordModal} setModalOpen={setChangePasswordModal} selectedUser={selectedUser}/>}
   </div>
   )
 }
@@ -212,7 +254,7 @@ const CustomCard = styled(Card)`
   width: calc(100vw - 40px);
   max-width: 1605px;
   height: calc(100vh - 40px);
-  max-height: 710px;
+  max-height: 912px;
   margin: 20px;
   background-color: white;
   

@@ -43,7 +43,6 @@ export default function ForgetPassword(props) {
     //     pushNotification(error?.error, "error");
     //   }
     // }
-    console.log("values", values);
   };
 
   const handleBackToLoginClick = () => {

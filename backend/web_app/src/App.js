@@ -29,7 +29,7 @@ function App() {
         </Route>
 
         {/* Reset Password Route */}
-        <Route path="reset-password" element={<PublicOnlyRoute Page={ResetPassword} />} />
+        {/* <Route path="reset-password" element={<PublicOnlyRoute Page={ResetPassword} />} /> */}
         
         {/* Dashboard Route */}
         <Route path="dashboard">
