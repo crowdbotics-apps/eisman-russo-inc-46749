@@ -95,7 +95,8 @@ class UserProfileSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ["id", "name", "email", "role", "position", "phone_number", "address", "latitude", "longitude"]
+        fields = ["id", "name", "email", "role", "position", "phone_number", "address", "latitude", "longitude",
+                  "device_id", "is_active"]
 
 
 class UserCreateSerializer(serializers.ModelSerializer):
