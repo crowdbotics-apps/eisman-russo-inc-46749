@@ -10,6 +10,7 @@ export const AntdesignTable = ({
   tableHeight,
   data = [],
   columns = [],
+  pagination = false,
   paginationRightHeadingName = "Total Results",
   allowMultieSelectRows = true,
   ...props
@@ -71,6 +72,9 @@ export const AntdesignTable = ({
         pagination={false}
         {...props}
       />
+      {
+        pagination && (
+
       <CustomPaginationContainer>
         <div className="pl-4 pr-4">
           <PaginationRightHeading>
@@ -90,6 +94,7 @@ export const AntdesignTable = ({
           </RoundedButton>
         </div>
       </CustomPaginationContainer>
+      )}
     </>
   );
 };
