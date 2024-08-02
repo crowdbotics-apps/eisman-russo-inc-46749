@@ -1,6 +1,7 @@
 from django.contrib.auth.base_user import BaseUserManager
 from django.contrib.auth.models import AbstractUser
 from django.contrib.auth.validators import UnicodeUsernameValidator
+from django.contrib.postgres.fields import ArrayField
 from django.db import models
 from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
@@ -70,8 +71,8 @@ class User(AbstractUser):
     )
     name = models.CharField(_("Name of User"), blank=True, null=True, max_length=255)
     email = models.EmailField(_('email address'), unique=True)
-    role = models.ForeignKey(Role, on_delete=models.SET_NULL, null=True, related_name="user_role")
-    position = models.ForeignKey(Position, on_delete=models.SET_NULL, null=True, related_name="user_position")
+    role = models.ForeignKey(Role, on_delete=models.SET_NULL, blank=True, null=True, related_name="user_role")
+    position = models.ForeignKey(Position, on_delete=models.SET_NULL, blank=True, null=True, related_name="user_position")
     phone_number = models.CharField(max_length=17, blank=True, null=True)
     address = models.CharField(
         _("Address"), blank=True, null=True, max_length=255
@@ -100,13 +101,12 @@ class UserAdditionalData(BaseFieldModel):
     company_name = models.CharField(max_length=255, blank=True, null=True)
     prefix = models.CharField(max_length=255, blank=True, null=True)
     notes = models.TextField(null=True, blank=True)
+    email_ticket_receipt = ArrayField(models.EmailField(), blank=True, null=True)
 
     class Meta:
         constraints = [
             models.UniqueConstraint(fields=['company_name'], name='unique_company_name'),
             models.UniqueConstraint(fields=['prefix'], name='unique_prefix')
         ]
-
-
 
 

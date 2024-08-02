@@ -5,10 +5,18 @@ from base.models import BaseFieldModel
 
 
 # Create your models here.
+# "rate_matrix_fields": {
+#         "mileage": false,
+#         "diameter": false,
+#         "unit": false,
+#         "weight": false,
+#         "reduction_rate": false
+# }
 
 class DebrisType(BaseFieldModel):
     name = models.CharField(max_length=255, unique=True)
     is_active = models.BooleanField(default=True)
+    rate_matrix_fields = models.JSONField(null=True, blank=True)
 
     def __str__(self):
         return self.name
