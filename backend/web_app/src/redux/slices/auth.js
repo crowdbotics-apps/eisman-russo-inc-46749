@@ -39,7 +39,7 @@ export function loginUser(formValues) {
   return async (dispatch, getState) => {
     try {
       dispatch(slice.actions.loginUserSlice({ isLoading: true, error: "", loginResponse: {} }));
-      const { data } = await main_api.post(adminAPIsEndPoints.COMPANY_LOGIN, formValues);
+      const { data } = await main_api.post(adminAPIsEndPoints.LOGIN, formValues);
       dispatch(slice.actions.loginUserSlice({ isLoading: false, error: "", loginResponse: data.result }));
     } catch (error) {
       dispatch(slice.actions.loginUserSlice({ isLoading: false, error: error.message, loginResponse: {} }));

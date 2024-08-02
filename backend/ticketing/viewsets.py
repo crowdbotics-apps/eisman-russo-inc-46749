@@ -2,12 +2,11 @@ from django.db import transaction
 from rest_framework import viewsets, status
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
-from .models import DebrisType, Event , HazardName, HazardType , SubActivity, TruckType
+from .models import DebrisType, Event, HazardName, HazardType, SubActivity, TruckType
 from .serializers import DebrisSerializer, EventSerializer, EventCreateSerializer , HazardNameSerializer, HazardTypeSerializer, SubActivitySerializer, TruckTypeSerializer
 from base.pagination import ListPagination
 from base.utils import error_handler
 from .permissions import DebrisTypePermissions
-
 
 
 class DebrisViewSet(viewsets.ModelViewSet):
@@ -19,14 +18,14 @@ class DebrisViewSet(viewsets.ModelViewSet):
     search_fields = ['name']
     ordering = ['-created_at']
 
-    def list(self, request,  *args, **kwargs):
+    def list(self, request, *args, **kwargs):
         debris = self.filter_queryset(self.get_queryset())
         page = self.paginate_queryset(debris)
         serializer = self.serializer_class(page, many=True)
         paginated_response = self.get_paginated_response(serializer.data)
         return paginated_response
 
-    def create(self, request,  *args, **kwargs):
+    def create(self, request, *args, **kwargs):
         serializer = DebrisSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
@@ -35,12 +34,12 @@ class DebrisViewSet(viewsets.ModelViewSet):
         message = error_handler(serializer.errors)
         return Response({'detail': message}, status=status.HTTP_400_BAD_REQUEST)
 
-    def retrieve(self, request,  *args, **kwargs):
+    def retrieve(self, request, *args, **kwargs):
         debris = self.get_object()
         serializer = self.serializer_class(debris)
         return Response({'result': serializer.data}, status=status.HTTP_200_OK)
 
-    def update(self, request,  *args, **kwargs):
+    def update(self, request, *args, **kwargs):
         debris = self.get_object()
         serializer = self.serializer_class(instance=debris, data=request.data, partial=True)
         if serializer.is_valid():
@@ -65,7 +64,7 @@ class EventViewSet(viewsets.ModelViewSet):
     search_fields = ['name']
     ordering = ['-created_at']
 
-    def list(self, request,  *args, **kwargs):
+    def list(self, request, *args, **kwargs):
         events = self.filter_queryset(self.get_queryset())
         page = self.paginate_queryset(events)
         serializer = self.serializer_class(page, many=True)
@@ -73,7 +72,7 @@ class EventViewSet(viewsets.ModelViewSet):
         return paginated_response
 
     @transaction.atomic
-    def create(self, request,  *args, **kwargs):
+    def create(self, request, *args, **kwargs):
         serializer = EventCreateSerializer(data=request.data)
         if serializer.is_valid():
             event = serializer.save()
@@ -83,13 +82,13 @@ class EventViewSet(viewsets.ModelViewSet):
         message = error_handler(serializer.errors)
         return Response({'detail': message}, status=status.HTTP_400_BAD_REQUEST)
 
-    def retrieve(self, request,  *args, **kwargs):
+    def retrieve(self, request, *args, **kwargs):
         event = self.get_object()
         serializer = self.serializer_class(event)
         return Response({'result': serializer.data}, status=status.HTTP_200_OK)
 
     @transaction.atomic
-    def update(self, request,  *args, **kwargs):
+    def update(self, request, *args, **kwargs):
         event = self.get_object()
         serializer = EventCreateSerializer(instance=event, data=request.data, partial=True)
         if serializer.is_valid():
@@ -106,8 +105,6 @@ class EventViewSet(viewsets.ModelViewSet):
         return Response({"detail": "Event Deleted Successfully"}, status=status.HTTP_200_OK)
 
 
-
-
 class HazardTypeViewSet(viewsets.ModelViewSet):
     permission_classes = [IsAuthenticated]
     queryset = HazardType.objects.all()
@@ -117,14 +114,14 @@ class HazardTypeViewSet(viewsets.ModelViewSet):
     search_fields = ['type']
     ordering = ['-created_at']
 
-    def list(self, request,  *args, **kwargs):
+    def list(self, request, *args, **kwargs):
         hazards = self.filter_queryset(self.get_queryset())
         page = self.paginate_queryset(hazards)
-        serializer = self.serializer_class(page, many=True) 
+        serializer = self.serializer_class(page, many=True)
         paginated_response = self.get_paginated_response(serializer.data)
         return paginated_response
 
-    def create(self, request,  *args, **kwargs):
+    def create(self, request, *args, **kwargs):
         serializer = HazardTypeSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
@@ -133,12 +130,12 @@ class HazardTypeViewSet(viewsets.ModelViewSet):
         message = error_handler(serializer.errors)
         return Response({'detail': message}, status=status.HTTP_400_BAD_REQUEST)
 
-    def retrieve(self, request,  *args, **kwargs):
+    def retrieve(self, request, *args, **kwargs):
         hazard = self.get_object()
         serializer = self.serializer_class(hazard)
         return Response({'result': serializer.data}, status=status.HTTP_200_OK)
 
-    def update(self, request,  *args, **kwargs):
+    def update(self, request, *args, **kwargs):
         hazard = self.get_object()
         serializer = self.serializer_class(instance=hazard, data=request.data, partial=True)
         if serializer.is_valid():
@@ -147,33 +144,30 @@ class HazardTypeViewSet(viewsets.ModelViewSet):
 
         message = error_handler(serializer.errors)
         return Response({'detail': message}, status=status.HTTP_400_BAD_REQUEST)
-    
+
     def destroy(self, request, *args, **kwargs):
         hazard = self.get_object()
         hazard.delete()
         return Response({"detail": "Hazard Type Deleted Successfully"}, status=status.HTTP_200_OK)
 
 
-
-
-
 class HazardNameViewSet(viewsets.ModelViewSet):
     permission_classes = [IsAuthenticated]
     queryset = HazardName.objects.all()
     serializer_class = HazardNameSerializer
-    filterset_fields = ['is_active']
-    search_fields= ['name','type']
+    filterset_fields = ['is_active', 'type']
+    search_fields = ['name', 'type']
     pagination_class = ListPagination
     ordering = ['-created_at']
-    
-    def list(self,request, *args, **kwargs):
+
+    def list(self, request, *args, **kwargs):
         hazard = self.filter_queryset(self.get_queryset())
         page = self.paginate_queryset(hazard)
         serializer = self.serializer_class(page, many=True)
         paginated_response = self.get_paginated_response(serializer.data)
         return paginated_response
-    
-    def create(self,request, *args, **kwargs):
+
+    def create(self, request, *args, **kwargs):
         serializer = HazardNameSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
@@ -181,16 +175,14 @@ class HazardNameViewSet(viewsets.ModelViewSet):
 
         message = error_handler(serializer.errors)
         return Response({'detail': message}, status=status.HTTP_400_BAD_REQUEST)
-    
-    def retrieve(self, request,  *args, **kwargs):
+
+    def retrieve(self, request, *args, **kwargs):
         hazard = self.get_object()
         serializer = self.serializer_class(hazard)
         return Response({'result': serializer.data}, status=status.HTTP_200_OK)
 
-
-    def update(self, request,  *args, **kwargs):
+    def update(self, request, *args, **kwargs):
         hazard = self.get_object()
-        print(hazard)
         serializer = self.serializer_class(instance=hazard, data=request.data, partial=True)
         if serializer.is_valid():
             serializer.save()
@@ -198,16 +190,13 @@ class HazardNameViewSet(viewsets.ModelViewSet):
 
         message = error_handler(serializer.errors)
         return Response({'detail': message}, status=status.HTTP_400_BAD_REQUEST)
-    
+
     def destroy(self, request, *args, **kwargs):
         hazard = self.get_object()
         hazard.delete()
         return Response({"detail": "Hazard Name Deleted Successfully"}, status=status.HTTP_200_OK)
 
 
-
-
-    
 class SubActivityViewSet(viewsets.ModelViewSet):
     permission_classes = [IsAuthenticated]
     serializer_class = SubActivitySerializer
@@ -216,15 +205,15 @@ class SubActivityViewSet(viewsets.ModelViewSet):
     search_fields = ['name']
     ordering = ['-created_at']
     pagination_class = ListPagination
-    
-    def list(self , request, *args, **kwargs):
+
+    def list(self, request, *args, **kwargs):
         subactivity = self.filter_queryset(self.get_queryset())
         page = self.paginate_queryset(subactivity)
         serializer = self.serializer_class(page, many=True)
         paginated_response = self.get_paginated_response(serializer.data)
         return paginated_response
-    
-    def create(self,request, *args, **kwargs):
+
+    def create(self, request, *args, **kwargs):
         serializer = SubActivitySerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
@@ -232,13 +221,13 @@ class SubActivityViewSet(viewsets.ModelViewSet):
 
         message = error_handler(serializer.errors)
         return Response({'detail': message}, status=status.HTTP_400_BAD_REQUEST)
-    
-    def retrive(self,request, *args, **kwargs):
+
+    def retrieve(self, request, *args, **kwargs):
         subactivity = self.get_object()
         serializer = self.serializer_class(subactivity)
         return Response({'result': serializer.data}, status=status.HTTP_200_OK)
     
-    def update(self,request, *args, **kwargs):
+    def update(self, request, *args, **kwargs):
         subactivity = self.get_object()
         serializer = self.serializer_class(instance=subactivity, data=request.data, partial=True)
         if serializer.is_valid():
@@ -247,12 +236,11 @@ class SubActivityViewSet(viewsets.ModelViewSet):
 
         message = error_handler(serializer.errors)
         return Response({'detail': message}, status=status.HTTP_400_BAD_REQUEST)
-    
+
     def destroy(self, request, *args, **kwargs):
         subactivity = self.get_object()
         subactivity.delete()
         return Response({"detail": "SubActivity Deleted Successfully"}, status=status.HTTP_200_OK)
-    
 
 
 class TruckTypeViewSet(viewsets.ModelViewSet):

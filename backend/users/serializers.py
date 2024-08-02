@@ -1,4 +1,5 @@
 from django.contrib.auth import get_user_model
+from django.core.exceptions import ValidationError
 from django.db import IntegrityError
 from rest_framework import serializers
 
@@ -65,9 +66,15 @@ class UserAdditionalDataSerializer(serializers.ModelSerializer):
 
 
 class UserAdditionalDataModifySerializer(serializers.ModelSerializer):
+    email_ticket_receipt = serializers.ListField(
+        child=serializers.EmailField(error_messages={
+            'invalid': 'Please enter a valid email address for email ticket receipt.'
+        }),
+        required=False
+    )
     class Meta:
         model = UserAdditionalData
-        fields = ['company_name', 'prefix']
+        fields = ['company_name', 'prefix', 'notes', 'email_ticket_receipt']
 
 
 class UserReadSerializer(serializers.ModelSerializer):
@@ -88,10 +95,12 @@ class UserProfileSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ["id", "name", "email", "role", "position", "phone_number", "address", "latitude", "longitude"]
+        fields = ["id", "name", "email", "role", "position", "phone_number", "address", "latitude", "longitude",
+                  "device_id", "is_active"]
 
 
 class UserCreateSerializer(serializers.ModelSerializer):
+    name = serializers.CharField(required=True)
     password = serializers.CharField(write_only=True)
     confirm_password = serializers.CharField(write_only=True)
     role = serializers.PrimaryKeyRelatedField(
@@ -168,7 +177,9 @@ class UserCreateSerializer(serializers.ModelSerializer):
                 UserAdditionalData.objects.create(
                     user=user,
                     company_name=company_name,
-                    prefix=prefix
+                    prefix=prefix,
+                    notes=additional_data.get('notes', None),
+                    email_ticket_receipt=additional_data.get('email_ticket_receipt', [])
                 )
             except IntegrityError as e:
                 if 'unique_company_name' in str(e):
@@ -185,6 +196,7 @@ class UserCreateSerializer(serializers.ModelSerializer):
 
 
 class UserUpdateSerializer(serializers.ModelSerializer):
+    name = serializers.CharField(allow_null=False)
     role = serializers.PrimaryKeyRelatedField(
         queryset=Role.objects.all(),
         allow_null=False
@@ -232,17 +244,17 @@ class UserUpdateSerializer(serializers.ModelSerializer):
                         'prime_contractor': ["Prime Contractor is required"]
                     })
             additional_data = data.get('additional_data', None)
-
-            company_name = additional_data.get('company_name', None) if additional_data else None
-            prefix = additional_data.get('prefix', None) if additional_data else None
-            if not company_name:
-                raise serializers.ValidationError({
-                    'company_name': ["Company Name is required"]
-                })
-            if not prefix:
-                raise serializers.ValidationError({
-                    'prefix': ["Prefix is required"]
-                })
+            if additional_data:
+                company_name = additional_data.get('company_name', None) if additional_data else None
+                prefix = additional_data.get('prefix', None) if additional_data else None
+                if not company_name:
+                    raise serializers.ValidationError({
+                        'company_name': ["Company Name is required"]
+                    })
+                if not prefix:
+                    raise serializers.ValidationError({
+                        'prefix': ["Prefix is required"]
+                    })
 
         return data
 
@@ -251,7 +263,7 @@ class UserUpdateSerializer(serializers.ModelSerializer):
         user = super().update(instance, validated_data)
 
         if additional_data:
-            user_additional_data = user.additional_data
+            user_additional_data = user.additional_data if hasattr(user, 'additional_data') else None
             try:
 
                 if user_additional_data:

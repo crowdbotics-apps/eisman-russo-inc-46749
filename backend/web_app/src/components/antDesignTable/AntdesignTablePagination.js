@@ -1,8 +1,8 @@
 import React, { useCallback, useEffect, useState } from "react";
 import styled from "styled-components";
 import { Table } from "antd";
-import { ReactComponent as GreaterThanIcon } from "../../assets/rawSvgs/greaterThanIcon.svg";
-import { ReactComponent as LessThanIcon } from "../../assets/rawSvgs/lessThanIcon.svg";
+import { ReactComponent as GreaterThanIcon } from "../../assets/rawSvg/greaterThanIcon.svg";
+import { ReactComponent as LessThanIcon } from "../../assets/rawSvg/lessThanIcon.svg";
 import { RoundedButton, PaginationRightHeading, CustomPaginationContainer } from "./tableStyles";
 
 export const AntdesignTablePagination = ({
@@ -40,14 +40,19 @@ export const AntdesignTablePagination = ({
   const handlePrevPage = () => {
     if (currentPage > 1) {
       setCurrentPage(currentPage - 1);
-      loadPaginatedData(currentPage - 1);
+      const prevPage = currentPage - 1;
+      const query = '';
+      loadPaginatedData(query, prevPage);
     }
   };
 
   const handleNextPage = () => {
+    console.log("currentPage", currentPage < Math.ceil(totalCount / pageSize));
     if (currentPage < Math.ceil(totalCount / pageSize)) {
       setCurrentPage(currentPage + 1);
-      loadPaginatedData(currentPage + 1);
+      const nextPage = currentPage + 1;
+      const query = '';
+      loadPaginatedData(query, nextPage);
     }
   };
 

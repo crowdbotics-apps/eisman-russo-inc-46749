@@ -19,18 +19,9 @@ main_api.interceptors.request.use(
   (config) => {
     const jwt_token = getJWTToken();
     if (jwt_token) {
-      config.headers.Authorization = `Token ${jwt_token}`;
+      config.headers.Authorization = jwt_token;
     } else {
       delete config.headers.Authorization;
-    }
-    const state = store.getState();
-
-    if(state?.auth?.loginResponse?.selectedRoleId){
-      config.params = { ...config.params, selected_role_id:  state?.auth?.loginResponse?.selectedRoleId};
-    }
-  
-    if(state?.auth?.loginResponse?.selectCompany?.[0]?.company_id){
-      config.params = { ...config.params, selected_company_id:  state?.auth?.loginResponse?.selectCompany?.[0]?.company_id};
     }
     return config;
   },
