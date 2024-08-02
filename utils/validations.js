@@ -14,10 +14,10 @@ export const loginValidationSchema = Yup.object().shape({
   password: Yup.string()
     .trim()
     .max(30, ({ max }) => `Password must be less than ${max} characters`)
-    .matches(/\w*[a-z]\w*/, "Passwords must have at least one lowercase")
     .min(8, ({ min }) => `Password must be at least ${min} characters`)
     .required("Password is required")
 });
+
 export const resetPasswordValidationSchema = Yup.object().shape({
   email: Yup.string()
     .matches(
@@ -28,4 +28,26 @@ export const resetPasswordValidationSchema = Yup.object().shape({
     .max(200, ({ max }) => `Email must be less than ${max} characters`)
     .email("Please enter a valid email address")
     .required("Email is required")
+});
+
+
+export const changePasswordValidationSchema = Yup.object().shape({
+  oldPassword: Yup.string()
+    .trim()
+    .max(30, ({ max }) => `Old password must be less than ${max} characters`)
+    .min(8, ({ min }) => `Old password must be at least ${min} characters`)
+    .required("Old password is required"),
+
+  newPassword: Yup.string()
+    .trim()
+    .max(30, ({ max }) => `New password must be less than ${max} characters`)
+    .min(8, ({ min }) => `New password must be at least ${min} characters`)
+    .required("New password is required"),
+
+  confirmNewPassword: Yup.string()
+    .oneOf(
+      [Yup.ref("newPassword"), null],
+      "Confirm new password must match new password"
+    )
+    .required("Confirm new password is required")
 });

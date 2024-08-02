@@ -13,6 +13,8 @@ import { Formik } from "formik";
 import { loginValidationSchema } from "../../utils/validations";
 import Loader from "../../components/core/loader/Loader";
 import Toast from "../../components/core/toast/Toast";
+import { getDeviceID } from "../../services/interceptor/Interceptor";
+import { authenticateUser } from "../../utils/helperFunctions";
 
 const LoginScreen = ({ navigation }) => {
   const dispatch = useDispatch();
@@ -26,6 +28,7 @@ const LoginScreen = ({ navigation }) => {
       dispatch(
         appActions.setAccessToken({ accessToken: response?.data.access })
       );
+      dispatch(appActions.setUserCredentials({ credentials: values }));
       navigation.reset({
         index: 0,
         routes: [
@@ -35,15 +38,29 @@ const LoginScreen = ({ navigation }) => {
         ]
       });
     } catch (error) {
-      // console.log("error", error);
+      console.log(error);
       if (error?.status === Constants.NOT_FOUND_CODE) {
         Toast.errorList("Error", [error?.data?.detail]);
       } else if (error?.status === Constants.NETWORK_ERROR) {
-        console.log("offline mode");
+        // const deviceId = await getDeviceID();
+        const deviceId = "0x00123";
+        const user = { ...values, deviceId };
+        if (authenticateUser(user)) {
+          dispatch(appActions.setAccessToken({ accessToken: "accessToken" }));
+          navigation.reset({
+            index: 0,
+            routes: [
+              {
+                name: StackNames.AppStack
+              }
+            ]
+          });
+        }
       } else {
-        console.log("something went wrong");
         //Toast.successor("Success", "Message")
-        Toast.errorList("Error", ["Something went wrong"]);
+        Toast.errorList("Error", [
+          "A system error occurred. if continues, contact support."
+        ]);
       }
     } finally {
       setIsLoading(false);

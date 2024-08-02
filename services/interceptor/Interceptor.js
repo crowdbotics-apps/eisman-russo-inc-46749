@@ -3,6 +3,9 @@ import axios from "axios";
 import { store } from "../../redux/Store";
 import { Constants } from "../../utils/constants";
 import DeviceInfo from "react-native-device-info";
+import Toast from "../../components/core/toast/Toast";
+import { appActions } from "../../redux/actions/AppAction";
+import { logoutUserFromInterceptor } from "../../utils/NavigationUtils";
 
 const API = axios.create({
   baseURL: Constants.BASE_URL,
@@ -11,9 +14,7 @@ const API = axios.create({
     "Content-Type": "application/json",
     Accept: "application/json",
     isMobile: true
-  },
-  timeout: 30000,
-  timeoutErrorMessage: "Request Timeout"
+  }
 });
 
 API.interceptors.request.use(
@@ -53,12 +54,14 @@ API.interceptors.response.use(
     if (error?.response?.config?.url.includes("login?success")) {
       return Promise.reject(error);
     } else if (error?.response?.status === Constants.UN_AUTHORIZED) {
-      console.log("logout user");
-      //   logOutUser()
-      //   setTimeout(() => {
-      // ToastMessage("error", "Unauthorized access.")
-      //   }, 200)
-      //   return
+      Toast.errorList("Error", ["Unauthorized access"]);
+      store.dispatch(
+        appActions.setAccessToken({
+          accessToken: null
+        })
+      );
+      logoutUserFromInterceptor();
+      return;
     }
     return Promise.reject(error);
   }

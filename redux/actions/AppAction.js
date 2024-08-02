@@ -1,6 +1,12 @@
-import { setAccessToken, setDeviceId, setIsAuthorized } from "../reducers/AppReducer"
+import {
+  setAccessToken,
+  setUserProfile,
+  setIsAuthorized,
+  setUserCredentials
+} from "../reducers/AppReducer";
 export const appActions = {
   setIsAuthorized,
   setAccessToken,
-  setDeviceId
-}
+  setUserProfile,
+  setUserCredentials
+};

@@ -2,7 +2,9 @@ export const ScreenNames = {
   SplashScreen: "SplashScreen",
   OnboardingScreen: "OnboardingScreen",
   LoginScreen: "LoginScreen",
-  HomeScreen: "HomeScreen"
+  HomeScreen: "HomeScreen",
+  ProfileScreen: "ProfileScreen",
+  ChangePassword: "ChangePassword"
 };
 
 export const StackNames = {

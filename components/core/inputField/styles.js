@@ -9,7 +9,7 @@ export const styles = StyleSheet.create({
   inputField: {
     height: hp(5.8),
     borderRadius: hp(0.8),
-    borderColor: Colors.grey300,
+    borderColor: Colors.greyScale300,
     paddingHorizontal: hp(1.5),
     borderWidth: 1,
     color: Colors.grey700,
