@@ -8,55 +8,112 @@ import django.db.models.deletion
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('users', '0001_initial'),
+        ("users", "0001_initial"),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='Role',
+            name="Role",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('created_at', models.DateTimeField(auto_now_add=True, null=True)),
-                ('modified_at', models.DateTimeField(auto_now=True, null=True)),
-                ('name', models.CharField(max_length=255, unique=True, verbose_name='Role Name')),
-                ('type', models.CharField(max_length=255, unique=True, verbose_name='Role Type')),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("created_at", models.DateTimeField(auto_now_add=True, null=True)),
+                ("modified_at", models.DateTimeField(auto_now=True, null=True)),
+                (
+                    "name",
+                    models.CharField(
+                        max_length=255, unique=True, verbose_name="Role Name"
+                    ),
+                ),
+                (
+                    "type",
+                    models.CharField(
+                        max_length=255, unique=True, verbose_name="Role Type"
+                    ),
+                ),
             ],
             options={
-                'abstract': False,
+                "abstract": False,
             },
         ),
         migrations.AlterModelManagers(
-            name='user',
-            managers=[
-            ],
+            name="user",
+            managers=[],
         ),
         migrations.AlterField(
-            model_name='user',
-            name='email',
-            field=models.EmailField(max_length=254, unique=True, verbose_name='email address'),
+            model_name="user",
+            name="email",
+            field=models.EmailField(
+                max_length=254, unique=True, verbose_name="email address"
+            ),
         ),
         migrations.AlterField(
-            model_name='user',
-            name='first_name',
-            field=models.CharField(blank=True, max_length=150, verbose_name='first name'),
+            model_name="user",
+            name="first_name",
+            field=models.CharField(
+                blank=True, max_length=150, verbose_name="first name"
+            ),
         ),
         migrations.AlterField(
-            model_name='user',
-            name='username',
-            field=models.CharField(blank=True, error_messages={'unique': 'A user with that username already exists.'}, help_text='Required. 150 characters or fewer. Letters, digits and @/./+/-/_ only.', max_length=150, null=True, unique=True, validators=[django.contrib.auth.validators.UnicodeUsernameValidator()], verbose_name='username'),
+            model_name="user",
+            name="username",
+            field=models.CharField(
+                blank=True,
+                error_messages={"unique": "A user with that username already exists."},
+                help_text="Required. 150 characters or fewer. Letters, digits and @/./+/-/_ only.",
+                max_length=150,
+                null=True,
+                unique=True,
+                validators=[django.contrib.auth.validators.UnicodeUsernameValidator()],
+                verbose_name="username",
+            ),
         ),
         migrations.CreateModel(
-            name='Position',
+            name="Position",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('created_at', models.DateTimeField(auto_now_add=True, null=True)),
-                ('modified_at', models.DateTimeField(auto_now=True, null=True)),
-                ('name', models.CharField(max_length=255, verbose_name='Position Name')),
-                ('platform_type', models.CharField(choices=[('mobile', 'Mobile'), ('web', 'Web'), ('both', 'Both')], default='web', max_length=50)),
-                ('role_id', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='users.role')),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("created_at", models.DateTimeField(auto_now_add=True, null=True)),
+                ("modified_at", models.DateTimeField(auto_now=True, null=True)),
+                (
+                    "name",
+                    models.CharField(max_length=255, verbose_name="Position Name"),
+                ),
+                (
+                    "platform_type",
+                    models.CharField(
+                        choices=[
+                            ("mobile", "Mobile"),
+                            ("web", "Web"),
+                            ("both", "Both"),
+                        ],
+                        default="web",
+                        max_length=50,
+                    ),
+                ),
+                (
+                    "role_id",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE, to="users.role"
+                    ),
+                ),
             ],
             options={
-                'unique_together': {('role_id', 'name')},
+                "unique_together": {("role_id", "name")},
             },
         ),
     ]

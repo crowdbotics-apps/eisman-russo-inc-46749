@@ -9,40 +9,74 @@ import uuid
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('ticketing', '0001_initial'),
+        ("ticketing", "0001_initial"),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='Event',
+            name="Event",
             fields=[
-                ('id', models.UUIDField(default=uuid.uuid4, editable=False, primary_key=True, serialize=False)),
-                ('created_at', models.DateTimeField(auto_now_add=True, null=True)),
-                ('modified_at', models.DateTimeField(auto_now=True, null=True)),
-                ('name', models.CharField(max_length=500, unique=True)),
-                ('event_date', models.DateField()),
-                ('declaration_date', models.DateField()),
-                ('is_active', models.BooleanField(default=True)),
-                ('notes', models.TextField(blank=True, null=True)),
+                (
+                    "id",
+                    models.UUIDField(
+                        default=uuid.uuid4,
+                        editable=False,
+                        primary_key=True,
+                        serialize=False,
+                    ),
+                ),
+                ("created_at", models.DateTimeField(auto_now_add=True, null=True)),
+                ("modified_at", models.DateTimeField(auto_now=True, null=True)),
+                ("name", models.CharField(max_length=500, unique=True)),
+                ("event_date", models.DateField()),
+                ("declaration_date", models.DateField()),
+                ("is_active", models.BooleanField(default=True)),
+                ("notes", models.TextField(blank=True, null=True)),
             ],
             options={
-                'abstract': False,
+                "abstract": False,
             },
         ),
         migrations.CreateModel(
-            name='FemaDates',
+            name="FemaDates",
             fields=[
-                ('id', models.UUIDField(default=uuid.uuid4, editable=False, primary_key=True, serialize=False)),
-                ('created_at', models.DateTimeField(auto_now_add=True, null=True)),
-                ('modified_at', models.DateTimeField(auto_now=True, null=True)),
-                ('start_date', models.DateField()),
-                ('end_date', models.DateField()),
-                ('percentage', models.PositiveIntegerField(validators=[django.core.validators.MinValueValidator(1), django.core.validators.MaxValueValidator(100)])),
-                ('event', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='fema_dates', to='ticketing.event')),
+                (
+                    "id",
+                    models.UUIDField(
+                        default=uuid.uuid4,
+                        editable=False,
+                        primary_key=True,
+                        serialize=False,
+                    ),
+                ),
+                ("created_at", models.DateTimeField(auto_now_add=True, null=True)),
+                ("modified_at", models.DateTimeField(auto_now=True, null=True)),
+                ("start_date", models.DateField()),
+                ("end_date", models.DateField()),
+                (
+                    "percentage",
+                    models.PositiveIntegerField(
+                        validators=[
+                            django.core.validators.MinValueValidator(1),
+                            django.core.validators.MaxValueValidator(100),
+                        ]
+                    ),
+                ),
+                (
+                    "event",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="fema_dates",
+                        to="ticketing.event",
+                    ),
+                ),
             ],
         ),
         migrations.AddConstraint(
-            model_name='femadates',
-            constraint=models.UniqueConstraint(fields=('event', 'start_date', 'end_date'), name='unique_event_start_date_end_date'),
+            model_name="femadates",
+            constraint=models.UniqueConstraint(
+                fields=("event", "start_date", "end_date"),
+                name="unique_event_start_date_end_date",
+            ),
         ),
     ]

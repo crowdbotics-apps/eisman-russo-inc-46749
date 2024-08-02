@@ -7,18 +7,30 @@ import django.db.models.deletion
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('users', '0006_auto_20240730_1803'),
+        ("users", "0006_auto_20240730_1803"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='user',
-            name='position',
-            field=models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='user_position', to='users.position'),
+            model_name="user",
+            name="position",
+            field=models.ForeignKey(
+                blank=True,
+                null=True,
+                on_delete=django.db.models.deletion.SET_NULL,
+                related_name="user_position",
+                to="users.position",
+            ),
         ),
         migrations.AlterField(
-            model_name='user',
-            name='role',
-            field=models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='user_role', to='users.role'),
+            model_name="user",
+            name="role",
+            field=models.ForeignKey(
+                blank=True,
+                null=True,
+                on_delete=django.db.models.deletion.SET_NULL,
+                related_name="user_role",
+                to="users.role",
+            ),
         ),
     ]

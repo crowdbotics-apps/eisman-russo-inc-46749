@@ -6,13 +6,13 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('ticketing', '0004_subactivity_trucktype'),
+        ("ticketing", "0004_subactivity_trucktype"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='debristype',
-            name='rate_matrix_fields',
+            model_name="debristype",
+            name="rate_matrix_fields",
             field=models.JSONField(blank=True, null=True),
         ),
     ]
