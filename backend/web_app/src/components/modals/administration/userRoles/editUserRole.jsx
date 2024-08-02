@@ -34,7 +34,6 @@ export default function EditUserRole({
     };
     const handleSubmit = (values) => {
       values = { ...values, status: active };
-      console.log("Values: ", values);
     };
     
   return (

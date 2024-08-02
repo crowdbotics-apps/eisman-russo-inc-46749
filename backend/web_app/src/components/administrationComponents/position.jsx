@@ -92,7 +92,6 @@ export default function Position({}) {
 
    //------------------ Functions to Handle Add and Edit User Position ---------------------//
    const handleEditPosition = async (values) => {
-    console.log(`Edited Position: `, values);
     const id = editPositionValues.id;
     try {
       await updateUserPosition(id, values);
@@ -104,7 +103,6 @@ export default function Position({}) {
   };
 
   const handleAddPosition = async (values) => {
-    console.log("Added Position: ", values);
     try {
       await addUserPosition(values);
       fetchData(); // Make sure this is being called after add

@@ -51,7 +51,6 @@ export default function SignIn(props) {
   };
 
   const handleForgotPasswordClick = () => {
-    console.log("forgot password");
     props.setIsAnimating(true);
     props.onForgotPasswordClick();
   };
