@@ -74,7 +74,10 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "django.contrib.sites",
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
     "corsheaders",
+=======
+>>>>>>> Stashed changes
 =======
 >>>>>>> Stashed changes
 ]
@@ -82,8 +85,11 @@ LOCAL_APPS = [
     "home",
     "users.apps.UsersConfig",
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
     "base",
     "ticketing",
+=======
+>>>>>>> Stashed changes
 =======
 >>>>>>> Stashed changes
 ]
@@ -91,7 +97,10 @@ THIRD_PARTY_APPS = [
     "rest_framework",
     "rest_framework.authtoken",
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
     "rest_framework_simplejwt",
+=======
+>>>>>>> Stashed changes
 =======
 >>>>>>> Stashed changes
     "dj_rest_auth",
@@ -112,7 +121,10 @@ INSTALLED_APPS += LOCAL_APPS + THIRD_PARTY_APPS + MODULES_APPS
 
 MIDDLEWARE = [
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
     "corsheaders.middleware.CorsMiddleware",
+=======
+>>>>>>> Stashed changes
 =======
 >>>>>>> Stashed changes
     "django.middleware.security.SecurityMiddleware",
@@ -123,7 +135,10 @@ MIDDLEWARE = [
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
     "base.custom_middlewares.DeviceMiddlewareMiddleware",
+=======
+>>>>>>> Stashed changes
 =======
 >>>>>>> Stashed changes
 ]
@@ -206,6 +221,7 @@ AUTHENTICATION_BACKENDS = (
 
 STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 # STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static'), os.path.join(BASE_DIR, 'web_build')]
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, "static"),
@@ -213,10 +229,15 @@ STATICFILES_DIRS = [
 ]
 
 =======
+=======
+>>>>>>> Stashed changes
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, "static"),
     os.path.join(BASE_DIR, "web_build"),
 ]
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
 STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 
@@ -247,6 +268,7 @@ REST_AUTH = {
 REST_FRAMEWORK = {
     "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
     "DEFAULT_AUTHENTICATION_CLASSES": [
         "rest_framework_simplejwt.authentication.JWTAuthentication",
         "rest_framework.authentication.SessionAuthentication",
@@ -257,6 +279,8 @@ REST_FRAMEWORK = {
         "rest_framework.filters.OrderingFilter",
     ],
     "EXCEPTION_HANDLER": "base.exceptions.custom_exception_handler",
+=======
+>>>>>>> Stashed changes
 =======
 >>>>>>> Stashed changes
 }
