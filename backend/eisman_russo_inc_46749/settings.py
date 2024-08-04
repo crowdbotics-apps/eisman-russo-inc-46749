@@ -73,18 +73,27 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "django.contrib.sites",
+<<<<<<< Updated upstream
     "corsheaders",
+=======
+>>>>>>> Stashed changes
 ]
 LOCAL_APPS = [
     "home",
     "users.apps.UsersConfig",
+<<<<<<< Updated upstream
     "base",
     "ticketing",
+=======
+>>>>>>> Stashed changes
 ]
 THIRD_PARTY_APPS = [
     "rest_framework",
     "rest_framework.authtoken",
+<<<<<<< Updated upstream
     "rest_framework_simplejwt",
+=======
+>>>>>>> Stashed changes
     "dj_rest_auth",
     "dj_rest_auth.registration",
     "bootstrap4",
@@ -102,7 +111,10 @@ MODULES_APPS = get_modules()
 INSTALLED_APPS += LOCAL_APPS + THIRD_PARTY_APPS + MODULES_APPS
 
 MIDDLEWARE = [
+<<<<<<< Updated upstream
     "corsheaders.middleware.CorsMiddleware",
+=======
+>>>>>>> Stashed changes
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
@@ -110,7 +122,10 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+<<<<<<< Updated upstream
     "base.custom_middlewares.DeviceMiddlewareMiddleware",
+=======
+>>>>>>> Stashed changes
 ]
 
 ROOT_URLCONF = "eisman_russo_inc_46749.urls"
@@ -190,12 +205,19 @@ AUTHENTICATION_BACKENDS = (
 )
 
 STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
+<<<<<<< Updated upstream
 # STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static'), os.path.join(BASE_DIR, 'web_build')]
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, "static"),
     os.path.join(BASE_DIR, "web_build", "static"),
 ]
 
+=======
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, "static"),
+    os.path.join(BASE_DIR, "web_build"),
+]
+>>>>>>> Stashed changes
 STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 
 MEDIA_URL = "/mediafiles/"
@@ -224,6 +246,7 @@ REST_AUTH = {
 
 REST_FRAMEWORK = {
     "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
+<<<<<<< Updated upstream
     "DEFAULT_AUTHENTICATION_CLASSES": [
         "rest_framework_simplejwt.authentication.JWTAuthentication",
         "rest_framework.authentication.SessionAuthentication",
@@ -234,6 +257,8 @@ REST_FRAMEWORK = {
         "rest_framework.filters.OrderingFilter",
     ],
     "EXCEPTION_HANDLER": "base.exceptions.custom_exception_handler",
+=======
+>>>>>>> Stashed changes
 }
 
 SIMPLE_JWT = {
