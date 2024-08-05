@@ -29,7 +29,7 @@ class UserAdmin(auth_admin.UserAdmin):
             {"fields": ("name", "role", "position", "device_id")},
         ),
     ) + auth_admin.UserAdmin.fieldsets
-    list_display = ["email", "username", "name", "is_superuser"]
+    list_display = ["email", "name", "is_superuser"]
     search_fields = ["name"]
     add_fieldsets = (
         (None, {"classes": ("wide",), "fields": ("email", "password1", "password2")}),
