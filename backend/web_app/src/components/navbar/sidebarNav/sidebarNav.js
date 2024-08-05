@@ -1,7 +1,7 @@
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Layout, Menu, theme } from "antd";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { MenuUnfoldOutlined, MenuFoldOutlined } from "@ant-design/icons";
 import { adminSidebarNavData } from "../../../constants/sidebarNavData/SidebarNavData";
 import { ReactComponent as CompanyBrandIcon } from "../../../assets/rawSvg/sidebarNavIcons/logoSmall.svg";
@@ -17,10 +17,11 @@ const { Sider } = Layout;
 export default function Sidebar({ setIsExpanded}) {
   const [collapsed, setCollapsed] = useState(false);
   const navigate = useNavigate();
+  const location = useLocation();
   const items = generateMenuItems(adminSidebarNavData);
   const flatItems = flattenMenuItems(items);
-  const [selectedKey, setSelectedKey] = useState('1'); // Set default selected key to '1'
-  
+  const initialSelectedKey = flatItems.find(item => item.navigateTo === location.pathname)?.key;
+  const [selectedKey, setSelectedKey] = useState(initialSelectedKey);
 
   const handleMenuClick = (e) => {
     const selectedItem = flatItems.find(item => item.key === e.key);
@@ -28,6 +29,14 @@ export default function Sidebar({ setIsExpanded}) {
       navigate(selectedItem.navigateTo);
     }
   };
+
+  useEffect(() => {
+    
+    const selectedItem = flatItems.find(item => item.navigateTo === location.pathname);
+    
+    setSelectedKey(selectedItem?.key);
+  }, [location.pathname, flatItems]);
+
 
   const toggleCollapse = () => {
     setIsExpanded(collapsed);
@@ -72,6 +81,7 @@ export default function Sidebar({ setIsExpanded}) {
         items={items}
         onClick={handleMenuClick}
         style={{ background: "#fff" }}
+        selectedKeys={[selectedKey]}
       />
       
     </Sider>

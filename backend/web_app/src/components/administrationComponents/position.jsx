@@ -14,6 +14,7 @@ import { main_api } from '../../api/axiosHelper';
 import { adminAPIsEndPoints } from '../../constants/apiEndPoints';
 import { AntdesignTablePagination } from '../antDesignTable/AntdesignTablePagination';
 import UpdatePosition from '../modals/administration/position/updatePosition';
+import CustomFilter from '../customFilterWithSearchBar/customFilter';
 
 export default function Position({}) {
   const [data, setData] = useState([]);
@@ -82,13 +83,6 @@ export default function Position({}) {
     setUpdatePositionModal(true);
   };
 
-  //------------------ Search ---------------------//
-
-  const handleSearch = (value) => {
-    if (value) {
-      setSearchedValue(value);
-    }
-  };
 
    //------------------ Functions to Handle Add and Edit User Position ---------------------//
    const handleEditPosition = async (values) => {
@@ -122,51 +116,38 @@ export default function Position({}) {
           <Heading text="Manage User Position" margin="0px 0px 0px 20px" fontSize="1.3rem" color="#3B3B3B" />
           <CustomButton btnText={"Add Position"} color={"white"} onClick={handleAddRow} />
         </div>
-        <div style={{display:"flex", flexDirection:"row"}}>
-
-        <SearchInputWrapper>
-            <SearchInput onBlur={(e) => handleSearch(e.target.value)} placeholder="Search By Position Name..." />
-        </SearchInputWrapper>
-        <Select 
-          placeholder="Select" 
-          options={roles}
-          onChange={(e)=>{ 
-            setRoleSelected(e);
-          }} 
-          style={{marginLeft:"20px",position:"relative", top:"12px", left:"6px", width:"260px", height:"40px"}}
-        />
-        <Select 
-          placeholder="Select" 
-          options={accessPermission} 
-          onChange={(e)=>{
-            setAccessPermissionSelected(e); 
-          }} 
-          style={{marginLeft:"8px",position:"relative", top:"12px", left:"6px", width:"260px", height:"40px"}}
-        />
-        <div style={{marginLeft:"8px",position:"relative", top:"12px", left:"6px", width:"260px", height:"40px"}}>
-
-        <CustomButton
-          btnText={"Reset Filter"}
-          color={"red"}
-          margin="0px 5px"
-          noBackground
-          hideIcon={true}
-          onClick={() => {
+        <CustomFilter
+          searchBar={true}
+          filter1={true}
+          filter2={true}
+          resetFilters={true}
+          searchBarPlaceholder="Search By Position Name..."
+          filter1Placeholder="Select Role"
+          filter2Placeholder="Select Access Permission"
+          resetFiltersText="Reset Filter"
+          filter1Options={roles}
+          filter2Options={accessPermission}
+          onSearchBarBlur={(e) => setSearchedValue(e.target.value)}
+          onFilter1Change={(e) => setRoleSelected(e)}
+          onFilter2Change={(e) => setAccessPermissionSelected(e)}
+          onResetFiltersClick={() => {
             setRoleSelected(null);
             setAccessPermissionSelected(null);
             setSearchedValue('');
             fetchData();
           }}
+          filter1Style={{marginLeft:"20px", marginBottom: "20px", position:"relative", top:"12px", left:"6px", width:"260px", height:"40px"}}
+          filter2Style={{marginLeft:"8px", marginBottom: "20px", position:"relative", top:"12px", left:"6px", width:"260px", height:"40px"}}
+          resetFiltersStyle={{cursor:"pointer",color:"red",marginLeft:"15px", marginBottom: "20px", position:"relative", top:"20px", left:"6px", width:"260px", height:"40px"}}
         />
-        </div>
-        </div>
         <AntdesignTablePagination 
           columns={userPositionsColumns({handleEditRow})} 
           data={data}
           totalCount={count}
           loadPaginatedData={fetchData} 
-          allowRowSelection={false} 
-          pageSize={7}
+          allowRowSelection={false}
+          tableHeight={500}
+          tableWidth={1200}
         />
     </CustomCard>
 
@@ -200,10 +181,11 @@ const CustomCard = styled(Card)`
   width: calc(100vw - 40px);
   max-width: 1274px;
   height: calc(100vh - 40px);
-  max-height: 912px;
+  max-height: 720px;
   margin: 20px;
   background-color: white;
-  
+
+
   @media (max-width: 768px) {
     width: calc(100vw - 20px);
     height: calc(100vh - 20px);
