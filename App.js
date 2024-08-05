@@ -6,18 +6,11 @@ import "react-native-gesture-handler"
 import { NavigationContainer } from "@react-navigation/native"
 import { createStackNavigator } from "@react-navigation/stack"
 import { Provider as PaperProvider } from "react-native-paper"
-import {
-  configureStore,
-  createReducer,
-  combineReducers
-} from "@reduxjs/toolkit"
 import Toaster from "react-native-toast-message"
 
 import { screens } from "@screens"
 import { modules, reducers, hooks } from "@modules"
-import { connectors } from "@store"
 import {
-  GlobalOptionsContext,
   OptionsContext,
   getOptions,
   getGlobalOptions

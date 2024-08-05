@@ -36,7 +36,6 @@ API.interceptors.request.use(
     const deviceId = await getDeviceID();
     if (deviceId) {
       config.headers["deviceId"] = deviceId;
-      // config.headers["deviceId"] = "0x00123";
     }
     console.log("API Call:", `${config?.baseURL}${config.url}`);
     return config;
@@ -82,7 +81,6 @@ export const checkInternetConnection = async () => {
 
 export const getDeviceID = async () => {
   const deviceId = await DeviceInfo.getUniqueId();
-  console.log("device id", deviceId);
   return deviceId;
 };
 

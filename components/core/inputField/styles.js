@@ -1,19 +1,25 @@
-import { StyleSheet } from "react-native"
+import { StyleSheet } from "react-native";
 import {
   heightPercentageToDP as hp,
   widthPercentageToDP as wp
-} from "react-native-responsive-screen"
-import { Colors } from "../../../theme/Colors"
+} from "react-native-responsive-screen";
+import { Colors } from "../../../theme/Colors";
 
 export const styles = StyleSheet.create({
-  inputField: {
-    height: hp(5.8),
+  inputContainer: {
     borderRadius: hp(0.8),
     borderColor: Colors.greyScale300,
-    paddingHorizontal: hp(1.5),
     borderWidth: 1,
+    padding: hp(0.5)
+  },
+  inputField: {
+    paddingHorizontal: hp(1.5),
     color: Colors.grey700,
-    backgroundColor: Colors.white
+    backgroundColor: Colors.white,
+    paddingVertical: hp(1),
+    margin: 0,
+    minHeight: hp(4),
+    height: "auto",
   },
   inputFieldError: {
     height: hp(5.7),
@@ -47,4 +53,4 @@ export const styles = StyleSheet.create({
     right: 10,
     top: hp(1.5)
   }
-})
+});

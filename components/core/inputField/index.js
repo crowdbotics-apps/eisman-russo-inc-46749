@@ -7,6 +7,10 @@ import { Colors } from "../../../theme/Colors";
 import ErrorIcon from "../../../assets/svgs/ErrorIcon.svg";
 import Eye from "../../../assets/svgs/Eye.svg";
 import EyeSlash from "../../../assets/svgs/EyeSlash.svg";
+import {
+  heightPercentageToDP as hp,
+  widthPercentageToDP as wp
+} from "react-native-responsive-screen";
 
 const InputField = ({
   label,
@@ -22,11 +26,14 @@ const InputField = ({
   onPress,
   customLabelStyle,
   autoCapitalize,
-  autoCorrect
+  autoCorrect,
+  numberOfLines,
+  multiline,
+  inputWidth
 }) => {
   const [showPassword, setShowPassword] = useState(password);
   const inputFieldStyle =
-    isError && error ? styles.inputFieldError : styles.inputField;
+      styles.inputField;
   return (
     <View>
       <View style={styles.labelContainer}>
@@ -43,9 +50,15 @@ const InputField = ({
           </Pressable>
         )}
       </View>
-      <View>
+      <View
+        style={[
+          styles.inputContainer,
+          isError && error && styles.inputFieldError
+          
+        ]}
+      >
         <TextInput
-          style={[Fonts.dSmallRegular, inputFieldStyle]}
+          style={[Fonts.dSmallRegular, inputFieldStyle,{ width: inputWidth ? inputWidth :isError && error ? wp(80):wp(88) }]}
           placeholder={placeholder}
           placeholderTextColor={Colors.grey400}
           keyboardType={keyboardType ? keyboardType : "default"}
@@ -55,6 +68,8 @@ const InputField = ({
           secureTextEntry={showPassword}
           autoCapitalize={autoCapitalize}
           autoCorrect={autoCorrect}
+          numberOfLines={1}
+          multiline={multiline}
         />
         <View style={styles.errorContainer}>
           {isError && error ? (
@@ -70,9 +85,11 @@ const InputField = ({
           ) : null}
         </View>
       </View>
-      {isError&&error&&<View style={styles.labelContainer}>
-        <Text style={[Fonts.button, styles.errorText]}>{error}</Text>
-      </View>}
+      {isError && error && (
+        <View style={styles.labelContainer}>
+          <Text style={[Fonts.button, styles.errorText]}>{error}</Text>
+        </View>
+      )}
     </View>
   );
 };

@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { View, Text, Keyboard, TouchableOpacity } from "react-native";
 import { appActions } from "../../redux/actions/AppAction";
 import { useDispatch } from "react-redux";
-import { POST } from "../../services/interceptor/ApiMethod";
+import { GET, POST } from "../../services/interceptor/ApiMethod";
 import { END_POINTS } from "../../utils/EndPoints";
 import { Constants, ScreenNames, StackNames } from "../../utils/constants";
 import { Fonts } from "../../theme/Typography";
@@ -14,16 +14,30 @@ import { loginValidationSchema } from "../../utils/validations";
 import Loader from "../../components/core/loader/Loader";
 import Toast from "../../components/core/toast/Toast";
 import { getDeviceID } from "../../services/interceptor/Interceptor";
-import { authenticateUser } from "../../utils/helperFunctions";
+import {
+  authenticateUser,
+  capitalizeFirstLetters
+} from "../../utils/helperFunctions";
 import Spacing from "../../components/core/spacing/Spacing";
 import {
   heightPercentageToDP as hp,
   widthPercentageToDP as wp
-} from "react-native-responsive-screen"
+} from "react-native-responsive-screen";
 const LoginScreen = ({ navigation }) => {
   const dispatch = useDispatch();
   const [isLoading, setIsLoading] = useState(false);
   const [isError, setIsError] = useState(false);
+
+  const fetchUser = async () => {
+    try {
+      const resp = await GET(END_POINTS.USER_PROFILE);
+      let userProfile = resp?.data?.result;
+      userProfile.name = capitalizeFirstLetters(userProfile?.name);
+      dispatch(appActions.setUserProfile({ userProfile: userProfile }));
+    } catch (error) {
+      
+    }
+  };
 
   const handleLogin = async values => {
     setIsLoading(true);
@@ -34,6 +48,8 @@ const LoginScreen = ({ navigation }) => {
       dispatch(
         appActions.setAccessToken({ accessToken: response?.data.access })
       );
+      await fetchUser();
+
       dispatch(appActions.setUserCredentials({ credentials: values }));
       navigation.reset({
         index: 0,
@@ -44,12 +60,10 @@ const LoginScreen = ({ navigation }) => {
         ]
       });
     } catch (error) {
-      console.log(error);
       if (error?.status === Constants.NOT_FOUND_CODE) {
         Toast.errorList("Error", [error?.data?.detail]);
       } else if (error?.status === Constants.NETWORK_ERROR) {
         const deviceId = await getDeviceID();
-        // const deviceId = "0x00123";
         const user = { ...values, deviceId };
         if (authenticateUser(user)) {
           dispatch(appActions.setAccessToken({ accessToken: "accessToken" }));
@@ -63,7 +77,6 @@ const LoginScreen = ({ navigation }) => {
           });
         }
       } else {
-        //Toast.successor("Success", "Message")
         Toast.errorList("Error", [
           "A system error occurred. if continues, contact support."
         ]);
@@ -111,7 +124,7 @@ const LoginScreen = ({ navigation }) => {
                       autoCorrect={false}
                       keyboardType={"email-address"}
                     />
-                    <Spacing height={hp(3)}/>
+                    <Spacing height={hp(3)} />
                     <InputField
                       isError={isError}
                       label={"Password"}
@@ -123,6 +136,7 @@ const LoginScreen = ({ navigation }) => {
                       onBlur={() => formik.handleBlur("password")}
                       autoCapitalize="none"
                       autoCorrect={false}
+                      inputWidth={wp(80)}
                     />
                   </View>
                 </View>

@@ -2,15 +2,16 @@ export const ScreenNames = {
   SplashScreen: "SplashScreen",
   OnboardingScreen: "OnboardingScreen",
   LoginScreen: "LoginScreen",
-  HomeScreen: "HomeScreen",
-  ProfileScreen: "ProfileScreen",
+  HomeScreen: "Home",
+  ProfileScreen: "Profile",
   ChangePassword: "ChangePassword"
 };
 
 export const StackNames = {
   RootStack: "RootStack",
   AuthStack: "AuthStack",
-  AppStack: "AppStack"
+  AppStack: "AppStack",
+  HomeTabs: "HomeTabs"
 };
 
 export const Constants = {

@@ -23,31 +23,21 @@ import UserCard from "../../assets/svgs/UserCard.svg";
 import AssesmentIcon from "../../assets/svgs/AssesmentIcon.svg";
 import Truck from "../../assets/svgs/Truck.svg";
 import HomeItem from "./HomeItem";
+import Spacing from "../../components/core/spacing/Spacing";
+import { capitalizeFirstLetters } from "../../utils/helperFunctions";
 
 const HomeScreen = ({ navigation }) => {
   const dispatch = useDispatch();
   const insets = useSafeAreaInsets();
   const [user, setUser] = useState({});
   const fetchUserProfile = async () => {
-    const isNetworkAvailable = await checkInternetConnection();
-    if (!isNetworkAvailable) {
-      return;
-    }
-    try {
-      const resp = await GET(END_POINTS.USER_PROFILE);
-      let userProfile = resp?.data?.result;
-      console.log("userProfile",userProfile)
-      dispatch(appActions.setUserProfile({ userProfile: userProfile }));
-      setUser(userProfile);
-    } catch (error) {
-      console.log("error", error);
-    }
+    setUser(store.getState().appReducer?.userProfile);
   };
   useEffect(() => {
     fetchUserProfile();
   }, []);
   return (
-    <ScrollView style={{ flex: 1, backgroundColor: Colors.white }}>
+    <View style={{ flex: 1, backgroundColor: Colors.white }}>
       <View
         style={{
           backgroundColor: Colors.primaryBlue,
@@ -68,7 +58,7 @@ const HomeScreen = ({ navigation }) => {
             { color: Colors.white }
           ]}
         >
-          {user?.name || "Alexander Arnold!xx"}
+          {user?.name}
         </Text>
         <Text
           style={[
@@ -80,7 +70,7 @@ const HomeScreen = ({ navigation }) => {
           Select your role based on your task to proceed with your day.
         </Text>
       </View>
-      <View style={{ paddingHorizontal: 16, marginTop: hp(2) }}>
+      <ScrollView style={{ paddingHorizontal: 16, marginTop: hp(2) }}>
         <HomeItem
           title={"Field Monitor"}
           icon={<UserCard height={hp(4)} width={wp(8)} />}
@@ -97,8 +87,9 @@ const HomeScreen = ({ navigation }) => {
           title={"Assessment"}
           icon={<AssesmentIcon height={hp(4)} width={wp(8)} />}
         />
-      </View>
-    </ScrollView>
+        <Spacing height={hp(1)} />
+      </ScrollView>
+    </View>
   );
 };
 
