@@ -40,7 +40,7 @@ export const adminSidebarNavData = [
             navigateTo: "/project-management/manage-project",
           },
           {
-            itemName: "Manage Project",
+            itemName: "Map User",
             navigateTo: "/project-management/manage-project",
           },
         ],
