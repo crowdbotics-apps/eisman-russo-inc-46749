@@ -1,13 +1,14 @@
 import React, { useCallback, useEffect, useState } from "react";
 import styled from "styled-components";
 import { Table } from "antd";
-import { ReactComponent as GreaterThanIcon } from "../../assets/rawSvg/greaterThanIcon.svg";
+import { ReactComponent as GreaterThanIcon } from "../../assets/rawSvg/greaterIcon.svg";
 import { ReactComponent as LessThanIcon } from "../../assets/rawSvg/lessThanIcon.svg";
 import { RoundedButton, PaginationRightHeading, CustomPaginationContainer } from "./tableStyles";
 
 export const AntdesignTablePagination = ({
   selectedRows,
   tableHeight,
+  tableWidth,
   data = [],
   columns = [],
   paginationRightHeadingName = "Total Results",
@@ -47,7 +48,6 @@ export const AntdesignTablePagination = ({
   };
 
   const handleNextPage = () => {
-    console.log("currentPage", currentPage < Math.ceil(totalCount / pageSize));
     if (currentPage < Math.ceil(totalCount / pageSize)) {
       setCurrentPage(currentPage + 1);
       const nextPage = currentPage + 1;
@@ -68,7 +68,8 @@ export const AntdesignTablePagination = ({
         className="antd-table-custom"
         columns={columns}
         dataSource={data}
-        style={{ height: tableHeight }}
+        scroll={{x:tableWidth, y:tableHeight}}
+        style={{ maxHeight: tableHeight }}
         rowSelection={
           allowRowSelection
             ? {
@@ -88,14 +89,15 @@ export const AntdesignTablePagination = ({
         </div>
         <div style={{ marginLeft: "auto", display: "flex", alignItems: "baseline" }}>
           <PaginationRightHeading>
+          
             {startIndex}-{endIndex} of {totalCount} results
           </PaginationRightHeading>
           <RoundedButton onClick={handlePrevPage} disabled={currentPage === 1}>
             <LessThanIcon />
           </RoundedButton>
-
           <RoundedButton onClick={handleNextPage} disabled={currentPage >= Math.ceil(totalCount / pageSize)} margin="0px 12px">
             <GreaterThanIcon />
+
           </RoundedButton>
         </div>
       </CustomPaginationContainer>

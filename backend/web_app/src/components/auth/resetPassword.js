@@ -330,14 +330,14 @@ export default function ResetPassword({
 
     
     const reqObject = {
+      user_id: selectedUser.key,
       new_password: formValues.new_password1,
       confirm_new_password: formValues.new_password2,
     };
 
-   const id = selectedUser.key;
    
     try {
-      const response = await main_api.post(adminAPIsEndPoints.CHANGE_PASSWORD(id), reqObject);
+      const response = await main_api.post(adminAPIsEndPoints.CHANGE_PASSWORD, reqObject);
       if (response.status === 200) {
         pushNotification("Password Reset Successfully!");
         setModalOpen(false);
