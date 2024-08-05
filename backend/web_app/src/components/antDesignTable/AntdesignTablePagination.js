@@ -8,6 +8,7 @@ import { RoundedButton, PaginationRightHeading, CustomPaginationContainer } from
 export const AntdesignTablePagination = ({
   selectedRows,
   tableHeight,
+  tableWidth,
   data = [],
   columns = [],
   paginationRightHeadingName = "Total Results",
@@ -47,7 +48,6 @@ export const AntdesignTablePagination = ({
   };
 
   const handleNextPage = () => {
-    console.log("currentPage", currentPage < Math.ceil(totalCount / pageSize));
     if (currentPage < Math.ceil(totalCount / pageSize)) {
       setCurrentPage(currentPage + 1);
       const nextPage = currentPage + 1;
@@ -68,7 +68,8 @@ export const AntdesignTablePagination = ({
         className="antd-table-custom"
         columns={columns}
         dataSource={data}
-        style={{ height: tableHeight }}
+        scroll={{x:tableWidth, y:tableHeight}}
+        style={{ maxHeight: tableHeight }}
         rowSelection={
           allowRowSelection
             ? {
