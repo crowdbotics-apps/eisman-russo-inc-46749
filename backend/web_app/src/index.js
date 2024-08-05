@@ -4,6 +4,7 @@ import './index.css';
 import { store } from "./redux/store";
 import { Provider } from "react-redux";
 import App from './App';
+import { Toaster } from "react-hot-toast";  
 import reportWebVitals from './reportWebVitals';
 import { ConfigProvider } from "antd";
 
@@ -14,6 +15,7 @@ root.render(
       <ConfigProvider theme={{ token: { colorPrimary: "rgb(54, 105, 174)" } }}>
         <App />
       </ConfigProvider>
+      <Toaster />
     </Provider>
   </React.StrictMode>
 );
