@@ -121,7 +121,16 @@ class UserViewSet(ModelViewSet):
     def change_password(self, request, *args, **kwargs):
         serializer = ChangePasswordSerializer(data=request.data)
         if serializer.is_valid():
-            user = request.user
+            user_id = request.data.get("user_id", None)
+            if user_id:
+                user = User.objects.filter(id=user_id).first()
+                if not user:
+                    return Response(
+                        {"detail": "User does not exist"},
+                        status=status.HTTP_400_BAD_REQUEST,
+                    )
+            else:
+                user = request.user
             new_password = serializer.validated_data["new_password"]
 
             # Set the new password

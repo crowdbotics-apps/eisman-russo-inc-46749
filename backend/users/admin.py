@@ -24,9 +24,12 @@ class UserAdmin(auth_admin.UserAdmin):
     form = UserChangeForm
     add_form = UserCreationForm
     fieldsets = (
-        ("User", {"fields": ("name", "role", "position")}),
+        (
+            "User",
+            {"fields": ("name", "role", "position", "device_id")},
+        ),
     ) + auth_admin.UserAdmin.fieldsets
-    list_display = ["email", "username", "name", "is_superuser"]
+    list_display = ["email", "name", "is_superuser"]
     search_fields = ["name"]
     add_fieldsets = (
         (None, {"classes": ("wide",), "fields": ("email", "password1", "password2")}),
@@ -36,7 +39,7 @@ class UserAdmin(auth_admin.UserAdmin):
 @admin.register(Role)
 class RoleAdmin(admin.ModelAdmin):
     change_list_template = "users/admin/role_changelist.html"
-    list_display = ["name"]
+    list_display = ["id", "name"]
 
     def get_urls(self):
         urls = super().get_urls()
@@ -65,7 +68,7 @@ class RoleAdmin(admin.ModelAdmin):
 @admin.register(Position)
 class PositionAdmin(admin.ModelAdmin):
     change_list_template = "users/admin/position_changelist.html"
-    list_display = ["name", "get_role_name"]
+    list_display = ["id", "name", "get_role_name"]
 
     def get_urls(self):
         urls = super().get_urls()
