@@ -36,7 +36,7 @@ const CustomCard = styled(Card)`
   width: 260px;
   height: 720px;
   margin-right: 10px;
-  margin-left: 20px;
+  margin-left: 50px;
   border-radius: 16px;
   background-color: white;
   

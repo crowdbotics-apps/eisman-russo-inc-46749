@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useState } from "react";
 import styled from "styled-components";
 import { Table } from "antd";
-import { ReactComponent as GreaterThanIcon } from "../../assets/rawSvg/greaterThanIcon.svg";
+import { ReactComponent as GreaterThanIcon } from "../../assets/rawSvg/greaterIcon.svg";
 import { ReactComponent as LessThanIcon } from "../../assets/rawSvg/lessThanIcon.svg";
 import { RoundedButton, PaginationRightHeading, CustomPaginationContainer } from "./tableStyles";
 
@@ -89,14 +89,15 @@ export const AntdesignTablePagination = ({
         </div>
         <div style={{ marginLeft: "auto", display: "flex", alignItems: "baseline" }}>
           <PaginationRightHeading>
+          
             {startIndex}-{endIndex} of {totalCount} results
           </PaginationRightHeading>
           <RoundedButton onClick={handlePrevPage} disabled={currentPage === 1}>
             <LessThanIcon />
           </RoundedButton>
-
           <RoundedButton onClick={handleNextPage} disabled={currentPage >= Math.ceil(totalCount / pageSize)} margin="0px 12px">
             <GreaterThanIcon />
+
           </RoundedButton>
         </div>
       </CustomPaginationContainer>

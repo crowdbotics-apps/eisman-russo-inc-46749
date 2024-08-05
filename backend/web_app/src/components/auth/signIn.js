@@ -10,6 +10,9 @@ import axiosInstance from "../../util/axiosConfig";
 import { adminAPIsEndPoints } from "../../constants/apiEndPoints";
 import { pushNotification } from "../../util/notification";
 import { loginFormSchema } from "../../constants/authFormFieldsSchema/formSchema";
+import { dispatch } from "../../redux/store";
+import { getProfileData } from "../../redux/slices/profile";
+import { useSelector } from "react-redux";
 
 export default function SignIn(props) {
   const navigate = useNavigate();
@@ -32,6 +35,9 @@ export default function SignIn(props) {
     deleteAllCookies();
   }, []);
 
+ 
+      
+
   const signin = async (values) => {
     setLoginLoader(true);
     axiosInstance
@@ -40,9 +46,12 @@ export default function SignIn(props) {
         if (response.status === 200) {
           const token =   `Bearer ${response.data.access}`;
           localStorage.setItem("token", token);
-          setLoginLoader(false);
-          navigate("/dashboard");
         }
+      })
+      .then(async () => {
+        await dispatch(getProfileData());
+        setLoginLoader(false);
+        navigate("/dashboard");
       })
       .catch((error) => {
         setLoginLoader(false);

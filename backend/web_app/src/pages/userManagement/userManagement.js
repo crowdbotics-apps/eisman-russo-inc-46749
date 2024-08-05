@@ -154,12 +154,15 @@ export default function UserManagement() {
     }
     const id = selectedUser.key;
     try {
-      await updateUser(id, payload);
-      fetchData();
+      const response = await main_api.put(adminAPIsEndPoints.UPDATE_USER(id), payload);
+      if (response.status === 200) {
+          pushNotification("User updated successfully", "success");
+          fetchData();
+          setUpdateUserModal(false);
+      }
     } catch (error) {
-      pushNotification('Error updating user', "error");
+        pushNotification(error.response.data.detail, "error");
     }
-    setUpdateUserModal(false);
   }
 
   const handleAddUser = async (values, selectedRoleType, selectedPositionName) => {
@@ -167,7 +170,7 @@ export default function UserManagement() {
       name: values?.name || '',
       email: values?.email || '',
       phone_number: values?.telephone_number || '',
-      is_active: values?.is_active || '',
+      is_active: values?.is_active || true,
       password: values?.password || '',
       confirm_password: values?.confirm_password || '',
       role: values?.role || '',
@@ -188,12 +191,16 @@ export default function UserManagement() {
       }
     }
     try {
-      await addUser(payload);
-      fetchData(); 
+      const response = await main_api.post(adminAPIsEndPoints.CREATE_USER, payload);
+      if (response.status === 201) {
+          pushNotification("User added successfully", "success");
+          fetchData();
+          setUpdateUserModal(false);
+
+      }
     } catch (error) {
-      pushNotification('Error adding user', "error");
+        pushNotification(error.response.data.detail, "error");
     }
-    setUpdateUserModal(false);
   }
 
 
@@ -226,7 +233,7 @@ export default function UserManagement() {
           }}
           filter1Style={{marginLeft:"20px", marginBottom: "20px", position:"relative", top:"12px", left:"6px", width:"260px", height:"40px"}}
           filter2Style={{marginLeft:"8px", marginBottom: "20px", position:"relative", top:"12px", left:"6px", width:"260px", height:"40px"}}
-          resetFiltersStyle={{cursor:"pointer",color:"red",marginLeft:"15px", marginBottom: "20px", position:"relative", top:"20px", left:"6px", width:"260px", height:"40px"}}
+          resetFiltersStyle={{cursor:"pointer",color:"#EE3E41",marginLeft:"15px", marginBottom: "20px", position:"relative", top:"20px", left:"6px", width:"260px", height:"40px"}}
         />
         <AntdesignTablePagination 
           columns={userManagementColumns({handleEditRow,handleChangePassword})} 
@@ -250,10 +257,11 @@ const Heading = ({ text = "", margin, fontSize = "0.75rem", color = "#3B3B3B" })
 
 const CustomCard = styled(Card)`
   width: calc(100vw - 40px);
-  max-width: 1605px;
+  max-width: 1750px;
   height: calc(100vh - 40px);
-  max-height: 720px;
-  margin: 20px;
+  max-height: 750px;
+  margin-top: 40px;
+  margin-left: 40px;
   background-color: white;
   
   @media (max-width: 768px) {

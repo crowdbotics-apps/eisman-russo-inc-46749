@@ -85,25 +85,51 @@ export default function Position({}) {
 
 
    //------------------ Functions to Handle Add and Edit User Position ---------------------//
-   const handleEditPosition = async (values) => {
+  //  const handleEditPosition = async (values) => {
+  //   const id = editPositionValues.id;
+  //   try {
+      
+  //     await updateUserPosition(id, values);
+      
+  //     fetchData(); // Make sure this is being called after update
+  //   } catch (error) {
+  //     console.error('Error updating position:', error);
+  //   }
+  //   setUpdatePositionModal(false);
+  // };
+
+  const handleEditPosition = async (values) => {
     const id = editPositionValues.id;
+   
     try {
-      await updateUserPosition(id, values);
-      fetchData(); // Make sure this is being called after update
+      const response = await main_api.put(adminAPIsEndPoints.UPDATE_POSITION(id), values);
+      if (response.status === 200) {
+        pushNotification("User position updated successfully", "success");
+        fetchData();
+        setUpdatePositionModal(false);
+      }
     } catch (error) {
-      console.error('Error updating position:', error);
+      pushNotification(error.response.data.detail, "error");
+
     }
-    setUpdatePositionModal(false);
+      
+    
+    
   };
+
 
   const handleAddPosition = async (values) => {
     try {
-      await addUserPosition(values);
-      fetchData(); // Make sure this is being called after add
+      const response = await main_api.post(adminAPIsEndPoints.ADD_POSITION, values);
+      if (response.status === 201) {
+          pushNotification("User position added successfully", "success");
+          fetchData(); 
+          setUpdatePositionModal(false);
+      }
     } catch (error) {
-      console.error('Error adding position:', error);
+            pushNotification(error.response.data.detail, "error");
     }
-    setUpdatePositionModal(false);
+  
   };
 
 
@@ -138,7 +164,7 @@ export default function Position({}) {
           }}
           filter1Style={{marginLeft:"20px", marginBottom: "20px", position:"relative", top:"12px", left:"6px", width:"260px", height:"40px"}}
           filter2Style={{marginLeft:"8px", marginBottom: "20px", position:"relative", top:"12px", left:"6px", width:"260px", height:"40px"}}
-          resetFiltersStyle={{cursor:"pointer",color:"red",marginLeft:"15px", marginBottom: "20px", position:"relative", top:"20px", left:"6px", width:"260px", height:"40px"}}
+          resetFiltersStyle={{cursor:"pointer",color:"#EE3E41",marginLeft:"15px", marginBottom: "20px", position:"relative", top:"20px", left:"6px", width:"260px", height:"40px"}}
         />
         <AntdesignTablePagination 
           columns={userPositionsColumns({handleEditRow})} 
@@ -146,7 +172,8 @@ export default function Position({}) {
           totalCount={count}
           loadPaginatedData={fetchData} 
           allowRowSelection={false}
-          tableHeight={500}
+          pageSize={10}
+          tableHeight={450}
           tableWidth={1200}
         />
     </CustomCard>
@@ -179,7 +206,7 @@ const Heading = ({ text = "", margin, fontSize = "0.75rem", color = "#3B3B3B" })
 
 const CustomCard = styled(Card)`
   width: calc(100vw - 40px);
-  max-width: 1274px;
+  max-width: 1474px;
   height: calc(100vh - 40px);
   max-height: 720px;
   margin: 20px;

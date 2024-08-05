@@ -32,6 +32,9 @@ const CustomPaginationContainer = styled.div`
   display: flex;
   align-items: center;
   margin-top: 20px;
+  position: relative;
+  top: 50px;
+  right: 0px;
 `;
 // 12px
 // #595959
