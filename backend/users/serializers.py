@@ -3,7 +3,8 @@ from django.core.exceptions import ValidationError
 from django.db import IntegrityError
 from rest_framework import serializers
 
-from users.models import Role, Position, UserAdditionalData
+from base.utils import generate_pre_signed_url
+from users.models import Role, Position, UserAdditionalData, UserAttachments
 from users.utils import CONTRACTOR, SUB_CONTRACTOR, PRIME_CONTRACTOR
 
 User = get_user_model()
@@ -128,6 +129,27 @@ class UserProfileSerializer(serializers.ModelSerializer):
         ]
 
 
+class UserAttachmentsCreateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = UserAttachments
+        fields = [
+            "key",
+            "type",
+        ]
+
+
+class UserAttachmentsReadSerializer(serializers.ModelSerializer):
+    url = serializers.SerializerMethodField()
+
+    class Meta:
+        model = UserAttachments
+        fields = "__all__"
+
+    def get_url(self, obj):
+        if obj.key:
+            return generate_pre_signed_url(obj.key)
+
+
 class UserCreateSerializer(serializers.ModelSerializer):
     name = serializers.CharField(required=True)
     password = serializers.CharField(write_only=True)
@@ -145,6 +167,7 @@ class UserCreateSerializer(serializers.ModelSerializer):
         required=False,
     )
     additional_data = UserAdditionalDataModifySerializer(required=False)
+    attachments = UserAttachmentsCreateSerializer(many=True, required=False)
 
     class Meta:
         model = User
@@ -162,6 +185,7 @@ class UserCreateSerializer(serializers.ModelSerializer):
             "longitude",
             "prime_contractor",
             "additional_data",
+            "attachments",
         ]
 
     def validate(self, data):
@@ -236,6 +260,9 @@ class UserCreateSerializer(serializers.ModelSerializer):
                         {"prefix": ["Prefix already exists"]}
                     )
 
+        attachments = validated_data.get("attachments", None)
+        if attachments:
+            user.create_attachments(attachments)
         return user
 
 
@@ -254,6 +281,11 @@ class UserUpdateSerializer(serializers.ModelSerializer):
         ),
         required=False,
     )
+    attachments = UserAttachmentsCreateSerializer(many=True, required=False)
+    remove_attachments = serializers.ListField(
+        child=serializers.UUIDField(),
+        required=False,
+    )
 
     class Meta:
         model = User
@@ -268,6 +300,8 @@ class UserUpdateSerializer(serializers.ModelSerializer):
             "is_active",
             "prime_contractor",
             "additional_data",
+            "attachments",
+            "remove_attachments",
         ]
 
     def validate(self, data):
@@ -322,6 +356,8 @@ class UserUpdateSerializer(serializers.ModelSerializer):
 
     def update(self, instance, validated_data):
         additional_data = validated_data.pop("additional_data", None)
+        attachments = validated_data.pop("attachments", None)
+        remove_attachments = validated_data.pop("remove_attachments", None)
         user = super().update(instance, validated_data)
 
         if additional_data:
@@ -347,6 +383,10 @@ class UserUpdateSerializer(serializers.ModelSerializer):
                     raise serializers.ValidationError(
                         {"prefix": ["Prefix already exists"]}
                     )
+        if attachments:
+            user.create_attachments(attachments)
+        if remove_attachments:
+            user.delete_attachments(remove_attachments)
 
         return user
 

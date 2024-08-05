@@ -11,7 +11,7 @@ from rest_framework_simplejwt.views import TokenObtainPairView
 from base.decorators import check_permissions
 from base.pagination import ListPagination
 from base.utils import error_handler
-from users.models import Role, Position
+from users.models import Role, Position, UserAttachments
 from users.serializers import (
     RoleSerializer,
     UserCreateSerializer,
@@ -22,6 +22,7 @@ from users.serializers import (
     UserUpdateSerializer,
     UserProfileSerializer,
     ChangePasswordSerializer,
+    UserAttachmentsReadSerializer,
 )
 from users.utils import WEB, MOBILE, validate_platform
 
@@ -108,7 +109,7 @@ class UserViewSet(ModelViewSet):
         instance = self.get_object()
         instance.delete()
         return Response(
-            {"detail": "User Deleted Successfully"}, status=status.HTTP_200_OK
+            {"detail": "User Deleted Successfully"}, status=status.HTTP_204_NO_CONTENT
         )
 
     @action(detail=False, methods=["get"])
@@ -236,7 +237,8 @@ class PositionViewSet(ModelViewSet):
         position.delete()
 
         return Response(
-            {"detail": "Position Deleted Successfully"}, status=status.HTTP_200_OK
+            {"detail": "Position Deleted Successfully"},
+            status=status.HTTP_204_NO_CONTENT,
         )
 
 
@@ -252,3 +254,21 @@ class RoleViewSet(ModelViewSet):
         roles = self.filter_queryset(roles)
         serializer = RoleSerializer(roles, many=True)
         return Response({"results": serializer.data}, status=status.HTTP_200_OK)
+
+
+class UserAttachmentsViewSet(ModelViewSet):
+    permission_classes = [IsAuthenticated]
+    queryset = UserAttachments.objects.all()
+    serializer_class = UserAttachmentsReadSerializer
+    http_method_names = ["get"]
+    filterset_fields = ["user"]
+    ordering = ["-created_at"]
+    pagination_class = ListPagination
+
+    def list(self, request, *args, **kwargs):
+        queryset = self.get_queryset()
+        queryset = self.filter_queryset(queryset)
+        page = self.paginate_queryset(queryset)
+        serializer = self.serializer_class(page, many=True)
+        paginated_response = self.get_paginated_response(serializer.data)
+        return paginated_response
