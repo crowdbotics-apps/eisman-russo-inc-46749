@@ -1,3 +1,5 @@
+from django.db import IntegrityError
+
 CONTRACTOR = "contractor"
 CLIENT = "client"
 ER_USER = "er_user"
@@ -27,8 +29,15 @@ def validate_platform(is_mobile, device_id, user):
             )
         if device_id:
             if not user.device_id:
-                user.device_id = device_id
-                user.save()
+                try:
+                    user.device_id = device_id
+                    user.save()
+                except IntegrityError as e:
+                    if "unique_device_id" in str(e):
+                        return (
+                            False,
+                            "Your account cannot be associated with this device id",
+                        )
             elif user.device_id != device_id:
                 return False, "Your account is not associated with this device id."
         else:
