@@ -1,17 +1,12 @@
-from django.core.validators import MinValueValidator, MaxValueValidator
-from django.db import models
-
 from base.models import BaseFieldModel
 
-
-# Create your models here.
-# "rate_matrix_fields": {
-#         "mileage": false,
-#         "diameter": false,
-#         "unit": false,
-#         "weight": false,
-#         "reduction_rate": false
-# }
+from django.conf import settings
+from django.core.validators import (
+    MaxValueValidator,
+    MinValueValidator,
+    validate_image_file_extension,
+)
+from django.db import models
 
 
 class DebrisType(BaseFieldModel):
@@ -29,10 +24,6 @@ class Event(BaseFieldModel):
     declaration_date = models.DateField()
     is_active = models.BooleanField(default=True)
     notes = models.TextField(null=True, blank=True)
-
-
-class Project(BaseFieldModel):
-    event = models.ForeignKey(Event, on_delete=models.CASCADE, related_name="projects")
 
 
 class FemaDates(BaseFieldModel):
@@ -86,3 +77,45 @@ class SubActivity(BaseFieldModel):
 
     def __str__(self):
         return self.name
+
+
+class State(BaseFieldModel):
+    name = models.CharField(max_length=255, unique=True)
+
+    def __str__(self):
+        return self.name
+
+
+class City(BaseFieldModel):
+    name = models.CharField(max_length=255, unique=True)
+    state = models.ForeignKey(State, on_delete=models.CASCADE, related_name="cities")
+
+    def __str__(self):
+        return self.name
+
+
+class Project(BaseFieldModel):
+    event = models.ForeignKey(Event, on_delete=models.CASCADE, related_name="projects")
+    name = models.CharField(max_length=500)
+    client = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.DO_NOTHING)
+    contractor = models.ForeignKey(
+        settings.AUTH_USER_MODEL, on_delete=models.DO_NOTHING
+    )
+    po_number = models.CharField(max_length=255, null=True, blank=True)
+    project_identfication_number = models.CharField(
+        max_length=255, null=True, blank=True
+    )
+    city = models.ForeignKey(City, on_delete=models.CASCADE, related_name="projects")
+    state = models.ForeignKey(State, on_delete=models.CASCADE, related_name="projects")
+    sub_activity = models.ForeignKey(
+        SubActivity, on_delete=models.CASCADE, related_name="projects"
+    )
+
+
+class Attachments(BaseFieldModel):
+    image = models.ImageField(
+        upload_to="attachments", validators=[validate_image_file_extension]
+    )
+    project = models.ForeignKey(
+        Project, on_delete=models.CASCADE, related_name="attachments"
+    )

@@ -1,7 +1,7 @@
 from . import views
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
-from .viewsets import (
+from ticketing.api.v1 import (
     DebrisViewSet,
     EventViewSet,
     HazardNameViewSet,

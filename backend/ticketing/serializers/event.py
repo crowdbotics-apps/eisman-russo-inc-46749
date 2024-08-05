@@ -2,48 +2,7 @@ from django.db import IntegrityError
 from django.utils import timezone
 from rest_framework import serializers
 from rest_framework.exceptions import ValidationError
-
-from .models import (
-    DebrisType,
-    Event,
-    FemaDates,
-    HazardType,
-    HazardName,
-    TruckType,
-    SubActivity,
-)
-
-
-class SubActivitySerializer(serializers.ModelSerializer):
-    class Meta:
-        model = SubActivity
-        fields = "__all__"
-
-
-class TruckTypeSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = TruckType
-        fields = "__all__"
-
-
-class HazardTypeSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = HazardType
-        fields = "__all__"
-
-
-class HazardNameSerializer(serializers.ModelSerializer):
-    type = HazardTypeSerializer()
-
-    class Meta:
-        model = HazardName
-        fields = "__all__"
-
-
-class DebrisSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = DebrisType
-        fields = "__all__"
+from ticketing.models import Event, FemaDates
 
 
 class FemaDatesSerializer(serializers.ModelSerializer):
