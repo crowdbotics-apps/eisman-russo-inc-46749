@@ -9,33 +9,61 @@ import uuid
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('users', '0005_user_device_id'),
+        ("users", "0005_user_device_id"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='user',
-            name='prime_contractor',
-            field=models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, related_name='user_prime_contractor', to=settings.AUTH_USER_MODEL),
+            model_name="user",
+            name="prime_contractor",
+            field=models.ForeignKey(
+                blank=True,
+                null=True,
+                on_delete=django.db.models.deletion.CASCADE,
+                related_name="user_prime_contractor",
+                to=settings.AUTH_USER_MODEL,
+            ),
         ),
         migrations.CreateModel(
-            name='UserAdditionalData',
+            name="UserAdditionalData",
             fields=[
-                ('id', models.UUIDField(default=uuid.uuid4, editable=False, primary_key=True, serialize=False)),
-                ('created_at', models.DateTimeField(auto_now_add=True, null=True)),
-                ('modified_at', models.DateTimeField(auto_now=True, null=True)),
-                ('company_name', models.CharField(blank=True, max_length=255, null=True)),
-                ('prefix', models.CharField(blank=True, max_length=255, null=True)),
-                ('notes', models.TextField(blank=True, null=True)),
-                ('user', models.OneToOneField(on_delete=django.db.models.deletion.CASCADE, related_name='additional_data', to=settings.AUTH_USER_MODEL)),
+                (
+                    "id",
+                    models.UUIDField(
+                        default=uuid.uuid4,
+                        editable=False,
+                        primary_key=True,
+                        serialize=False,
+                    ),
+                ),
+                ("created_at", models.DateTimeField(auto_now_add=True, null=True)),
+                ("modified_at", models.DateTimeField(auto_now=True, null=True)),
+                (
+                    "company_name",
+                    models.CharField(blank=True, max_length=255, null=True),
+                ),
+                ("prefix", models.CharField(blank=True, max_length=255, null=True)),
+                ("notes", models.TextField(blank=True, null=True)),
+                (
+                    "user",
+                    models.OneToOneField(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="additional_data",
+                        to=settings.AUTH_USER_MODEL,
+                    ),
+                ),
             ],
         ),
         migrations.AddConstraint(
-            model_name='useradditionaldata',
-            constraint=models.UniqueConstraint(fields=('company_name',), name='unique_company_name'),
+            model_name="useradditionaldata",
+            constraint=models.UniqueConstraint(
+                fields=("company_name",), name="unique_company_name"
+            ),
         ),
         migrations.AddConstraint(
-            model_name='useradditionaldata',
-            constraint=models.UniqueConstraint(fields=('prefix',), name='unique_prefix'),
+            model_name="useradditionaldata",
+            constraint=models.UniqueConstraint(
+                fields=("prefix",), name="unique_prefix"
+            ),
         ),
     ]

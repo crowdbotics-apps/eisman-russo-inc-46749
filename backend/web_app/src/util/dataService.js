@@ -20,7 +20,11 @@ export const getUserList = async (page) => {
 export const addUser = async (data) => {
     try {
         const response = await main_api.post(adminAPIsEndPoints.CREATE_USER, data);
-        pushNotification("User added successfully", response);
+        if (response.status === 201) {
+            pushNotification("User added successfully", "success");
+        }else{
+            pushNotification(response.detail, "error");
+        }
     } catch (error) {
         pushNotification("Error while adding user", error);
     }
@@ -32,12 +36,34 @@ export const addUser = async (data) => {
 export const updateUser = async (id, data) => {
     try {
         const response = await main_api.put(adminAPIsEndPoints.UPDATE_USER(id), data);
-        pushNotification("User updated successfully", response);
+        if (response.status === 200) {
+            pushNotification("User updated successfully", "success");
+            
+        }else{
+        pushNotification(response.detail, "error");
+        }
     } catch (error) {
         pushNotification("Error while updating user", error);
     }
 };
 
+
+//----------------------- Change Password -----------------------//
+
+
+export const changePassword = async (id, data) => {
+    try {
+        const response = await main_api.put(adminAPIsEndPoints.CHANGE_PASSWORD(id), data);
+        if (response.status === 200) {
+            pushNotification("Password updated successfully", "success");
+            
+        }else{
+        pushNotification(response.detail, "error");
+        }
+    } catch (error) {
+        pushNotification("Error while updating user", error);
+    }
+};
 
 //----------------------- Get User Role List -----------------------//
 

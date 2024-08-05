@@ -34,7 +34,7 @@ const CustomMenu = ({ menuItems, handleMenuSelect }) => {
 
 const CustomCard = styled(Card)`
   width: 260px;
-  height: 720px;
+  height: 912px;
   margin-right: 10px;
   margin-left: 20px;
   border-radius: 16px;

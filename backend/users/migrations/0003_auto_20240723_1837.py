@@ -6,14 +6,14 @@ from django.db import migrations
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('users', '0002_auto_20240723_0537'),
+        ("users", "0002_auto_20240723_0537"),
     ]
 
     operations = [
         migrations.DeleteModel(
-            name='Position',
+            name="Position",
         ),
         migrations.DeleteModel(
-            name='Role',
+            name="Role",
         ),
     ]
