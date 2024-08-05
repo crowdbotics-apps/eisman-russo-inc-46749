@@ -15,6 +15,11 @@ from .serializers import (
 from base.pagination import ListPagination
 from base.utils import error_handler
 from .permissions import DebrisTypePermissions
+# import User
+
+from users.serializers import UserReadSerializer
+from users.models import User
+
 
 
 class DebrisViewSet(viewsets.ModelViewSet):
@@ -27,8 +32,9 @@ class DebrisViewSet(viewsets.ModelViewSet):
     ordering = ["-created_at"]
 
     def list(self, request, *args, **kwargs):
-        debris = self.filter_queryset(self.get_queryset())
-        page = self.paginate_queryset(debris)
+        queryset = self.get_queryset()
+        queryset = self.filter_queryset(queryset)
+        page = self.paginate_queryset(queryset)
         serializer = self.serializer_class(page, many=True)
         paginated_response = self.get_paginated_response(serializer.data)
         return paginated_response
@@ -276,7 +282,7 @@ class SubActivityViewSet(viewsets.ModelViewSet):
 
 
 class TruckTypeViewSet(viewsets.ModelViewSet):
-    # permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated]
     queryset = TruckType.objects.all()
     serializer_class = TruckTypeSerializer
     filterset_fields = ["is_active"]

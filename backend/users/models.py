@@ -100,10 +100,19 @@ class User(AbstractUser):
     USERNAME_FIELD = "email"
     REQUIRED_FIELDS = []
 
+        
     objects = CustomUserManager()
 
     def get_absolute_url(self):
         return reverse("users:detail", kwargs={"username": self.username})
+    
+    class Meta:
+        permissions = [
+            ("can_add_debris_type", "Can add debris type"),
+            ("can_change_debris_type", "Can change debris type"),
+            ("can_delete_debris_type", "Can delete debris type"),
+            ("can_view_debris_type", "Can view debris type"),
+            ]
 
     class Meta:
         constraints = [
