@@ -7,6 +7,7 @@ export const adminAPIsEndPoints = {
   LIST_USER: "/users/profile/",
   UPDATE_USER: (id) => `/users/profile/${id}/`,
   CHANGE_PASSWORD: "/users/profile/change_password/",
+  USER_DETAILS: "/users/profile/details/",
 
   //----------------------- User Role APIs -----------------------//
 

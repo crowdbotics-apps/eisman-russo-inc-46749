@@ -89,7 +89,7 @@ const Heading = ({ text = "", margin, fontSize = "0.75rem", color = "#3B3B3B" })
 
 const CustomCard = styled(Card)`
   width: calc(100vw - 40px);
-  max-width: 1274px;
+  max-width: 1474px;
   height: calc(100vh - 40px);
   max-height: 720px;
   margin: 20px;

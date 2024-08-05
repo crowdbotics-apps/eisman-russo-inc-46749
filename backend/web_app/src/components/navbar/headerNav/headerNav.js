@@ -16,6 +16,7 @@ import HeadingComponent from "../../headingComponent/heading";
 import { logOut } from "../../../util/commonUtil";
 import { pushNotification } from "../../../util/notification";
 import Notifications from "../../notifications/notifications";
+import { current } from "@reduxjs/toolkit";
 
 export default function HeaderNav({expanded}) {
   let navigate = useNavigate();
@@ -36,12 +37,12 @@ export default function HeaderNav({expanded}) {
       NavTo: "",
       // onClick: () => setIsAccountSettingsModalOpen(true),
     },
-    {
-      icon: <LegalAgreeIcon />,
-      name: "Legal Agreement",
-      NavTo: "",
-      // onClick: () => setIsLegalAgreementModalOpen(true),
-    },
+    // {
+    //   icon: <LegalAgreeIcon />,
+    //   name: "Legal Agreement",
+    //   NavTo: "",
+    //   // onClick: () => setIsLegalAgreementModalOpen(true),
+    // },
   ];
   const closeModal = () => {
     // setIsOnboardingModalVisible(false);
@@ -107,6 +108,7 @@ export default function HeaderNav({expanded}) {
       .join(' '); 
   };
  
+  const currentUser = localStorage.getItem('username');
 
   return (
     <>
@@ -158,7 +160,7 @@ export default function HeaderNav({expanded}) {
           >
             {/* <UserAvatar src={require("../assets/avatar/avatar-1.png")} alt="User Avatar" /> */}
             <Avatar
-              name={"B A"}
+              name={currentUser || "B A"}
               round={true}
               size="33"
               textSizeRatio={1.5}
