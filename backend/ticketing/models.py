@@ -115,7 +115,10 @@ class ContractorRateMatrix(BaseFieldModel):
     rate = models.FloatField()
     unit_type = models.CharField(max_length=50, choices=UNIT_TYPES)
     reduction_rate = models.FloatField(
-        null=True, blank=True, validators=[MaxValueValidator(100), MinValueValidator(0)]
+        null=True,
+        blank=True,
+        validators=[MaxValueValidator(100), MinValueValidator(0)],
+        default=0,
     )
 
     def clean(self):

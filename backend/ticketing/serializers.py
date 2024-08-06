@@ -254,7 +254,9 @@ class ContractorRateMatrixModifySerializer(serializers.ModelSerializer):
             or (self.instance.debris_type if self.instance else None)
         ).rate_matrix_fields
         for field in rate_matrix_custom_fields:
-            value = rate_matrix_fields.get(field, False)
+            value = (
+                rate_matrix_fields.get(field, False) if rate_matrix_fields else False
+            )
             if value == True:
                 if not hasattr(self, "instance"):
                     require_fields = get_rate_matrix_custom_fields(field)
@@ -280,7 +282,7 @@ class ContractorRateMatrixModifySerializer(serializers.ModelSerializer):
             elif value == False:
                 require_fields = get_rate_matrix_custom_fields(field)
                 for field in require_fields:
-                    if data.get(field):
+                    if field in data:
                         raise serializers.ValidationError(
                             {
                                 field: [
