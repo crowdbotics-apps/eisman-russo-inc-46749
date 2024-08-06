@@ -261,6 +261,7 @@ class UserUpdateSerializer(serializers.ModelSerializer):
             "name",
             "phone_number",
             "address",
+            "device_id",
             "latitude",
             "longitude",
             "role",
