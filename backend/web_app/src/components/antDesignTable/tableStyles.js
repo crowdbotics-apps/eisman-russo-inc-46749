@@ -11,6 +11,10 @@ const RoundedButton = styled.button`
   justify-content: center;
   align-items: center;
   cursor: pointer;
+  position: ${(props) => props.position};
+  top: ${(props) => props.top};
+  right: ${(props) => props.right};
+  left: ${(props) => props.left};
   margin:${(props) => props.margin};
   box-shadow:width: 36px;
     cursor: pointer;
