@@ -10,6 +10,7 @@ import { ReactComponent as TicketsBadge } from "../../assets/rawSvg/ticketBadge.
 import { ReactComponent as UsersBadge } from "../../assets/rawSvg/usersBadge.svg";
 import moment from 'moment';
 import { dashboardProjectsColumns } from '../../util/antdTableColumns';
+import { useSelector } from 'react-redux';
 
 const { RangePicker } = DatePicker;
 const { Search } = Input;
@@ -76,11 +77,23 @@ export default function Dashboard() {
   const startDate = today.clone().subtract(5, 'days');
   const endDate = today.clone().add(5, 'days');
   const [dateRange, setDateRange] = useState([startDate, endDate]);
-  localStorage.setItem('username', 'Bryan Adams');
-  const greetings = `Welcome ${localStorage.getItem('username')}`;
+  const profileState = useSelector((state) => state?.profileData?.profileData);
+
+  const defaultUsername = 'Guest';
+
+  localStorage.setItem('username', `${profileState?.name ?? defaultUsername}`);
+  const currentUser = localStorage.getItem('username');
+
+  const greetings = `Welcome ${currentUser}`;
   useEffect(() => {
     fetchService();
   }, []);
+
+  useEffect(() => {
+    if (profileState) {
+      console.log("profileState", profileState);
+    }
+  }, [profileState]);
 
   useEffect(() => {
     filterDataByDateRange();

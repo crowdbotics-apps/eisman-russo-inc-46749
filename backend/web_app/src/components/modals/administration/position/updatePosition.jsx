@@ -57,7 +57,7 @@ export default function UpdatePosition({
       footer={null}
       maskClosable={false}
     >
-      <Divider style={{width:"100%", borderTop:"1px solid #DEE2E6"}}/>
+      <Divider style={{width:"108.5%", position:"relative", top:"0px", right:"24px", borderTop:"1px solid #DEE2E6"}}/>
       <Form name="updateUserPositionForm" onFinish={onFinish} form={form} layout="vertical">
         <div style={{display:"flex", flexDirection:"row"}}>
           <FormItem 
@@ -111,7 +111,8 @@ export default function UpdatePosition({
         >
           <Checkbox onChange={handleCheckboxChange}>Is project specific</Checkbox>
         </FormItem>
-        <Divider style={{borderTop:"1px solid #DEE2E6"}}/>
+        <Heading text="Note: If the position is project specific, it will only be available for the selected project." margin="-20px 0px 0px 2px" fontSize="0.75rem" color="grey" />
+        <Divider style={{width:"108.5%", position:"relative", top:"0px", right:"24px",borderTop:"1px solid #DEE2E6"}}/>
         <div className="d-flex justify-content-end">
           <CustomButton
             btnText={"Cancel"}

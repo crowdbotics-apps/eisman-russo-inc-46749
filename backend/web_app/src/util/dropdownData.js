@@ -3,6 +3,7 @@
 export const accessPermission = [
     { label: "Web", value: "web" },
     { label: "Mobile", value: "mobile" },
+    { label: "Both", value: "both" },
   ];
 
 export const status = [
