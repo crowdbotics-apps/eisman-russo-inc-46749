@@ -51,7 +51,6 @@ export const userPositionsColumns = ({roleState,handleEditRow}) => {
           key: "action",
           render: (_, record) => (
             <Space size="middle" className="d-flex">
-              {console.log("record",record)}
               
               {record.role.can_add_positions ? (<Button
                 onClick={(event) => {
