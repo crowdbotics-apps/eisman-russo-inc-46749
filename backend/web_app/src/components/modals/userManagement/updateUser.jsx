@@ -117,6 +117,7 @@ export default function UpdateUser({
     }, [userRole]);
 
    
+   
 
     useEffect(() => {
         if (editUserValues) {
@@ -150,6 +151,9 @@ export default function UpdateUser({
       setUserRole(value);
       const type = rolesState.filter((role) => role.name === option.label).map((role) => role.type);
       setRoleType(type[0]);
+
+      setPositionType(null);
+      form.setFieldsValue({ position: null });
       
     }
 
@@ -175,7 +179,7 @@ export default function UpdateUser({
 
   return (
 
-    <CustomModal  
+  <CustomModal  
   open={isModalOpen}
   title={title}
   width="1000px"
@@ -205,7 +209,7 @@ export default function UpdateUser({
         },
       ]}
     >
-      <Select placeholder="Select" options={roles} style={{width:"260px"}} onChange={handleRoleChange}/>
+      <Select placeholder="Select Role" options={roles} style={{width:"260px"}} onChange={handleRoleChange}/>
     </FormItem>
     <FormItem 
       name="position" 
@@ -218,7 +222,7 @@ export default function UpdateUser({
       ]} 
       style={{position:"relative", top:"0px",right:positionType !== "Sub Contractor" ? "167px" : "6px"}}
     >
-      <PaginatedSelect fetchData={fetchData} placeholder="Select" options={positionList} onChange={handlePositionChange} style={{width:"260px"}}/>
+      <PaginatedSelect fetchData={fetchData} placeholder="Select Position" options={positionList} value={positionType} onChange={handlePositionChange} style={{width:"260px"}}/>
     </FormItem>
     {
       roleType === "contractor" && positionType === "Sub Contractor" ? 
@@ -253,8 +257,17 @@ export default function UpdateUser({
       label="Telephone Number"
       rules={[
         {
-          required: false,
+          required: true,
           message: "Please enter your phone number",
+        },
+        {
+          pattern: /^[0-9-+() ]*$/,
+          message: "Phone number can only contain numbers, spaces, and the characters +, -, and ()",
+        },
+        {
+          min: 10,
+          max: 15,
+          message: "Phone number must be between 10 and 15 characters",
         },
       ]}
     >

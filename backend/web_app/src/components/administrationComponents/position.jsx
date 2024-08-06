@@ -168,7 +168,7 @@ export default function Position({}) {
           resetFiltersStyle={{cursor:"pointer",color:"#EE3E41",marginLeft:"15px", marginBottom: "20px", position:"relative", top:"20px", left:"6px", width:"260px", height:"40px"}}
         />
         <AntdesignTablePagination 
-          columns={userPositionsColumns({handleEditRow})} 
+          columns={userPositionsColumns({rolesState,handleEditRow})} 
           data={data}
           totalCount={count}
           loadPaginatedData={fetchData} 
