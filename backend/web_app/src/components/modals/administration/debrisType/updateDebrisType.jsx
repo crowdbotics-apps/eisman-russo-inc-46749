@@ -9,12 +9,12 @@ import { CustomModal } from '../../../customModal/customModal';
 import { accessPermission } from '../../../../util/dropdownData';
 import { useSelector } from 'react-redux';
 
-export default function UpdatePosition({
+export default function UpdateDebrisType({
     isModalOpen,
     title,
     setModalOpen,
     onFinish,
-    editPositionValues,
+    editDebrisTypeValues,
     padding = "20px",
 }) {
 
@@ -30,15 +30,15 @@ export default function UpdatePosition({
   const [form] = Form.useForm();
 
   useEffect(() => {
-    if (editPositionValues) {
+    if (editDebrisTypeValues) {
       form.setFieldsValue({
-        role: editPositionValues.role.id,
-        name: editPositionValues.name,
-        platform_type: editPositionValues.platform_type,
-        is_project_specific_position: editPositionValues.is_project_specific_position,
+        role: editDebrisTypeValues.role.id,
+        name: editDebrisTypeValues.name,
+        platform_type: editDebrisTypeValues.platform_type,
+        is_project_specific_position: editDebrisTypeValues.is_project_specific_position,
       });
     }
-  }, [editPositionValues]);
+  }, [editDebrisTypeValues]);
 
   const handleCheckboxChange = (e) => {
     form.setFieldsValue({ is_project_specific_position: e.target.checked });
@@ -62,15 +62,15 @@ export default function UpdatePosition({
         <div style={{display:"flex", flexDirection:"row"}}>
           <FormItem 
             name="role" 
-            label="User Role" 
+            label="User Type" 
             rules={[
               {
                 required: true,
-                message: "Please select a user role",
+                message: "Please select a user type",
               },
             ]}
           >
-            <Select placeholder="Select Role" options={roles} style={{width:"260px"}} />
+            <Select placeholder="Select" options={roles} style={{width:"260px"}} />
           </FormItem>
           <FormItem 
             name="name" 
@@ -84,7 +84,7 @@ export default function UpdatePosition({
               },
             ]}
           >
-            <Input placeholder="Enter Position Name Here" style={{width:"280px"}}/>
+            <Input placeholder="Enter Here" style={{width:"280px"}}/>
           </FormItem>
         </div>
         <FormItem 
@@ -97,7 +97,7 @@ export default function UpdatePosition({
             },
           ]}
         >
-          <Select placeholder="Select Access Permission" options={accessPermission} />
+          <Select placeholder="Select" options={accessPermission} />
         </FormItem>
         <FormItem 
           name="is_project_specific_position" 

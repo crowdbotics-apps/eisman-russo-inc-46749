@@ -14,6 +14,7 @@ import { main_api } from '../../api/axiosHelper';
 import { adminAPIsEndPoints } from '../../constants/apiEndPoints';
 import { AntdesignTablePagination } from '../antDesignTable/AntdesignTablePagination';
 import UpdatePosition from '../modals/administration/position/updatePosition';
+import CustomFilter from '../customFilterWithSearchBar/customFilter';
 
 
 export default function TruckDescription() {
@@ -120,34 +121,17 @@ export default function TruckDescription() {
     
     <CustomCard style={{ boxShadow: '0px 4px 12px rgba(0, 0, 0, 0.1)' }}>
         <div style={{display:"flex", flexDirection:"row", justifyContent:"space-between"}}>
-          <Heading text="Manage Debris Type" margin="0px 0px 0px 20px" fontSize="1.3rem" color="#3B3B3B" />
-          <CustomButton btnText={"Add Debris Type"} color={"white"} onClick={handleAddRow} />
+          <Heading text="Manage Truck Type" margin="0px 0px 0px 20px" fontSize="1.3rem" color="#3B3B3B" />
+          <CustomButton btnText={"Add truck Type"} color={"white"} onClick={handleAddRow} />
         </div>
-        <div style={{display:"flex", flexDirection:"row"}}>
+      <CustomFilter
 
-        <SearchInputWrapper>
-            <SearchInput onBlur={(e) => handleSearch(e.target.value)} placeholder="Search By Position Name..." />
-        </SearchInputWrapper>
-        <Select 
-          placeholder="Select Status" 
-          options={roles}
-          onChange={(e)=>{ 
-            setRoleSelected(e);
-          }} 
-          style={{marginLeft:"20px",position:"relative", top:"12px", left:"6px", width:"260px", height:"40px"}}
-        />
-        <div 
-          onClick={() => {
-            setRoleSelected(null);
-            setAccessPermissionSelected(null);
-            setSearchedValue('');
-            fetchData();
-          }}
-          style={{cursor:"pointer",color:"red",marginLeft:"15px",position:"relative", top:"20px", left:"6px", width:"260px", height:"40px"}}>
-         Reset Filter
-       
-        </div>
-        </div>
+        searchBar={true}
+        filter1={true}
+        searchPlaceholder="Search Truck Type"
+        filter1Placeholder="Status"
+        handleSearch={handleSearch}
+      />
         <AntdesignTablePagination 
           columns={userPositionsColumns({handleEditRow})} 
           data={data}
@@ -180,7 +164,7 @@ const Heading = ({ text = "", margin, fontSize = "0.75rem", color = "#3B3B3B" })
 
 const CustomCard = styled(Card)`
   width: calc(100vw - 40px);
-  max-width: 1274px;
+  max-width: 1474px;
   height: calc(100vh - 40px);
   max-height: 720px;
   margin: 20px;
