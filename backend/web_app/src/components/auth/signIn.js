@@ -55,7 +55,8 @@ export default function SignIn(props) {
       })
       .catch((error) => {
         setLoginLoader(false);
-        pushNotification("error", "Invalid credentials");
+        
+        pushNotification(error.detail,"error");
       });
   };
 
