@@ -23,6 +23,7 @@ from users.serializers import (
     UserProfileSerializer,
     ChangePasswordSerializer,
     UserAttachmentsReadSerializer,
+    ResetPasswordSerializer,
 )
 from users.utils import WEB, MOBILE, validate_platform
 
@@ -119,19 +120,32 @@ class UserViewSet(ModelViewSet):
         return Response({"result": serializer.data}, status=status.HTTP_200_OK)
 
     @action(detail=False, methods=["post"])
-    def change_password(self, request, *args, **kwargs):
-        serializer = ChangePasswordSerializer(data=request.data)
+    def reset_password(self, request, *args, **kwargs):
+        serializer = ResetPasswordSerializer(data=request.data)
         if serializer.is_valid():
-            user_id = request.data.get("user_id", None)
-            if user_id:
-                user = User.objects.filter(id=user_id).first()
-                if not user:
-                    return Response(
-                        {"detail": "User does not exist"},
-                        status=status.HTTP_400_BAD_REQUEST,
-                    )
-            else:
-                user = request.user
+            user = request.user
+            new_password = serializer.validated_data["new_password"]
+
+            # Set the new password
+            user.set_password(new_password)
+            user.save()
+            return Response(
+                {"detail": "Password has been changed successfully."},
+                status=status.HTTP_200_OK,
+            )
+
+        message = error_handler(serializer.errors)
+
+        return Response({"detail": message}, status=status.HTTP_400_BAD_REQUEST)
+
+    @action(detail=False, methods=["post"])
+    def change_password(self, request, *args, **kwargs):
+        user = request.user
+        serializer = ChangePasswordSerializer(
+            data=request.data,
+            context={"user": user},
+        )
+        if serializer.is_valid():
             new_password = serializer.validated_data["new_password"]
 
             # Set the new password

@@ -391,13 +391,37 @@ class UserUpdateSerializer(serializers.ModelSerializer):
         return user
 
 
-class ChangePasswordSerializer(serializers.Serializer):
+class ResetPasswordSerializer(serializers.Serializer):
+    user = serializers.PrimaryKeyRelatedField(queryset=User.objects.all())
     new_password = serializers.CharField(required=True, write_only=True)
     confirm_new_password = serializers.CharField(required=True, write_only=True)
 
     def validate(self, data):
         new_password = data.get("new_password")
         confirm_new_password = data.get("confirm_new_password")
+
+        # Check if new password and confirm new password match
+        if new_password != confirm_new_password:
+            raise serializers.ValidationError({"password": ["Passwords do not match."]})
+
+        return data
+
+
+class ChangePasswordSerializer(serializers.Serializer):
+    old_password = serializers.CharField(required=True, write_only=True)
+    new_password = serializers.CharField(required=True, write_only=True)
+    confirm_new_password = serializers.CharField(required=True, write_only=True)
+
+    def validate(self, data):
+        user = self.context.get("user")
+        new_password = data.get("new_password")
+        confirm_new_password = data.get("confirm_new_password")
+        old_password = data.get("old_password")
+
+        if old_password and not user.check_password(old_password):
+            raise serializers.ValidationError(
+                {"old_password": ["Old password is not correct."]}
+            )
 
         # Check if new password and confirm new password match
         if new_password != confirm_new_password:
