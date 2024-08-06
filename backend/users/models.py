@@ -8,17 +8,24 @@ from django.utils.translation import gettext_lazy as _
 
 from base.models import BaseFieldModel
 from users.managers import CustomUserManager
-from users.utils import WEB, BOTH, MOBILE
-
+from users.utils import MOBILE, WEB, BOTH
 
 class Role(BaseFieldModel):
     name = models.CharField(_("Role Name"), max_length=255, unique=True)
     type = models.CharField(_("Role Type"), max_length=255, unique=True)
     can_add_positions = models.BooleanField(default=True)
+    role_permissions = ArrayField(models.CharField(max_length=255), blank=True, null=True)
+    
+    class Meta:
+        permissions = [
+            ("can_manage_role", "Can manage role"),
+        ]
+    
 
 
 class Position(BaseFieldModel):
     PLATFORM_TYPES = [
+
         (MOBILE, "Mobile"),
         (WEB, "Web"),
         (BOTH, "Both"),
@@ -34,6 +41,10 @@ class Position(BaseFieldModel):
 
     class Meta:
         unique_together = ("role_id", "name")
+    class Meta:
+        permissions = [
+            ("can_manage_position", "Can manage position"),
+        ]
 
 
 class User(AbstractUser):
@@ -105,14 +116,7 @@ class User(AbstractUser):
 
     def get_absolute_url(self):
         return reverse("users:detail", kwargs={"username": self.username})
-    
-    class Meta:
-        permissions = [
-            ("can_add_debris_type", "Can add debris type"),
-            ("can_change_debris_type", "Can change debris type"),
-            ("can_delete_debris_type", "Can delete debris type"),
-            ("can_view_debris_type", "Can view debris type"),
-            ]
+
 
     class Meta:
         constraints = [

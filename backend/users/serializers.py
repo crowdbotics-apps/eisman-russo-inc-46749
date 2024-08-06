@@ -2,9 +2,13 @@ from django.contrib.auth import get_user_model
 from django.core.exceptions import ValidationError
 from django.db import IntegrityError
 from rest_framework import serializers
+from django.contrib.auth.models import Permission
 
 from users.models import Role, Position, UserAdditionalData
-from users.utils import CONTRACTOR, SUB_CONTRACTOR, PRIME_CONTRACTOR
+from users.utils import CONTRACTOR, PRIME_CONTRACTOR, SUB_CONTRACTOR
+from users.utils import grant_permissions
+from rest_framework import status
+from rest_framework.response import Response
 
 User = get_user_model()
 
@@ -209,7 +213,8 @@ class UserCreateSerializer(serializers.ModelSerializer):
             prime_contractor=validated_data.get("prime_contractor", None),
         )
         additional_data = validated_data.get("additional_data", None)
-
+        
+        
         company_name = (
             additional_data.get("company_name", None) if additional_data else None
         )
@@ -235,8 +240,10 @@ class UserCreateSerializer(serializers.ModelSerializer):
                     raise serializers.ValidationError(
                         {"prefix": ["Prefix already exists"]}
                     )
-
-        return user
+        user = grant_permissions(user, user.role)
+        if (user):
+            return user
+        return Response("Something went wrong", status=status.HTTP_400_BAD_REQUEST)
 
 
 class UserUpdateSerializer(serializers.ModelSerializer):

@@ -3,7 +3,6 @@ from django.utils.deprecation import MiddlewareMixin
 from requests import Response
 from rest_framework_simplejwt.authentication import JWTAuthentication
 from rest_framework_simplejwt.exceptions import InvalidToken, TokenError
-from rest_framework.response import Response
 from rest_framework import status
 
 from users.utils import WEB, MOBILE

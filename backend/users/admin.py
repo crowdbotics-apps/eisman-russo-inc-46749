@@ -3,18 +3,13 @@ from django.contrib.auth import admin as auth_admin
 from django.contrib.auth import get_user_model
 from django.http import HttpResponseRedirect
 
+
 from users.forms import UserChangeForm, UserCreationForm
 from users.models import Role, Position
 from django.urls import path
 
-from users.utils import (
-    ROLE_CHOICES,
-    CLIENT,
-    CONTRACTOR,
-    ER_USER,
-    PRIME_CONTRACTOR,
-    SUB_CONTRACTOR,
-)
+
+from users.utils import CLIENT, CONTRACTOR, ER_USER, PRIME_CONTRACTOR, SUB_CONTRACTOR
 
 User = get_user_model()
 
@@ -53,7 +48,7 @@ class RoleAdmin(admin.ModelAdmin):
         return custom_urls + urls
 
     def create_default_roles(self, request):
-        for role in ROLE_CHOICES:
+        for role in Role:
             role_type, name, can_add_positions = role
             Role.objects.get_or_create(
                 name=name, type=role_type, can_add_positions=can_add_positions
@@ -87,7 +82,7 @@ class PositionAdmin(admin.ModelAdmin):
         return ""
 
     def create_default_positions(self, request):
-        for role in ROLE_CHOICES:
+        for role in Role:
             try:
                 role_type, name, can_add_positions = role
                 if role_type == CLIENT:

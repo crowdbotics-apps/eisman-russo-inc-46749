@@ -2,6 +2,7 @@ from django.db import IntegrityError
 from django.utils import timezone
 from rest_framework import serializers
 from rest_framework.exceptions import ValidationError
+from django.contrib.auth.models import Permission
 
 from .models import (
     DebrisType,
@@ -12,6 +13,13 @@ from .models import (
     TruckType,
     SubActivity,
 )
+
+
+class UserPermissionSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Permission
+        fields = "__all__"
+
 
 
 class SubActivitySerializer(serializers.ModelSerializer):

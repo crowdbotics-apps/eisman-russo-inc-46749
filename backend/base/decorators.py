@@ -18,3 +18,13 @@ def check_permissions(permissions):
         return wrapped
 
     return decorator
+
+def class_check_permissions(permissions):
+    def class_decorator(cls):
+        for method in ['list', 'create', 'retrieve', 'update', 'destroy']:
+            if hasattr(cls, method):
+                original_method = getattr(cls, method)
+                decorated_method = check_permissions(permissions)(original_method)
+                setattr(cls, method, decorated_method)
+        return cls
+    return class_decorator

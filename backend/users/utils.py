@@ -1,12 +1,15 @@
 from django.db import IntegrityError
+from django.contrib.auth.models import Permission
+from django.contrib.contenttypes.models import ContentType
+
 
 CONTRACTOR = "contractor"
 CLIENT = "client"
 ER_USER = "er_user"
 ER_SUB_CONSULTANT = "er_sub_consultant"
-
 PRIME_CONTRACTOR = "Prime Contractor"
 SUB_CONTRACTOR = "Sub Contractor"
+
 
 WEB = "web"
 MOBILE = "mobile"
@@ -51,3 +54,11 @@ def validate_platform(is_mobile, device_id, user):
             )
 
     return True, None
+
+
+def grant_permissions(user, role):
+    user.user_permissions.clear()
+    permissions_to_add = role.role_permissions
+    filtered_permissions = Permission.objects.filter(codename__in=permissions_to_add)
+    user.user_permissions.set(filtered_permissions)    
+    return user

@@ -7,6 +7,7 @@ from rest_framework.viewsets import ModelViewSet, ViewSet
 from rest_framework.response import Response
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from rest_framework_simplejwt.views import TokenObtainPairView
+from django.contrib.auth.models import Permission
 
 from base.decorators import check_permissions
 from base.pagination import ListPagination
@@ -23,7 +24,7 @@ from users.serializers import (
     UserProfileSerializer,
     ChangePasswordSerializer,
 )
-from users.utils import WEB, MOBILE, validate_platform
+from users.utils import validate_platform
 
 User = get_user_model()
 
@@ -55,7 +56,7 @@ class LoginViewSet(ViewSet, TokenObtainPairView):
 
 
 class UserViewSet(ModelViewSet):
-    permission_classes = [IsAuthenticated]
+    # permission_classes = [IsAuthenticated]
     serializer_class = UserReadSerializer
     queryset = User.objects.filter(role__isnull=False, position__isnull=False)
     pagination_class = ListPagination
@@ -86,7 +87,6 @@ class UserViewSet(ModelViewSet):
             )
 
         message = error_handler(serializer.errors)
-
         return Response({"detail": message}, status=status.HTTP_400_BAD_REQUEST)
 
     def update(self, request, *args, **kwargs):
@@ -101,7 +101,6 @@ class UserViewSet(ModelViewSet):
             )
 
         message = error_handler(serializer.errors)
-
         return Response({"detail": message}, status=status.HTTP_400_BAD_REQUEST)
 
     def destroy(self, request, *args, **kwargs):
@@ -165,6 +164,7 @@ class PositionViewSet(ModelViewSet):
 
     def create(self, request, *args, **kwargs):
         serializer = PositionCreateSerializer(data=request.data)
+        
 
         if serializer.is_valid():
             # Custom validation logic
