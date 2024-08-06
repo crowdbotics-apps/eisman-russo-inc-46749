@@ -34,7 +34,7 @@ export default function UpdatePosition({
       form.setFieldsValue({
         role: editPositionValues?.role?.id,
         name: editPositionValues?.name,
-        platform_type: editPositionValues?.platform_type,
+        platform_type: editPositionValues?.platform_type.charAt(0).toLowerCase() + editPositionValues?.platform_type.slice(1),
         is_project_specific_position: editPositionValues?.is_project_specific_position,
       });
     }
