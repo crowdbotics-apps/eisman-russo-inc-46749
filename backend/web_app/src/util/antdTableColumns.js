@@ -3,6 +3,7 @@
 import { Tag, Space, Dropdown } from "antd";
 import styled from "styled-components";
 import { ReactComponent as EditIcon } from "../assets/rawSvg/editIcon.svg";
+import { ReactComponent as DeleteIcon } from "../assets/rawSvg/delete.svg";
 import { ReactComponent as DropDownDots } from "../assets/rawSvg/dropdownDots.svg";
 import { ReactComponent as ChangePassword } from "../assets/rawSvg/lock.svg";
 
@@ -95,22 +96,6 @@ export const userManagementColumns = ({handleEditRow,handleChangePassword}) => {
             </Tag>
           ),
       },
-      // {
-      //     title: "Actions",
-      //     key: "action",
-      //     render: (_, record) => (
-      //       <Space size="middle" className="d-flex">
-      //         <Button
-      //           onClick={(event) => {
-      //             event.stopPropagation();
-      //             handleEditRow(record);
-      //           }}
-      //         >
-      //           <EditIcon />
-      //         </Button>
-      //       </Space>
-      //     ),
-      //   },
       {
         title: "Actions",
         key: "action",
@@ -180,7 +165,6 @@ export const userManagementColumns = ({handleEditRow,handleChangePassword}) => {
 
 //-------------------- Debris Type Table Columns --------------------//
 
-//-------------------- User Positions Table Columns --------------------//
 
 export const debrisTypeColumns = ({handleEditRow}) => {
   let columns = [
@@ -222,18 +206,18 @@ export const debrisTypeColumns = ({handleEditRow}) => {
 };
 
 
-//-------------------- Truck Description Table Columns --------------------//
+//-------------------- Truck Type Table Columns --------------------//
 
-export const truckDescriptionColumns = ({handleEditRow}) => {
+export const truckTypeColumns = ({handleEditRow}) => {
   let columns = [
-      { title: 'Truck Type', dataIndex: 'truckType', key: 'truckType' },
+      { title: 'Truck Type', dataIndex: 'type', key: 'type' },
       { title: 'Description', dataIndex: 'description', key: 'description' },
       {
         title: "Status",
-        dataIndex: "status",
-        key: "status",
+        dataIndex: "is_active",
+        key: "is_active",
         render: (_, record) =>
-          record.status === true ? (
+          record.is_active === true ? (
             <Tag bordered={false} color="green" style={{borderRadius:"12px"}}>
               Active
             </Tag>
@@ -270,13 +254,13 @@ export const truckDescriptionColumns = ({handleEditRow}) => {
 
 export const subActivityColumns = ({handleEditRow}) => {
   let columns = [
-      { title: 'Sub-Activity Name', dataIndex: 'subActivityName', key: 'subActivityName' },
+      { title: 'Sub-Activity Name', dataIndex: 'name', key: 'name' },
       {
         title: "Status",
-        dataIndex: "status",
-        key: "status",
+        dataIndex: "is_active",
+        key: "is_active",
         render: (_, record) =>
-          record.status === true ? (
+          record.is_active === true ? (
             <Tag bordered={false} color="green" style={{borderRadius:"12px"}}>
               Active
             </Tag>
@@ -352,6 +336,57 @@ export const hazardManagementColumns = ({isHazardNameTable,handleEditRow}) => {
 };
 
 
+//-------------------- Event Management Table Columns --------------------//
+
+
+export const eventManagementColumns = ({handleEditRow, handleDeleteRow}) => {
+  let columns = [
+      { title: 'Event Name', dataIndex: 'name', key: 'name' },
+      { title: 'Event Date', dataIndex: 'event_date', key: 'event_date' },
+      { title: 'Declaration Date', dataIndex: 'declaration_date', key: 'declaration_date' },
+      {
+        title: "Status",
+        dataIndex: "is_active",
+        key: "is_active",
+        render: (_, record) =>
+          record.is_active === true ? (
+            <Tag bordered={false} color="green" style={{borderRadius:"12px"}}>
+              Active
+            </Tag>
+          ) : (
+            <Tag bordered={false} color="red" style={{borderRadius:"12px"}}>
+              InActive
+            </Tag>
+          ),
+      },
+      {
+          title: "Actions",
+          key: "action",
+          render: (_, record) => (
+            <Space size="middle" className="d-flex">
+              <Button
+                onClick={(event) => {
+                  event.stopPropagation();
+                  handleEditRow(record);
+                }}
+              >
+                <EditIcon />
+              </Button>
+              <Button
+                onClick={(event) => {
+                  event.stopPropagation();
+                  handleDeleteRow(record);
+                }}
+              >
+                <DeleteIcon />
+              </Button>
+            </Space>
+          ),
+      },
+    ];
+
+  return columns;
+};
 
 //-------------------- Styled Button Component --------------------//
 const Button = styled.button`

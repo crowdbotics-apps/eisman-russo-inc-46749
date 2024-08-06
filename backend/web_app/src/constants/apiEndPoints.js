@@ -40,5 +40,34 @@ export const adminAPIsEndPoints = {
   LIST_SUB_ACTIVITY: (query) => `/ticketing/sub-activity/?${query}`,
   UPDATE_SUB_ACTIVITY: (id) => `/ticketing/sub-activity/${id}/`,
   DELETE_SUB_ACTIVITY: (id) => `/ticketing/sub-activity/${id}/`,
+
+  //----------------------- Hazard Type APIs -----------------------//
+
+  ADD_HAZARD_TYPE: "/ticketing/hazard-type/",
+  LIST_HAZARD_TYPE: (query) => `/ticketing/hazard-type/?${query}`,
+  UPDATE_HAZARD_TYPE: (id) => `/ticketing/hazard-type/${id}/`,
+  DELETE_HAZARD_TYPE: (id) => `/ticketing/hazard-type/${id}/`,
+
+  //----------------------- Hazard Name APIs -----------------------//
+
+  ADD_HAZARD_NAME: "/ticketing/hazard-name/",
+  LIST_HAZARD_NAME: (query) => `/ticketing/hazard-name/?${query}`,
+  UPDATE_HAZARD_NAME: (id) => `/ticketing/hazard-name/${id}/`,
+  DELETE_HAZARD_NAME: (id) => `/ticketing/hazard-name/${id}/`,
+
+  //----------------------- Menu Setup APIs -----------------------//
+
+  ADD_MENU: "/users/menu/",
+  LIST_MENU: (query) => `/users/menu/?${query}`,
+  UPDATE_MENU: (id) => `/users/menu/${id}/`,
+  DELETE_MENU: (id) => `/users/menu/${id}/`,
+
+  //----------------------- Event Management APIs -----------------------//
+
+  ADD_EVENT: "/ticketing/event/",
+  LIST_EVENT: (query) => `/ticketing/event/?${query}`,
+  UPDATE_EVENT: (id) => `/ticketing/event/${id}/`,
+  DELETE_EVENT: (id) => `/ticketing/event/${id}/`,
+
 };
 

@@ -271,7 +271,3 @@ const CustomCard = styled(Card)`
   }
 `;
 
-const SearchInputWrapper = styled.div`
-width: 350px;
-margin-left: 20px;
-`;

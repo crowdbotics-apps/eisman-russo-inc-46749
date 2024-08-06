@@ -7,8 +7,7 @@ import { administrationMenuData } from '../../constants/menuData/menuData';
 import { generateMenuItems } from '../../util/generateMenuItems';
 import CustomMenu from '../../components/customMenu/customMenu';
 import DebrisType from '../../components/administrationComponents/debrisType';
-import TruckDescription from '../../components/administrationComponents/truckDescription';
-import TicketType from '../../components/administrationComponents/ticketType';
+import TruckType from '../../components/administrationComponents/truckType';
 import SubActivity from '../../components/administrationComponents/subActivity';
 import Hazard from '../../components/administrationComponents/hazard';
 import UserRole from '../../components/administrationComponents/userRole';
@@ -38,8 +37,7 @@ export default function Administration() {
   //---------------------- Components ----------------------//
   const COMPONENTS = {
     'Debris Type': DebrisType,
-    'Truck Description': TruckDescription,
-    'Ticket Type': TicketType,
+    'Truck Type': TruckType,
     'Sub-Activity': SubActivity,
     'Hazard': Hazard,
     'User Role': UserRole,
@@ -50,8 +48,7 @@ export default function Administration() {
   //---------------------- Props Mapping ----------------------//
   const propsMapping = {
     'Debris Type': {},
-    'Truck Description': {},
-    'Ticket Type': {},
+    'Truck Type': {},
     'Sub-Activity': {},
     'Hazard': {},
     'User Role': { editUserRoleNameModal, setEditUserRoleNameModal },

@@ -9,11 +9,7 @@ export const administrationMenuData = [
         active: true,
       },
       {
-        itemName: "Truck Description",
-        itemIcon: <ArrowRightIcon />,
-      },
-      {
-        itemName: "Ticket Type",
+        itemName: "Truck Type",
         itemIcon: <ArrowRightIcon />,
       },
       {

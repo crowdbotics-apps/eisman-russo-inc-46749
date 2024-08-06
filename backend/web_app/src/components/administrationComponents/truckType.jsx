@@ -12,27 +12,29 @@ import { main_api } from '../../api/axiosHelper';
 import { adminAPIsEndPoints } from '../../constants/apiEndPoints';
 import { AntdesignTablePagination } from '../antDesignTable/AntdesignTablePagination';
 import UpdatePosition from '../modals/administration/position/updatePosition';
-import { debrisTypeColumns } from '../../util/antdTableColumns';
+import { debrisTypeColumns, truckTypeColumns } from '../../util/antdTableColumns';
 import CustomFilter from '../customFilterWithSearchBar/customFilter';
 import { status } from '../../util/dropdownData';
 import UpdateDebrisType from '../modals/administration/debrisType/updateDebrisType';
+import UpdateTruckType from '../modals/administration/truckType/updateTruckType';
 
-export default function DebrisType() {
+
+export default function TruckType() {
 
   const [data, setData] = useState([]);
   const [searchedValue, setSearchedValue] = useState('');
   const [statusSelected, setStatusSelected] = useState(null);
 
 
-  const [editDebrisTypeValues, setEditDebrisTypeValues] = useState(null);
-  const [updateDebrisModal, setUpdateDebrisModal] = useState(false);
+  const [editTruckTypeValues, setEditTruckTypeValues] = useState(null);
+  const [updateTruckTypeModal, setUpdateTruckTypeModal] = useState(false);
 
   const [count, setCount] = useState(0);
 
  
 
   const fetchData = async (query = '',page = 1) => {
-    main_api.get(`${adminAPIsEndPoints.LIST_DEBRIS(query)}&page=${page}`)
+    main_api.get(`${adminAPIsEndPoints.LIST_TRUCK_TYPE(query)}&page=${page}`)
     .then((response) => {
       setCount(response.data.count);
       const result = response.data.results;
@@ -62,40 +64,29 @@ export default function DebrisType() {
     
     if (values) {
       
-        setEditDebrisTypeValues(values);
-        setUpdateDebrisModal(true);
+        setEditTruckTypeValues(values);
+        setUpdateTruckTypeModal(true);
     }
   };
 
   const handleAddRow = () => { 
-    setEditDebrisTypeValues(null);
-    setUpdateDebrisModal(true);
+    setEditTruckTypeValues(null);
+    setUpdateTruckTypeModal(true);
   };
 
 
 
-   //------------------ Functions to Handle Add and Edit Debris Type ---------------------//
-   const handleEditDebrisType = async (values) => {
-    const id = editDebrisTypeValues.id;
+   //------------------ Functions to Handle Add and Edit Truck Type ---------------------//
+  
+  const handleEditTruckType = async (values) => {
+    const id = editTruckTypeValues.id;
     if (values && id) {
-      const payload = {
-        name: values.name || '',
-        is_active: values.is_active,
-        rate_matrix_fields: {
-          mileage: values?.mileage || false,
-          weight: values?.weight || false,
-          diameter: values?.diameter || false,
-          unit: values?.unit || false,
-          reduction_rate: values?.reduction_rate || false,
-        }
-      }
-      
       try {
-        const response = await main_api.put(adminAPIsEndPoints.UPDATE_DEBRIS(id), payload);
+        const response = await main_api.put(adminAPIsEndPoints.UPDATE_TRUCK_TYPE(id), values);
         if (response.status === 200) {
-          pushNotification("Debris Type updated successfully!", "success");
+          pushNotification("Truck Type updated successfully!", "success");
           fetchData();
-          setUpdateDebrisModal(false);
+          setUpdateTruckTypeModal(false);
         }
       } catch (error) {
         pushNotification(error.response.data.detail, "error");
@@ -107,27 +98,14 @@ export default function DebrisType() {
    
   };
 
-  const handleAddDebrisType = async (values) => {
-   console.log("values",values);
-   if (values) {
-      const payload = {
-        name: values.name || '',
-        is_active: values.is_active,
-        rate_matrix_fields: {
-          mileage: values?.mileage || false,
-          weight: values?.weight || false,
-          diameter: values?.diameter || false,
-          unit: values?.unit || false,
-          reduction_rate: values?.reduction_rate || false,
-        }
-      }
-      
+  const handleAddTruckType = async (values) => {
+   if (values) {    
       try {
-        const response = await main_api.post(adminAPIsEndPoints.ADD_DEBRIS, payload);
+        const response = await main_api.post(adminAPIsEndPoints.ADD_TRUCK_TYPE, values);
         if (response.status === 201) {
-          pushNotification("Debris Type added successfully!", "success");
+          pushNotification("Truck Type added successfully!", "success");
           fetchData();
-          setUpdateDebrisModal(false);
+          setUpdateTruckTypeModal(false);
         }
       } catch (error) {
         pushNotification(error.response.data.detail, "error");
@@ -143,14 +121,14 @@ export default function DebrisType() {
     
     <CustomCard style={{ boxShadow: '0px 4px 12px rgba(0, 0, 0, 0.1)' }}>
         <div style={{display:"flex", flexDirection:"row", justifyContent:"space-between"}}>
-          <Heading text="Manage Debris Type" margin="0px 0px 0px 5px" fontSize="1.3rem" color="#3B3B3B" />
-          <CustomButton btnText={"Add Debris Type"} color={"white"} onClick={handleAddRow} />
+          <Heading text="Manage Truck Type" margin="0px 0px 0px 5px" fontSize="1.3rem" color="#3B3B3B" />
+          <CustomButton btnText={"Add Truck Type"} color={"white"} onClick={handleAddRow} />
         </div>
         <CustomFilter 
           searchBar={true}
           filter1={true}
           resetFilters={true}
-          searchBarPlaceholder={"Search by Debris Name..."}
+          searchBarPlaceholder={"Search by Truck Type..."}
           filter1Placeholder={"Status"}
           resetFiltersText='Reset Filter'
           filter1Options={status}
@@ -165,28 +143,29 @@ export default function DebrisType() {
           resetFiltersStyle={{cursor:"pointer",color:"#EE3E41",marginLeft:"15px", marginBottom: "20px", position:"relative", top:"20px", left:"6px", width:"260px", height:"40px"}}
         />
         <AntdesignTablePagination 
-          columns={debrisTypeColumns({handleEditRow})} 
+          columns={truckTypeColumns({handleEditRow})} 
           data={data}
           totalCount={count}
           loadPaginatedData={fetchData} 
           allowRowSelection={false}
-          tableHeight={500}
+          tableHeight={450}
           tableWidth={1200} 
         />
     </CustomCard>
 
-    {updateDebrisModal && (
-      <UpdateDebrisType
-        isModalOpen={updateDebrisModal}
-        title={editDebrisTypeValues ? 'Edit Debris Type' : 'Add Debris Type'}
-        onFinish={editDebrisTypeValues ? handleEditDebrisType : handleAddDebrisType}
-        setModalOpen={setUpdateDebrisModal}
-        editDebrisTypeValues={editDebrisTypeValues}  
+    {updateTruckTypeModal && (
+      <UpdateTruckType
+        isModalOpen={updateTruckTypeModal}
+        title={editTruckTypeValues ? 'Edit Truck Type' : 'Add Truck Type'}
+        onFinish={editTruckTypeValues ? handleEditTruckType : handleAddTruckType}
+        setModalOpen={setUpdateTruckTypeModal}
+        editTruckTypeValues={editTruckTypeValues}  
       />
       )}
     </>
   )
 }
+
 
 const Heading = ({ text = "", margin, fontSize = "0.75rem", color = "#3B3B3B" }) => {
   return <HeadingComponent text={text} fontSize={fontSize} color={color} fontWeight={700} margin={margin} />;
@@ -207,7 +186,4 @@ const CustomCard = styled(Card)`
     margin: 10px;
   }
 `;
-
-
-
 

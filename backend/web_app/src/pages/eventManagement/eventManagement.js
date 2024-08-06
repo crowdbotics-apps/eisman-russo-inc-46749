@@ -1,15 +1,252 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
+import { Card, Input, Row, Select } from 'antd'
+import styled from 'styled-components';
+import HeadingComponent from '../../components/headingComponent/heading';
+import CustomButton from '../../components/customButton/customButton';
+import SearchInput from '../../components/searchInput/SearchInput';
+import { eventManagementColumns, userManagementColumns } from '../../util/antdTableColumns';
+// import { AntdesignTable } from '../../components/antDesignTable/AntdesignTable';
+import { AntdesignTablePagination } from '../../components/antDesignTable/AntdesignTablePagination';
+import UpdateUser from '../../components/modals/userManagement/updateUser';
+import { pushNotification } from '../../util/notification';
+import { useSelector } from 'react-redux';
+import { addUser, getUserList, updateUser } from '../../util/dataService';
+import { main_api } from '../../api/axiosHelper';
+import { adminAPIsEndPoints } from '../../constants/apiEndPoints';
+import { status } from '../../util/dropdownData';
+import ResetPassword from '../../components/auth/resetPassword';
+import CustomFilter from '../../components/customFilterWithSearchBar/customFilter';
 
 export default function EventManagement() {
+
+    //------------------ State Management ---------------------//
+
+    const [data, setData] = useState();
+    const [searchedValue, setSearchedValue] = useState('');
+    const [eventDateSelected, setEventDateSelected] = useState(null);
+    const [statusSelected, setStatusSelected] = useState(null);
+
+    const [editEventValues, setEditEventValues] = useState(null);
+    const [updateEventModal, setUpdateEventModal] = useState(false);    
+    
+    const [count, setCount] = useState(0);
+  
+    
+      
+    //------------------ Function to Fetch Data ---------------------//
+  
+    
+  
+   
+    const fetchData = async (query = '',page = 1) => {
+      main_api.get(`${adminAPIsEndPoints.LIST_EVENT(query)}&page=${page}`)
+      .then((response) => {
+        setCount(response.data.count);
+        const result = response.data.results;
+        if (result) {
+          setData(result);
+        } else {
+          setData([]);
+          pushNotification("No data found!", "error");
+        }
+      }).catch((error) => {
+        pushNotification(error, "error");
+      });
+    };
+  
+    useEffect(() => {
+      fetchData();
+    }, []);
+  
+  
+    //----------------------- Filter -----------------------//
+  
+    useEffect(() => {
+      let query = `search=${searchedValue}`;
+      if(eventDateSelected){
+        query += `&event_date=${eventDateSelected}`;
+      }
+      if (statusSelected!==null) {
+        query+=`&is_active=${statusSelected}`;
+      }
+      fetchData(query);
+    }, [eventDateSelected, statusSelected, searchedValue]);
+  
+  
+    //------------------ Functions for Update & Delete Event Modal ---------------------//
+  
+    const handleAddRow = () => {
+      setEditEventValues(null);
+      setUpdateEventModal(true);
+    };
+
+
+    const handleEditRow = (values) => {
+      if (values) {
+          setEditEventValues(values);
+          setUpdateEventModal(true);
+      }
+    };
+
+    const handleDeleteRow = (values) => {
+      if (values) {
+          setEditEventValues(values);
+          setUpdateEventModal(true);
+      }
+    };
+  
+  
+  
+  
+    //------------------ Functions to Handle Add and Edit Event ---------------------//
+  
+    const handleEditEvent = async (values, selectedRoleType, selectedPositionName) => {
+      
+      let payload = {
+        name: values?.name || '',
+        email: values?.email || '',
+        phone_number: values?.telephone_number || '',
+        is_active: values?.is_active || false,
+        password: values?.password || '',
+        confirm_password: values?.confirm_password || '',
+        role: values?.role || '',
+        position: values?.position || '',
+      }
+      
+      payload = {
+        ...payload,
+        additional_data: {}
+      };
+  
+      if (selectedRoleType === "contractor") {
+        payload.additional_data.company_name = values?.company_name || '';
+        payload.additional_data.prefix = values?.prefix || '';
+  
+        if (selectedPositionName === "Sub Contractor") {
+          payload.prime_contractor = values?.prime_contractor || '';
+        }
+      }
+      const id = editEventValues.key;
+      try {
+        const response = await main_api.put(adminAPIsEndPoints.UPDATE_USER(id), payload);
+        if (response.status === 200) {
+            pushNotification("User updated successfully", "success");
+            fetchData();
+            setUpdateEventModal(false);
+        }
+      } catch (error) {
+          pushNotification(error.response.data.detail, "error");
+      }
+    }
+  
+    const handleAddEvent = async (values, selectedRoleType, selectedPositionName) => {
+      let payload = {
+        name: values?.name || '',
+        email: values?.email || '',
+        phone_number: values?.telephone_number || '',
+        is_active: values?.is_active || true,
+        password: values?.password || '',
+        confirm_password: values?.confirm_password || '',
+        role: values?.role || '',
+        position: values?.position || '',
+      }
+      
+      payload = {
+        ...payload,
+        additional_data: {}
+      };
+  
+      if (selectedRoleType === "contractor") {
+        payload.additional_data.company_name = values?.company_name || '';
+        payload.additional_data.prefix = values?.prefix || '';
+  
+        if (selectedPositionName === "Sub Contractor") {
+          payload.prime_contractor = values?.prime_contractor || '';
+        }
+      }
+      try {
+        const response = await main_api.post(adminAPIsEndPoints.CREATE_USER, payload);
+        if (response.status === 201) {
+            pushNotification("User added successfully", "success");
+            fetchData();
+            setUpdateEventModal(false);
+  
+        }
+      } catch (error) {
+          pushNotification(error.response.data.detail, "error");
+      }
+    }
+
   return (
-    <div
-    className='App d-flex justify-content-center align-items-center flex-column'
-    style={{
-      height: "80vh" 
-    }}
-  >
-    <h1>Welcome!!</h1>
-    <h3>This is the EventManagement page.</h3>
+    <div style={{ marginTop: '10px' }}>
+    <CustomCard style={{ boxShadow: '0px 4px 12px rgba(0, 0, 0, 0.1)' }}>
+        <div style={{display:"flex", flexDirection:"row", justifyContent:"space-between"}}>
+          <Heading text="Event List" margin="0px 0px 0px 5px" fontSize="1.3rem" color="#3B3B3B" />
+          <CustomButton btnText={"Add New Event"} color={"white"} onClick={handleAddRow} />
+        </div>
+        <CustomFilter 
+          searchBar={true}
+          filter1={true}
+          filter2={true}
+          resetFilters={true}
+          searchBarPlaceholder="Search By Event Name..."
+          filter1Placeholder="Status"
+          filter2Placeholder="Event Date"
+          resetFiltersText="Reset Filter"
+          filter1Options={roles}
+          filter2Options={status}
+          onSearchBarBlur={(e) => setSearchedValue(e)}
+          onFilter1Change={(e) => setStatusSelected(e)}
+          onFilter2Change={(e) => setEventDateSelected(e)}
+          onResetFiltersClick={() => {
+            setEventDateSelected(null);
+            setStatusSelected(null);
+            setSearchedValue('');
+            fetchData();
+          }}
+          filter1Style={{marginLeft:"20px", marginBottom: "20px", position:"relative", top:"12px", left:"6px", width:"260px", height:"40px"}}
+          filter2Style={{marginLeft:"8px", marginBottom: "20px", position:"relative", top:"12px", left:"6px", width:"260px", height:"40px"}}
+          resetFiltersStyle={{cursor:"pointer",color:"#EE3E41",marginLeft:"15px", marginBottom: "20px", position:"relative", top:"20px", left:"6px", width:"260px", height:"40px"}}
+        />
+        <AntdesignTablePagination 
+          columns={eventManagementColumns({handleEditRow,handleDeleteRow})} 
+          data={data}
+          totalCount={count}
+          loadPaginatedData={fetchData} 
+          allowRowSelection={false}
+          tableHeight={500}
+          tableWidth={1200} 
+        />
+    </CustomCard>
+    {updateEventModal && 
+      <UpdateUser 
+        isModalOpen={updateEventModal} 
+        title={editEventValues ? "Edit Event" : "Add New Event"} 
+        onFinish={editEventValues ? handleEditEvent : handleAddEvent  } 
+        setModalOpen={setUpdateEventModal} 
+        editEventValues={editEventValues}
+      />
+    }
   </div>
   )
 }
+
+const Heading = ({ text = "", margin, fontSize = "0.75rem", color = "#3B3B3B" }) => {
+  return <HeadingComponent text={text} fontSize={fontSize} color={color} fontWeight={700} margin={margin} />;
+};
+
+const CustomCard = styled(Card)`
+  width: calc(100vw - 40px);
+  max-width: 1570px;
+  height: calc(100vh - 40px);
+  max-height: 750px;
+  margin-top: 40px;
+  margin-left: 40px;
+  background-color: white;
+  
+  @media (max-width: 768px) {
+    width: calc(100vw - 20px);
+    height: calc(100vh - 20px);
+    margin: 10px;
+  }
+`;

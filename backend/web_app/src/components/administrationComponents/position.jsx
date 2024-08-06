@@ -86,24 +86,9 @@ export default function Position({}) {
 
 
    //------------------ Functions to Handle Add and Edit User Position ---------------------//
-  //  const handleEditPosition = async (values) => {
-  //   const id = editPositionValues.id;
-  //   try {
-      
-  //     await updateUserPosition(id, values);
-      
-  //     fetchData(); // Make sure this is being called after update
-  //   } catch (error) {
-  //     console.error('Error updating position:', error);
-  //   }
-  //   setUpdatePositionModal(false);
-  // };
 
   const handleEditPosition = async (values) => {
     const id = editPositionValues.id;
-    console.log("values", values);
-    
-   
     try {
       const response = await main_api.put(adminAPIsEndPoints.UPDATE_POSITION(id), values);
       if (response.status === 200) {
@@ -122,7 +107,6 @@ export default function Position({}) {
 
 
   const handleAddPosition = async (values) => {
-    console.log("values", values);
     
     try {
       const response = await main_api.post(adminAPIsEndPoints.ADD_POSITION, values);
