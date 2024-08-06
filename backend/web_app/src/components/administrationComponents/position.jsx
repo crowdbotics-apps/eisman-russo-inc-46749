@@ -43,6 +43,7 @@ export default function Position({}) {
       const result = response.data.results;
       result?.map((item) => {
         item.userType = item.role.name;
+        item.platform_type = item.platform_type.charAt(0).toUpperCase() + item.platform_type.slice(1);
       });
       setData(result);
     }).catch((error) => {
@@ -139,7 +140,7 @@ export default function Position({}) {
     
     <CustomCard style={{ boxShadow: '0px 4px 12px rgba(0, 0, 0, 0.1)' }}>
         <div style={{display:"flex", flexDirection:"row", justifyContent:"space-between"}}>
-          <Heading text="Manage User Position" margin="0px 0px 0px 20px" fontSize="1.3rem" color="#3B3B3B" />
+          <Heading text="Manage User Position" margin="0px 0px 0px 5px" fontSize="1.3rem" color="#3B3B3B" />
           <CustomButton btnText={"Add Position"} color={"white"} onClick={handleAddRow} />
         </div>
         <CustomFilter
@@ -153,7 +154,7 @@ export default function Position({}) {
           resetFiltersText="Reset Filter"
           filter1Options={roles}
           filter2Options={accessPermission}
-          onSearchBarBlur={(e) => setSearchedValue(e.target.value)}
+          onSearchBarBlur={(e) => setSearchedValue(e)}
           onFilter1Change={(e) => setRoleSelected(e)}
           onFilter2Change={(e) => setAccessPermissionSelected(e)}
           onResetFiltersClick={() => {
@@ -206,7 +207,7 @@ const Heading = ({ text = "", margin, fontSize = "0.75rem", color = "#3B3B3B" })
 
 const CustomCard = styled(Card)`
   width: calc(100vw - 40px);
-  max-width: 1474px;
+  max-width: 1270px;
   height: calc(100vh - 40px);
   max-height: 720px;
   margin: 20px;

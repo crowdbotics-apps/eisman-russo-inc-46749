@@ -92,10 +92,10 @@ export const AntdesignTablePagination = ({
           
             {startIndex}-{endIndex} of {totalCount} results
           </PaginationRightHeading>
-          <RoundedButton onClick={handlePrevPage} disabled={currentPage === 1}>
+          <RoundedButton onClick={handlePrevPage} disabled={currentPage === 1} >
             <LessThanIcon />
           </RoundedButton>
-          <RoundedButton onClick={handleNextPage} disabled={currentPage >= Math.ceil(totalCount / pageSize)} margin="0px 12px">
+          <RoundedButton onClick={handleNextPage} disabled={currentPage >= Math.ceil(totalCount / pageSize)} margin="0px 12px" position= "relative" top= "4px" left="4px">
             <GreaterThanIcon />
 
           </RoundedButton>

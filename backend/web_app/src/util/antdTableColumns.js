@@ -42,7 +42,7 @@ export const userRolesColumns =  [
 
 export const userPositionsColumns = ({handleEditRow}) => {
   let columns = [
-      { title: 'User Type', dataIndex: 'userType', key: 'userType' },
+      { title: 'User Role', dataIndex: 'userType', key: 'userType' },
       { title: 'Position Name', dataIndex: 'name', key: 'name' },
       { title: 'Access Permission', dataIndex: 'platform_type', key: 'platform_type' },
       {
@@ -180,13 +180,13 @@ export const userManagementColumns = ({handleEditRow,handleChangePassword}) => {
 
 export const debrisTypeColumns = ({handleEditRow}) => {
   let columns = [
-      { title: 'Debris Name', dataIndex: 'debrisName', key: 'debrisName' },
+      { title: 'Debris Name', dataIndex: 'name', key: 'name' },
       {
         title: "Status",
-        dataIndex: "status",
-        key: "status",
+        dataIndex: "is_active",
+        key: "is_active",
         render: (_, record) =>
-          record.status === true ? (
+          record.is_active === true ? (
             <Tag bordered={false} color="green" style={{borderRadius:"12px"}}>
               Active
             </Tag>

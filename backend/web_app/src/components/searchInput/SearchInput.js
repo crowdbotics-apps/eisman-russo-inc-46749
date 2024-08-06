@@ -7,6 +7,7 @@ function SearchInput({
   search,
   onChange = () => null,
   onBlur = () => null,
+  onKeyDown = () => null,
   placeholder = "Search...",
   ...props
 }) {
@@ -19,7 +20,7 @@ function SearchInput({
           value={search}
           onChange={e => onChange(e.target.value)}
         /> */}
-        <Input placeholder={placeholder} value={search} onChange={(e) => onChange(e.target.value)} onBlur={onBlur} {...props} />
+        <Input placeholder={placeholder} value={search} onChange={(e) => onChange(e.target.value)} onBlur={(e) => onBlur(e.target.value)} onKeyDown={(e) => onKeyDown(e.target.value)} {...props} />
       </SearchContainer>
     </SearchBar>
   );

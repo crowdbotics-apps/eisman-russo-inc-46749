@@ -208,7 +208,7 @@ export default function UserManagement() {
     <div style={{ marginTop: '10px' }}>
     <CustomCard style={{ boxShadow: '0px 4px 12px rgba(0, 0, 0, 0.1)' }}>
         <div style={{display:"flex", flexDirection:"row", justifyContent:"space-between"}}>
-          <Heading text="Manage Users" margin="0px 0px 0px 20px" fontSize="1.3rem" color="#3B3B3B" />
+          <Heading text="Manage Users" margin="0px 0px 0px 5px" fontSize="1.3rem" color="#3B3B3B" />
           <CustomButton btnText={"Add User"} color={"white"} onClick={handleAddRow} />
         </div>
         <CustomFilter 
@@ -222,7 +222,7 @@ export default function UserManagement() {
           resetFiltersText="Reset Filter"
           filter1Options={roles}
           filter2Options={status}
-          onSearchBarBlur={(e) => setSearchedValue(e.target.value)}
+          onSearchBarBlur={(e) => setSearchedValue(e)}
           onFilter1Change={(e) => setRoleSelected(e)}
           onFilter2Change={(e) => setStatusSelected(e)}
           onResetFiltersClick={() => {
@@ -257,7 +257,7 @@ const Heading = ({ text = "", margin, fontSize = "0.75rem", color = "#3B3B3B" })
 
 const CustomCard = styled(Card)`
   width: calc(100vw - 40px);
-  max-width: 1750px;
+  max-width: 1570px;
   height: calc(100vh - 40px);
   max-height: 750px;
   margin-top: 40px;

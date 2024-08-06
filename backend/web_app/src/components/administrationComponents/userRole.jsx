@@ -59,15 +59,14 @@ export default function UserRole({editUserRoleNameModal,setEditUserRoleNameModal
  
   return (
     <CustomCard style={{ boxShadow: '0px 4px 12px rgba(0, 0, 0, 0.1)' }}>
-        <Heading text="Manage User Roles" margin="0px 0px 0px 20px" fontSize="1.3rem" color="#3B3B3B" />
-        <Divider/>
+        <Heading text="Manage User Roles" margin="0px 0px 15px 5px" fontSize="1.3rem" color="#3B3B3B" />
         <CustomFilter
           searchBar={true}
           filter1={false}
           filter2={false}
           resetFilters={false}
-          searchBarPlaceholder="Search By Position Name..."
-          onSearchBarBlur={(e) => handleSearch(e.target.value)}
+          searchBarPlaceholder="Search By Role Name..."
+          onSearchBarBlur={(e) => handleSearch(e)}
          />
         <AntdesignTable columns={userRolesColumns} data={filteredData} allowMultieSelectRows={false} pagination={false}/>
     </CustomCard>
@@ -89,7 +88,7 @@ const Heading = ({ text = "", margin, fontSize = "0.75rem", color = "#3B3B3B" })
 
 const CustomCard = styled(Card)`
   width: calc(100vw - 40px);
-  max-width: 1474px;
+  max-width: 1270px;
   height: calc(100vh - 40px);
   max-height: 720px;
   margin: 20px;
