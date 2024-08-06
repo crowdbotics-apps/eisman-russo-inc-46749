@@ -3,7 +3,7 @@ import { Select, Spin } from 'antd';
 
 const { Option } = Select;
 
-export default function PaginatedSelect({fetchData, placeholder = "Select", options, onChange, style}) {
+export default function PaginatedSelect({fetchData, placeholder = "Select", options, value, onChange, style}) {
     const [page, setPage] = useState(1);
     const [loading, setLoading] = useState(false);
     const [hasMore, setHasMore] = useState(true);
@@ -19,11 +19,13 @@ export default function PaginatedSelect({fetchData, placeholder = "Select", opti
         }
       };
 
+   
       
   return (
     <Select
     placeholder={placeholder}
     options={options}
+    value={value}
     onChange={onChange}
     style={style}
     onPopupScroll={handlePopupScroll}
