@@ -20,7 +20,7 @@ export default function UpdatePosition({
 
   const rolesState = useSelector((state) => state.roles.roles);
 
-  const roles = rolesState.map((role) => {
+  const roles = rolesState.filter((role)=> role.can_add_positions === true).map((role) => {
     return {
       label: role.name,
       value: role.id,
@@ -32,10 +32,10 @@ export default function UpdatePosition({
   useEffect(() => {
     if (editPositionValues) {
       form.setFieldsValue({
-        role: editPositionValues.role.id,
-        name: editPositionValues.name,
-        platform_type: editPositionValues.platform_type,
-        is_project_specific_position: editPositionValues.is_project_specific_position,
+        role: editPositionValues?.role?.id,
+        name: editPositionValues?.name,
+        platform_type: editPositionValues?.platform_type.charAt(0).toLowerCase() + editPositionValues?.platform_type.slice(1),
+        is_project_specific_position: editPositionValues?.is_project_specific_position,
       });
     }
   }, [editPositionValues]);
@@ -62,15 +62,15 @@ export default function UpdatePosition({
         <div style={{display:"flex", flexDirection:"row"}}>
           <FormItem 
             name="role" 
-            label="User Type" 
+            label="User Role" 
             rules={[
               {
                 required: true,
-                message: "Please select a user type",
+                message: "Please select a user role",
               },
             ]}
           >
-            <Select placeholder="Select" options={roles} style={{width:"260px"}} />
+            <Select placeholder="Select Role" options={roles} style={{width:"260px"}} />
           </FormItem>
           <FormItem 
             name="name" 
@@ -84,7 +84,7 @@ export default function UpdatePosition({
               },
             ]}
           >
-            <Input placeholder="Enter Here" style={{width:"280px"}}/>
+            <Input placeholder="Enter Position Name Here" style={{width:"280px"}}/>
           </FormItem>
         </div>
         <FormItem 
@@ -97,7 +97,7 @@ export default function UpdatePosition({
             },
           ]}
         >
-          <Select placeholder="Select" options={accessPermission} />
+          <Select placeholder="Select Access Permission" options={accessPermission} />
         </FormItem>
         <FormItem 
           name="is_project_specific_position" 

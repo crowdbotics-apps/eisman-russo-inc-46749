@@ -15,6 +15,7 @@ import UpdatePosition from '../modals/administration/position/updatePosition';
 import { debrisTypeColumns } from '../../util/antdTableColumns';
 import CustomFilter from '../customFilterWithSearchBar/customFilter';
 import { status } from '../../util/dropdownData';
+import UpdateDebrisType from '../modals/administration/debrisType/updateDebrisType';
 
 export default function DebrisType() {
 
@@ -35,12 +36,9 @@ export default function DebrisType() {
     .then((response) => {
       setCount(response.data.count);
       const result = response.data.results;
-      result?.map((item) => {
-        // item.userType = item.role.name;
-      });
       setData(result);
     }).catch((error) => {
-      pushNotification("error", error);
+      pushNotification(error, "error");
     });
   };
     
@@ -110,9 +108,9 @@ export default function DebrisType() {
           resetFilters={true}
           searchBarPlaceholder={"Search by Debris Name..."}
           filter1Placeholder={"Select Status"}
-          resetFiltersText='Reset Filters'
+          resetFiltersText='Reset Filter'
           filter1Options={status}
-          onSearchBarBlur={(e) => setSearchedValue(e.target.value)}
+          onSearchBarBlur={(e) => setSearchedValue(e)}
           onFilter1Change={(e) => setStatusSelected(e)}
           onResetFiltersClick={() => {
             setSearchedValue('');
@@ -120,7 +118,7 @@ export default function DebrisType() {
             fetchData();
           }}
           filter1Style={{marginLeft:"20px", marginBottom: "20px", position:"relative", top:"12px", left:"6px", width:"260px", height:"40px"}}
-          resetFiltersStyle={{cursor:"pointer",color:"red",marginLeft:"15px", marginBottom: "20px", position:"relative", top:"20px", left:"6px", width:"260px", height:"40px"}}
+          resetFiltersStyle={{cursor:"pointer",color:"#EE3E41",marginLeft:"15px", marginBottom: "20px", position:"relative", top:"20px", left:"6px", width:"260px", height:"40px"}}
         />
         <AntdesignTablePagination 
           columns={debrisTypeColumns({handleEditRow})} 
@@ -133,9 +131,9 @@ export default function DebrisType() {
         />
     </CustomCard>
 
-    {/* {updateDebrisModal && (
-       
-      )} */}
+    {updateDebrisModal && (
+       <UpdateDebrisType/>
+      )}
     </>
   )
 }
@@ -147,7 +145,7 @@ const Heading = ({ text = "", margin, fontSize = "0.75rem", color = "#3B3B3B" })
 
 const CustomCard = styled(Card)`
   width: calc(100vw - 40px);
-  max-width: 1274px;
+  max-width: 1270px;
   height: calc(100vh - 40px);
   max-height: 720px;
   margin: 20px;
@@ -159,6 +157,9 @@ const CustomCard = styled(Card)`
     margin: 10px;
   }
 `;
+
+
+
 
 const SearchInputWrapper = styled.div`
 width: 350px;

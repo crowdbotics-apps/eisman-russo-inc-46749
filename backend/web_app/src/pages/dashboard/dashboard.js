@@ -89,11 +89,7 @@ export default function Dashboard() {
     fetchService();
   }, []);
 
-  useEffect(() => {
-    if (profileState) {
-      console.log("profileState", profileState);
-    }
-  }, [profileState]);
+
 
   useEffect(() => {
     filterDataByDateRange();

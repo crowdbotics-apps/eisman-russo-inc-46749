@@ -72,7 +72,8 @@ class DebrisViewSet(viewsets.ModelViewSet):
         debris = self.get_object()
         debris.delete()
         return Response(
-            {"detail": "Debris Type Deleted Successfully"}, status=status.HTTP_200_OK
+            {"detail": "Debris Type Deleted Successfully"},
+            status=status.HTTP_204_NO_CONTENT,
         )
 
 
@@ -130,7 +131,7 @@ class EventViewSet(viewsets.ModelViewSet):
         evnet = self.get_object()
         evnet.delete()
         return Response(
-            {"detail": "Event Deleted Successfully"}, status=status.HTTP_200_OK
+            {"detail": "Event Deleted Successfully"}, status=status.HTTP_204_NO_CONTENT
         )
 
 
@@ -180,7 +181,8 @@ class HazardTypeViewSet(viewsets.ModelViewSet):
         hazard = self.get_object()
         hazard.delete()
         return Response(
-            {"detail": "Hazard Type Deleted Successfully"}, status=status.HTTP_200_OK
+            {"detail": "Hazard Type Deleted Successfully"},
+            status=status.HTTP_204_NO_CONTENT,
         )
 
 
@@ -230,7 +232,8 @@ class HazardNameViewSet(viewsets.ModelViewSet):
         hazard = self.get_object()
         hazard.delete()
         return Response(
-            {"detail": "Hazard Name Deleted Successfully"}, status=status.HTTP_200_OK
+            {"detail": "Hazard Name Deleted Successfully"},
+            status=status.HTTP_204_NO_CONTENT,
         )
 
 
@@ -280,7 +283,8 @@ class SubActivityViewSet(viewsets.ModelViewSet):
         subactivity = self.get_object()
         subactivity.delete()
         return Response(
-            {"detail": "SubActivity Deleted Successfully"}, status=status.HTTP_200_OK
+            {"detail": "SubActivity Deleted Successfully"},
+            status=status.HTTP_204_NO_CONTENT,
         )
 
 
@@ -330,7 +334,8 @@ class TruckTypeViewSet(viewsets.ModelViewSet):
         truck = self.get_object()
         truck.delete()
         return Response(
-            {"detail": "Truck Type Deleted Successfully"}, status=status.HTTP_200_OK
+            {"detail": "Truck Type Deleted Successfully"},
+            status=status.HTTP_204_NO_CONTENT,
         )
 
 
