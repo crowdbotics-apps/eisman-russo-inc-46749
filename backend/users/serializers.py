@@ -97,6 +97,7 @@ class UserReadSerializer(serializers.ModelSerializer):
             "name",
             "email",
             "role",
+            "device_id",
             "position",
             "phone_number",
             "address",
