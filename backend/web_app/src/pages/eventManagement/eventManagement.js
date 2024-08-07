@@ -1,21 +1,17 @@
 import React, { useEffect, useState } from 'react'
-import { Card, Input, Row, Select } from 'antd'
+import { Card } from 'antd'
 import styled from 'styled-components';
 import HeadingComponent from '../../components/headingComponent/heading';
 import CustomButton from '../../components/customButton/customButton';
-import SearchInput from '../../components/searchInput/SearchInput';
-import { eventManagementColumns, userManagementColumns } from '../../util/antdTableColumns';
-// import { AntdesignTable } from '../../components/antDesignTable/AntdesignTable';
+import { eventManagementColumns } from '../../util/antdTableColumns';
 import { AntdesignTablePagination } from '../../components/antDesignTable/AntdesignTablePagination';
-import UpdateUser from '../../components/modals/userManagement/updateUser';
 import { pushNotification } from '../../util/notification';
-import { useSelector } from 'react-redux';
-import { addUser, getUserList, updateUser } from '../../util/dataService';
 import { main_api } from '../../api/axiosHelper';
 import { adminAPIsEndPoints } from '../../constants/apiEndPoints';
 import { status } from '../../util/dropdownData';
-import ResetPassword from '../../components/auth/resetPassword';
 import CustomFilter from '../../components/customFilterWithSearchBar/customFilter';
+import PermissionModal from '../../components/modals/permission/permissionModal';
+import UpdateEvent from '../../components/modals/eventManagement/updateEvent';
 
 export default function EventManagement() {
 
@@ -28,6 +24,7 @@ export default function EventManagement() {
 
     const [editEventValues, setEditEventValues] = useState(null);
     const [updateEventModal, setUpdateEventModal] = useState(false);    
+    const [deleteEventModal, setDeleteEventModal] = useState(false);    
     
     const [count, setCount] = useState(0);
   
@@ -91,83 +88,36 @@ export default function EventManagement() {
     const handleDeleteRow = (values) => {
       if (values) {
           setEditEventValues(values);
-          setUpdateEventModal(true);
+          setDeleteEventModal(true);
       }
     };
   
   
   
   
-    //------------------ Functions to Handle Add and Edit Event ---------------------//
+    //------------------ Functions to Handle Add, Edit and Delete Event ---------------------//
   
-    const handleEditEvent = async (values, selectedRoleType, selectedPositionName) => {
-      
-      let payload = {
+    const handleAddEvent = async (values) => {
+      const payload = {
         name: values?.name || '',
-        email: values?.email || '',
-        phone_number: values?.telephone_number || '',
-        is_active: values?.is_active || false,
-        password: values?.password || '',
-        confirm_password: values?.confirm_password || '',
-        role: values?.role || '',
-        position: values?.position || '',
-      }
-      
-      payload = {
-        ...payload,
-        additional_data: {}
-      };
-  
-      if (selectedRoleType === "contractor") {
-        payload.additional_data.company_name = values?.company_name || '';
-        payload.additional_data.prefix = values?.prefix || '';
-  
-        if (selectedPositionName === "Sub Contractor") {
-          payload.prime_contractor = values?.prime_contractor || '';
-        }
-      }
-      const id = editEventValues.key;
-      try {
-        const response = await main_api.put(adminAPIsEndPoints.UPDATE_USER(id), payload);
-        if (response.status === 200) {
-            pushNotification("User updated successfully", "success");
-            fetchData();
-            setUpdateEventModal(false);
-        }
-      } catch (error) {
-          pushNotification(error.response.data.detail, "error");
-      }
-    }
-  
-    const handleAddEvent = async (values, selectedRoleType, selectedPositionName) => {
-      let payload = {
-        name: values?.name || '',
-        email: values?.email || '',
-        phone_number: values?.telephone_number || '',
+        event_date: values?.event_date ? values.event_date.format("YYYY-MM-DD") : '',
+        declaration_date: values?.declaration_date ? values.declaration_date.format("YYYY-MM-DD") : '',
         is_active: values?.is_active || true,
-        password: values?.password || '',
-        confirm_password: values?.confirm_password || '',
-        role: values?.role || '',
-        position: values?.position || '',
-      }
-      
-      payload = {
-        ...payload,
-        additional_data: {}
+        notes: values?.notes || '',
+        fema_dates: values?.fema_dates
+          ? values.fema_dates.map((fema_date) => ({
+              ...fema_date,
+              start_date: fema_date.start_date ? fema_date.start_date.format("YYYY-MM-DD") : '',
+              end_date: fema_date.end_date ? fema_date.end_date.format("YYYY-MM-DD") : '',
+              percentage: fema_date.percentage || 1,
+            }))
+          : [{}],
       };
-  
-      if (selectedRoleType === "contractor") {
-        payload.additional_data.company_name = values?.company_name || '';
-        payload.additional_data.prefix = values?.prefix || '';
-  
-        if (selectedPositionName === "Sub Contractor") {
-          payload.prime_contractor = values?.prime_contractor || '';
-        }
-      }
+      
       try {
-        const response = await main_api.post(adminAPIsEndPoints.CREATE_USER, payload);
+        const response = await main_api.post(adminAPIsEndPoints.ADD_EVENT, payload);
         if (response.status === 201) {
-            pushNotification("User added successfully", "success");
+            pushNotification("Event created successfully", "success");
             fetchData();
             setUpdateEventModal(false);
   
@@ -176,6 +126,54 @@ export default function EventManagement() {
           pushNotification(error.response.data.detail, "error");
       }
     }
+
+    const handleEditEvent = async (values) => {
+      
+      const payload = {
+        name: values?.name || '',
+        event_date: values?.event_date ? values.event_date.format("YYYY-MM-DD") : '',
+        declaration_date: values?.declaration_date ? values.declaration_date.format("YYYY-MM-DD") : '',
+        is_active: values?.is_active,
+        notes: values?.notes || '',
+        fema_dates: values?.fema_dates
+          ? values.fema_dates.map((fema_date) => ({
+              ...fema_date,
+              start_date: fema_date.start_date ? fema_date.start_date.format("YYYY-MM-DD") : '',
+              end_date: fema_date.end_date ? fema_date.end_date.format("YYYY-MM-DD") : '',
+              percentage: fema_date.percentage || 1,
+            }))
+          : [{}],
+      };
+      const id = editEventValues.id;
+      try {
+        const response = await main_api.put(adminAPIsEndPoints.UPDATE_EVENT(id), payload);
+        if (response.status === 200) {
+            pushNotification("Event updated successfully", "success");
+            fetchData();
+            setUpdateEventModal(false);
+        }
+      } catch (error) {
+          pushNotification(error.response.data.detail, "error");
+      }
+    }
+
+    const handleDeleteEvent = async () => {
+      const id = editEventValues.id;
+      try {
+        const response = await main_api.delete(adminAPIsEndPoints.DELETE_EVENT(id));
+        console.log("response",response);
+        
+        if (response.status === 200) {
+            pushNotification("Event deleted successfully", "success");
+            fetchData();
+            setDeleteEventModal(false);
+        }
+      } catch (error) {
+          pushNotification(error.response.data.detail, "error");
+      }
+    }
+  
+  
 
   return (
     <div style={{ marginTop: '10px' }}>
@@ -187,17 +185,16 @@ export default function EventManagement() {
         <CustomFilter 
           searchBar={true}
           filter1={true}
-          filter2={true}
+          dateFilter={true}
           resetFilters={true}
           searchBarPlaceholder="Search By Event Name..."
           filter1Placeholder="Status"
-          filter2Placeholder="Event Date"
+          dateFilterPlaceholder="Event Date"
           resetFiltersText="Reset Filter"
-          filter1Options={roles}
-          filter2Options={status}
+          filter1Options={status}
           onSearchBarBlur={(e) => setSearchedValue(e)}
           onFilter1Change={(e) => setStatusSelected(e)}
-          onFilter2Change={(e) => setEventDateSelected(e)}
+          onDateFilterChange={(e) => setEventDateSelected(e)}
           onResetFiltersClick={() => {
             setEventDateSelected(null);
             setStatusSelected(null);
@@ -205,7 +202,7 @@ export default function EventManagement() {
             fetchData();
           }}
           filter1Style={{marginLeft:"20px", marginBottom: "20px", position:"relative", top:"12px", left:"6px", width:"260px", height:"40px"}}
-          filter2Style={{marginLeft:"8px", marginBottom: "20px", position:"relative", top:"12px", left:"6px", width:"260px", height:"40px"}}
+          dateFilterStyle={{marginLeft:"8px", marginBottom: "20px", position:"relative", top:"12px", left:"6px", width:"260px", height:"40px"}}
           resetFiltersStyle={{cursor:"pointer",color:"#EE3E41",marginLeft:"15px", marginBottom: "20px", position:"relative", top:"20px", left:"6px", width:"260px", height:"40px"}}
         />
         <AntdesignTablePagination 
@@ -219,11 +216,20 @@ export default function EventManagement() {
         />
     </CustomCard>
     {updateEventModal && 
-      <UpdateUser 
+      <UpdateEvent 
         isModalOpen={updateEventModal} 
         title={editEventValues ? "Edit Event" : "Add New Event"} 
         onFinish={editEventValues ? handleEditEvent : handleAddEvent  } 
         setModalOpen={setUpdateEventModal} 
+        editEventValues={editEventValues}
+      />
+    }
+    {deleteEventModal &&
+      <PermissionModal
+        isModalOpen={deleteEventModal} 
+        title={""} 
+        onDelete={handleDeleteEvent} 
+        setModalOpen={setDeleteEventModal} 
         editEventValues={editEventValues}
       />
     }

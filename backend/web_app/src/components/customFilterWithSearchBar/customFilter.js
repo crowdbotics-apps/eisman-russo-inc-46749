@@ -1,105 +1,42 @@
-// import React from 'react'
-// import SearchInput from '../searchInput/SearchInput';
-// import styled from 'styled-components';
-// import { Select } from 'antd';
-
-// export default function CustomFilter({
-//     searchBar, 
-//     filter1, 
-//     filter2,
-//     resetFilters, 
-//     searchBarPlaceholder = "Search...", 
-//     filter1Placeholder = "Select", 
-//     filter2Placeholder = "Select",
-//     resetFiltersText = "Reset Filters",
-//     filter1Options = [], 
-//     filter2Options = [],
-//     onSearchBarBlur = () => {},
-//     onFilter1Change = () => {},
-//     onFilter2Change = () => {},
-//     onResetFiltersClick = () => {},
-//     filter1Style = {},
-//     filter2Style = {},
-//     resetFiltersStyle = {},
-// }) {
-//   return (
-//     <div style={{display:"flex", flexDirection:"row"}}>
-
-//         {searchBar && (
-//             <SearchInputWrapper>
-//                 <SearchInput onBlur={onSearchBarBlur} placeholder={searchBarPlaceholder} />
-//             </SearchInputWrapper>
-//         )}
-//         {filter1 && (
-//             <Select 
-//             placeholder={filter1Placeholder} 
-//             options={filter1Options}
-//             onChange={onFilter1Change} 
-//             style={filter1Style}
-//             />
-//         )}
-//         {filter2 && (
-//             <Select 
-//             placeholder={filter2Placeholder} 
-//             options={filter2Options} 
-//             onChange={onFilter2Change} 
-//             style={filter2Style}
-//             />
-//         )}
-//         {resetFilters && (
-//             <div 
-//             onClick={onResetFiltersClick}
-//             style={resetFiltersStyle}
-//             >
-//             {resetFiltersText}
-//             </div>
-//         )}
-//     </div>
-//   )
-// }
-
-
-// const SearchInputWrapper = styled.div`
-// width: 350px;
-// margin-left: 20px;
-// `;
-
-
-
-///////////////////////////
-
-
 
 import React, { useState } from 'react';
 import SearchInput from '../searchInput/SearchInput';
 import styled from 'styled-components';
-import { Select } from 'antd';
+import { DatePicker, Select } from 'antd';
+import dayjs from 'dayjs';
+
 
 export default function CustomFilter({
     searchBar, 
     filter1, 
     filter2,
+    dateFilter,
     resetFilters, 
     searchBarPlaceholder = "Search...", 
     filter1Placeholder = "Select", 
     filter2Placeholder = "Select",
+    dateFilterPlaceholder = "Select Date",
     resetFiltersText = "Reset Filters",
     filter1Options = [], 
     filter2Options = [],
     onSearchBarBlur = () => {},
     onFilter1Change = () => {},
     onFilter2Change = () => {},
+    onDateFilterChange = () => {},
     onResetFiltersClick = () => {},
     filter1Style = {},
     filter2Style = {},
+    dateFilterStyle = {},
     resetFiltersStyle = {},
 }) {
   const [filter1Value, setFilter1Value] = useState(null);
   const [filter2Value, setFilter2Value] = useState(null);
+  const [dateFilterValue, setDateFilterValue] = useState(null);
 
   const handleResetFilters = () => {
     setFilter1Value(null);
     setFilter2Value(null);
+    setDateFilterValue(null);
     onResetFiltersClick();
   };
 
@@ -112,6 +49,12 @@ export default function CustomFilter({
     setFilter2Value(value);
     onFilter2Change(value);
   };
+
+  const handleDateFilterChange = (value) => {
+    setDateFilterValue(value);
+    const formattedValue = value ? dayjs(value).format("YYYY-MM-DD") : null;
+    onDateFilterChange(formattedValue);
+  }
 
   return (
     <div style={{display: "flex", flexDirection: "row"}}>
@@ -137,6 +80,14 @@ export default function CustomFilter({
           options={filter2Options}
           onChange={handleFilter2Change}
           style={filter2Style}
+        />
+      )}
+      {dateFilter && (
+        <DatePicker 
+          value={dateFilterValue}
+          placeholder={dateFilterPlaceholder}
+          onChange={handleDateFilterChange}
+          style={dateFilterStyle}
         />
       )}
       {resetFilters && (

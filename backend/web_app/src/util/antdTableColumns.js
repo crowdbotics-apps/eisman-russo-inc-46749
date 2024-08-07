@@ -363,7 +363,9 @@ export const eventManagementColumns = ({handleEditRow, handleDeleteRow}) => {
           title: "Actions",
           key: "action",
           render: (_, record) => (
-            <Space size="middle" className="d-flex">
+            <div className="d-flex" style={{position:"relative", top:"0px", right:"18px"}}>
+
+            <Space size="small" >
               <Button
                 onClick={(event) => {
                   event.stopPropagation();
@@ -381,6 +383,7 @@ export const eventManagementColumns = ({handleEditRow, handleDeleteRow}) => {
                 <DeleteIcon />
               </Button>
             </Space>
+            </div>
           ),
       },
     ];

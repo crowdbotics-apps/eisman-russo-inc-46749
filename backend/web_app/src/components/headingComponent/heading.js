@@ -16,4 +16,9 @@ const Heading = styled.h2`
   font-weight: ${(props) => props.fontWeight};
   color: ${(props) => props.color};
   margin: ${(props) => props.margin ?? "unset"};
+  position: ${(props) => props.position ?? "unset"};
+  top: ${(props) => props.top ?? "unset"};
+  bottom: ${(props) => props.bottom ?? "unset"};
+  left: ${(props) => props.left ?? "unset"};
+  right: ${(props) => props.right ?? "unset"};
 `;
