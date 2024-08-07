@@ -40,9 +40,10 @@ export const userRolesColumns =  [
 
 //-------------------- User Positions Table Columns --------------------//
 
-export const userPositionsColumns = ({handleEditRow}) => {
+export const userPositionsColumns = ({roleState,handleEditRow}) => {
+  
   let columns = [
-      { title: 'User Type', dataIndex: 'userType', key: 'userType' },
+      { title: 'User Role', dataIndex: 'userType', key: 'userType' },
       { title: 'Position Name', dataIndex: 'name', key: 'name' },
       { title: 'Access Permission', dataIndex: 'platform_type', key: 'platform_type' },
       {
@@ -50,14 +51,17 @@ export const userPositionsColumns = ({handleEditRow}) => {
           key: "action",
           render: (_, record) => (
             <Space size="middle" className="d-flex">
-              <Button
+              
+              {record.role.can_add_positions ? (<Button
                 onClick={(event) => {
                   event.stopPropagation();
                   handleEditRow(record);
                 }}
               >
                 <EditIcon />
-              </Button>
+              </Button>)
+              : null}
+              
             </Space>
           ),
         },
@@ -180,13 +184,13 @@ export const userManagementColumns = ({handleEditRow,handleChangePassword}) => {
 
 export const debrisTypeColumns = ({handleEditRow}) => {
   let columns = [
-      { title: 'Debris Name', dataIndex: 'debrisName', key: 'debrisName' },
+      { title: 'Debris Name', dataIndex: 'name', key: 'name' },
       {
         title: "Status",
-        dataIndex: "status",
-        key: "status",
+        dataIndex: "is_active",
+        key: "is_active",
         render: (_, record) =>
-          record.status === true ? (
+          record.is_active === true ? (
             <Tag bordered={false} color="green" style={{borderRadius:"12px"}}>
               Active
             </Tag>
