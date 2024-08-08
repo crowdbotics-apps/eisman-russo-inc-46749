@@ -1,21 +1,15 @@
 import React, { useEffect, useState } from 'react'
-import { Card, Input, Select } from 'antd'
+import { Card } from 'antd'
 import styled from 'styled-components';
 import HeadingComponent from '../headingComponent/heading';
-import SearchInput from '../searchInput/SearchInput';
-import { AntdesignTable } from '../antDesignTable/AntdesignTable';
 import { pushNotification } from '../../util/notification';
 import CustomButton from '../customButton/customButton';
-import { addUserPosition, getUserPositionList, updateUserPosition } from '../../util/dataService';
-import { useSelector } from 'react-redux';
 import { main_api } from '../../api/axiosHelper';
 import { adminAPIsEndPoints } from '../../constants/apiEndPoints';
 import { AntdesignTablePagination } from '../antDesignTable/AntdesignTablePagination';
-import UpdatePosition from '../modals/administration/position/updatePosition';
-import { debrisTypeColumns, subActivityColumns } from '../../util/antdTableColumns';
+import { subActivityColumns } from '../../util/antdTableColumns';
 import CustomFilter from '../customFilterWithSearchBar/customFilter';
 import { status } from '../../util/dropdownData';
-import UpdateDebrisType from '../modals/administration/debrisType/updateDebrisType';
 import UpdateSubActivity from '../modals/administration/subActivity/updateSubActivity';
 
 export default function SubActivity() {
@@ -75,7 +69,7 @@ export default function SubActivity() {
 
 
 
-   //------------------ Functions to Handle Add and Edit Debris Type ---------------------//
+   //------------------ Functions to Handle Add and Edit Sub-Activity ---------------------//
    const handleEditSubActivity = async (values) => {
     const id = editSubActivityValues.id;
     if (values && id) {

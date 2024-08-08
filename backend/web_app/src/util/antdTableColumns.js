@@ -295,16 +295,55 @@ export const subActivityColumns = ({handleEditRow}) => {
 //-------------------- Hazard Management Table Columns --------------------//
 
 
-export const hazardManagementColumns = ({isHazardNameTable,handleEditRow}) => {
+export const hazardTypeColumns = ({handleEditRow}) => {
   let columns = [
-      { title: 'Hazard Type', dataIndex: 'hazardType', key: 'hazardType' },
-      isHazardNameTable && { title: 'Hazard Name', dataIndex: 'hazardName', key: 'hazardName' },
+      { title: 'Hazard Type', dataIndex: 'type', key: 'type' },
       {
         title: "Status",
-        dataIndex: "status",
-        key: "status",
+        dataIndex: "is_active",
+        key: "is_active",
         render: (_, record) =>
-          record.status === true ? (
+          record.is_active === true ? (
+            <Tag bordered={false} color="green" style={{borderRadius:"12px"}}>
+              Active
+            </Tag>
+          ) : (
+            <Tag bordered={false} color="red" style={{borderRadius:"12px"}}>
+              InActive
+            </Tag>
+          ),
+      },
+      {
+          title: "Actions",
+          key: "action",
+          render: (_, record) => (
+            <Space size="middle" className="d-flex">
+              <Button
+                onClick={(event) => {
+                  event.stopPropagation();
+                  handleEditRow(record);
+                }}
+              >
+                <EditIcon />
+              </Button>
+            </Space>
+          ),
+      },
+    ];
+
+  return columns;
+};
+
+export const hazardNameColumns = ({handleEditRow}) => {
+  let columns = [
+      { title: 'Hazard Type', dataIndex: 'type', key: 'type' },
+      { title: 'Hazard Name', dataIndex: 'name', key: 'name' },
+      {
+        title: "Status",
+        dataIndex: "is_active",
+        key: "is_active",
+        render: (_, record) =>
+          record.is_active === true ? (
             <Tag bordered={false} color="green" style={{borderRadius:"12px"}}>
               Active
             </Tag>

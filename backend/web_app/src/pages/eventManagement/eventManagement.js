@@ -193,7 +193,7 @@ export default function EventManagement() {
           filter1Placeholder="Status"
           filter2Placeholder="Event Date"
           resetFiltersText="Reset Filter"
-          filter1Options={roles}
+          filter1Options={status}
           filter2Options={status}
           onSearchBarBlur={(e) => setSearchedValue(e)}
           onFilter1Change={(e) => setStatusSelected(e)}
