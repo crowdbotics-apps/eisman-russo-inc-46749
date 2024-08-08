@@ -14,6 +14,7 @@ import { main_api } from '../../api/axiosHelper';
 import { adminAPIsEndPoints } from '../../constants/apiEndPoints';
 import { AntdesignTablePagination } from '../antDesignTable/AntdesignTablePagination';
 import UpdatePosition from '../modals/administration/position/updatePosition';
+import CustomFilter from '../customFilterWithSearchBar/customFilter';
 
 export default function Position({}) {
   const [data, setData] = useState([]);
@@ -42,6 +43,7 @@ export default function Position({}) {
       const result = response.data.results;
       result?.map((item) => {
         item.userType = item.role.name;
+        item.platform_type = item.platform_type.charAt(0).toUpperCase() + item.platform_type.slice(1);
       });
       setData(result);
     }).catch((error) => {
@@ -82,34 +84,57 @@ export default function Position({}) {
     setUpdatePositionModal(true);
   };
 
-  //------------------ Search ---------------------//
-
-  const handleSearch = (value) => {
-    if (value) {
-      setSearchedValue(value);
-    }
-  };
 
    //------------------ Functions to Handle Add and Edit User Position ---------------------//
-   const handleEditPosition = async (values) => {
+  //  const handleEditPosition = async (values) => {
+  //   const id = editPositionValues.id;
+  //   try {
+      
+  //     await updateUserPosition(id, values);
+      
+  //     fetchData(); // Make sure this is being called after update
+  //   } catch (error) {
+  //     console.error('Error updating position:', error);
+  //   }
+  //   setUpdatePositionModal(false);
+  // };
+
+  const handleEditPosition = async (values) => {
     const id = editPositionValues.id;
+    console.log("values", values);
+    
+   
     try {
-      await updateUserPosition(id, values);
-      fetchData(); // Make sure this is being called after update
+      const response = await main_api.put(adminAPIsEndPoints.UPDATE_POSITION(id), values);
+      if (response.status === 200) {
+        pushNotification("User position updated successfully", "success");
+        fetchData();
+        setUpdatePositionModal(false);
+      }
     } catch (error) {
-      console.error('Error updating position:', error);
+      pushNotification(error.response.data.detail, "error");
+
     }
-    setUpdatePositionModal(false);
+      
+    
+    
   };
 
+
   const handleAddPosition = async (values) => {
+    console.log("values", values);
+    
     try {
-      await addUserPosition(values);
-      fetchData(); // Make sure this is being called after add
+      const response = await main_api.post(adminAPIsEndPoints.ADD_POSITION, values);
+      if (response.status === 201) {
+          pushNotification("User position added successfully", "success");
+          fetchData(); 
+          setUpdatePositionModal(false);
+      }
     } catch (error) {
-      console.error('Error adding position:', error);
+            pushNotification(error.response.data.detail, "error");
     }
-    setUpdatePositionModal(false);
+  
   };
 
 
@@ -119,54 +144,42 @@ export default function Position({}) {
     
     <CustomCard style={{ boxShadow: '0px 4px 12px rgba(0, 0, 0, 0.1)' }}>
         <div style={{display:"flex", flexDirection:"row", justifyContent:"space-between"}}>
-          <Heading text="Manage User Position" margin="0px 0px 0px 20px" fontSize="1.3rem" color="#3B3B3B" />
+          <Heading text="Manage User Position" margin="0px 0px 0px 5px" fontSize="1.3rem" color="#3B3B3B" />
           <CustomButton btnText={"Add Position"} color={"white"} onClick={handleAddRow} />
         </div>
-        <div style={{display:"flex", flexDirection:"row"}}>
-
-        <SearchInputWrapper>
-            <SearchInput onBlur={(e) => handleSearch(e.target.value)} placeholder="Search By Position Name..." />
-        </SearchInputWrapper>
-        <Select 
-          placeholder="Select" 
-          options={roles}
-          onChange={(e)=>{ 
-            setRoleSelected(e);
-          }} 
-          style={{marginLeft:"20px",position:"relative", top:"12px", left:"6px", width:"260px", height:"40px"}}
-        />
-        <Select 
-          placeholder="Select" 
-          options={accessPermission} 
-          onChange={(e)=>{
-            setAccessPermissionSelected(e); 
-          }} 
-          style={{marginLeft:"8px",position:"relative", top:"12px", left:"6px", width:"260px", height:"40px"}}
-        />
-        <div style={{marginLeft:"8px",position:"relative", top:"12px", left:"6px", width:"260px", height:"40px"}}>
-
-        <CustomButton
-          btnText={"Reset Filter"}
-          color={"red"}
-          margin="0px 5px"
-          noBackground
-          hideIcon={true}
-          onClick={() => {
+        <CustomFilter
+          searchBar={true}
+          filter1={true}
+          filter2={true}
+          resetFilters={true}
+          searchBarPlaceholder="Search By Position Name..."
+          filter1Placeholder="Select Role"
+          filter2Placeholder="Select Access Permission"
+          resetFiltersText="Reset Filter"
+          filter1Options={roles}
+          filter2Options={accessPermission}
+          onSearchBarBlur={(e) => setSearchedValue(e)}
+          onFilter1Change={(e) => setRoleSelected(e)}
+          onFilter2Change={(e) => setAccessPermissionSelected(e)}
+          onResetFiltersClick={() => {
             setRoleSelected(null);
             setAccessPermissionSelected(null);
             setSearchedValue('');
             fetchData();
           }}
+          filter1Style={{marginLeft:"20px", marginBottom: "20px", position:"relative", top:"12px", left:"6px", width:"260px", height:"40px"}}
+          filter2Style={{marginLeft:"8px", marginBottom: "20px", position:"relative", top:"12px", left:"6px", width:"260px", height:"40px"}}
+          resetFiltersStyle={{cursor:"pointer",color:"#EE3E41",marginLeft:"15px", marginBottom: "20px", position:"relative", top:"20px", left:"6px", width:"260px", height:"40px"}}
         />
-        </div>
-        </div>
         <AntdesignTablePagination 
-          columns={userPositionsColumns({handleEditRow})} 
+          columns={userPositionsColumns({rolesState,handleEditRow})} 
           data={data}
           totalCount={count}
           loadPaginatedData={fetchData} 
-          allowRowSelection={false} 
-          pageSize={7}
+          allowRowSelection={false}
+          pageSize={10}
+          tableHeight={450}
+          tableWidth={1200}
         />
     </CustomCard>
 
@@ -198,12 +211,13 @@ const Heading = ({ text = "", margin, fontSize = "0.75rem", color = "#3B3B3B" })
 
 const CustomCard = styled(Card)`
   width: calc(100vw - 40px);
-  max-width: 1274px;
+  max-width: 1270px;
   height: calc(100vh - 40px);
-  max-height: 912px;
+  max-height: 720px;
   margin: 20px;
   background-color: white;
-  
+
+
   @media (max-width: 768px) {
     width: calc(100vw - 20px);
     height: calc(100vh - 20px);

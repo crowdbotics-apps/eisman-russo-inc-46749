@@ -10,7 +10,7 @@ export const getUserList = async (page) => {
         const response = await main_api.get(`${adminAPIsEndPoints.LIST_USER}?page=${page}`);
         return response.data.results;
     } catch (error) {
-        pushNotification("Error while fetching users", error);
+        pushNotification(error.response.data.detail, "error");
     }
 };
 
@@ -22,11 +22,9 @@ export const addUser = async (data) => {
         const response = await main_api.post(adminAPIsEndPoints.CREATE_USER, data);
         if (response.status === 201) {
             pushNotification("User added successfully", "success");
-        }else{
-            pushNotification(response.detail, "error");
         }
     } catch (error) {
-        pushNotification("Error while adding user", error);
+        pushNotification(error.response.data.detail, "error");
     }
 };
 
@@ -39,11 +37,9 @@ export const updateUser = async (id, data) => {
         if (response.status === 200) {
             pushNotification("User updated successfully", "success");
             
-        }else{
-        pushNotification(response.detail, "error");
         }
     } catch (error) {
-        pushNotification("Error while updating user", error);
+        pushNotification(error.response.data.detail, "error");
     }
 };
 
@@ -57,11 +53,9 @@ export const changePassword = async (id, data) => {
         if (response.status === 200) {
             pushNotification("Password updated successfully", "success");
             
-        }else{
-        pushNotification(response.detail, "error");
         }
     } catch (error) {
-        pushNotification("Error while updating user", error);
+        pushNotification(error.response.data.detail, "error");
     }
 };
 
@@ -98,9 +92,11 @@ export const getUserPositionList = async (query) => {
 export const addUserPosition = async (data) => {
     try {
         const response = await main_api.post(adminAPIsEndPoints.ADD_POSITION, data);
-        return response;
+        if (response.status === 201) {
+            pushNotification("User position added successfully", "success");
+        }
     } catch (error) {
-            pushNotification(error, "error");
+            pushNotification(error.response.data.detail, "error");
     }
 };
 
@@ -109,10 +105,15 @@ export const addUserPosition = async (data) => {
 
 export const updateUserPosition = async (id, data) => {
     try {
+        
         const response = await main_api.put(adminAPIsEndPoints.UPDATE_POSITION(id), data);
-        return response;
+        
+        if (response.status === 200) {
+            pushNotification("User position updated successfully", "success");
+        }
     } catch (error) {
-        pushNotification(error, "error");
+        
+        pushNotification(error.response.data.detail, "error");
     }
 };
 

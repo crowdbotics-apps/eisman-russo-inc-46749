@@ -75,11 +75,11 @@ export const adminSidebarNavData = [
         itemIcon: <MapIcon/>,
         navigateTo: "/map",
       },
-      {
-        itemName: "Settings",
-        itemIcon: <SettingsIcon/>,
-        navigateTo: "/settings",
-      },
+      // {
+      //   itemName: "Settings",
+      //   itemIcon: <SettingsIcon/>,
+      //   navigateTo: "/settings",
+      // },
     ],
   },
 ];

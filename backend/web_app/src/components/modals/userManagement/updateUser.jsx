@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import styled from "styled-components";
-import { Divider, Form, Input, InputNumber, Select } from "antd";
-import { CustomModal } from '../../customModal/customModal';
+import { Divider, Form, Input, InputNumber, Select, Switch } from "antd";
+import { CustomModal, FormWrapper } from '../../customModal/customModal';
 import CustomButton from '../../customButton/customButton';
 import { countryCodes } from '../../../util/dropdownData';
 import CustomSwitch from '../../customSwitch/customSwitch';
@@ -16,16 +16,6 @@ import { pushNotification } from '../../../util/notification';
 
 
 
-const selectBefore = (
-    <Select
-      defaultValue={countryCodes[0].value}
-      options={countryCodes}
-      style={{
-        width: "70px",
-      }}
-    />
-  );
-
 export default function UpdateUser({
     isModalOpen,
     title,
@@ -38,7 +28,7 @@ export default function UpdateUser({
 
     const [address, setAddress] = useState("");
     const [addressLatAndLong, setAddressLatAndLong] = useState([null,null]);
-    const [active, setActive] = useState(true);
+    const [active, setActive] = useState(editUserValues?.status || true);
     const [userRole, setUserRole] = useState();
     const [positionType, setPositionType] = useState(null);
     const [roleType, setRoleType] = useState(null);
@@ -126,9 +116,8 @@ export default function UpdateUser({
       fetchData();
     }, [userRole]);
 
-    useEffect(() => { 
-      form.setFieldsValue({ is_active: active });
-    }, [active]);
+   
+   
 
     useEffect(() => {
         if (editUserValues) {
@@ -137,7 +126,7 @@ export default function UpdateUser({
           form.setFieldsValue({
             name: editUserValues.name,
             email: editUserValues?.email,
-            telephone_number: editUserValues?.telephone_number,
+            telephone_number: editUserValues?.phone_number,
             is_active: editUserValues.status,
             password: editUserValues?.password,
             confirm_password: editUserValues?.password,
@@ -148,17 +137,23 @@ export default function UpdateUser({
             prefix: editUserValues?.prefix,
         });
         }
-    }, [editUserValues, roles]);
+    }, [editUserValues]);
 
    
 
     const handleSwitchChange = (checked) => {
-        setActive(checked);
-      };
+      setActive(checked);
+      form.setFieldsValue({ is_active: checked }); 
+      
+    };
 
     const handleRoleChange = (value,option) => {
       setUserRole(value);
-      setRoleType(option.label);
+      const type = rolesState.filter((role) => role.name === option.label).map((role) => role.type);
+      setRoleType(type[0]);
+
+      setPositionType(null);
+      form.setFieldsValue({ position: null });
       
     }
 
@@ -183,11 +178,8 @@ export default function UpdateUser({
     }
 
   return (
-    <>
-    
- {windowSize?.width >= 1200 ?
- 
- (<CustomModal  
+
+  <CustomModal  
   open={isModalOpen}
   title={title}
   width="1000px"
@@ -201,7 +193,8 @@ export default function UpdateUser({
   maskClosable={false}
   // isScrollable={true}
 >
-  <Divider style={{width:"100%", borderTop:"1px solid #DEE2E6"}}/>
+  <Divider style={{width:"104.9%", position:"relative", top:"0px", right:"24px",borderTop:"1px solid #DEE2E6"}}/>
+
   <Form name="updateUserForm" onFinish={updateData} form={form} layout="vertical" >
     <FormWrapper windowSize={windowSize}>
     <div style={{display:"flex", flexDirection:"row", marginRight:"4px"}}>
@@ -216,7 +209,7 @@ export default function UpdateUser({
         },
       ]}
     >
-      <Select placeholder="Select" options={roles} style={{width:"260px"}} onChange={handleRoleChange}/>
+      <Select placeholder="Select Role" options={roles} style={{width:"260px"}} onChange={handleRoleChange}/>
     </FormItem>
     <FormItem 
       name="position" 
@@ -229,10 +222,10 @@ export default function UpdateUser({
       ]} 
       style={{position:"relative", top:"0px",right:positionType !== "Sub Contractor" ? "167px" : "6px"}}
     >
-      <PaginatedSelect fetchData={fetchData} placeholder="Select" options={positionList} onChange={handlePositionChange} style={{width:"260px"}}/>
+      <PaginatedSelect fetchData={fetchData} placeholder="Select Position" options={positionList} value={positionType} onChange={handlePositionChange} style={{width:"260px"}}/>
     </FormItem>
     {
-      positionType === "Sub Contractor" ? 
+      roleType === "contractor" && positionType === "Sub Contractor" ? 
     
       (
         <>
@@ -249,7 +242,6 @@ export default function UpdateUser({
         >
         <PaginatedSelect fetchData={fetchPrimeContractor} placeholder="Select" options={primeContractorList} onChange={handlePrimeContractorChange} style={{width:"260px"}}/>
 
-          {/* <Select placeholder="Select" options={roles} style={{width:"320px", marginRight:"4px"}} /> */}
         </FormItem>
         </>
       )
@@ -265,15 +257,24 @@ export default function UpdateUser({
       label="Telephone Number"
       rules={[
         {
-          required: false,
+          required: true,
           message: "Please enter your phone number",
+        },
+        {
+          pattern: /^[0-9-+() ]*$/,
+          message: "Phone number can only contain numbers, spaces, and the characters +, -, and ()",
+        },
+        {
+          min: 10,
+          max: 15,
+          message: "Phone number must be between 10 and 15 characters",
         },
       ]}
     >
       <Input placeholder='Enter Telephone Number' style={{width:"260px"}}/>
     </FormItem>
     {
-      positionType === "Prime Contractor" || "Sub Contractor" && roleType === "Contractor" ? 
+      roleType === "contractor" ? 
       (
         <div style={{display:"flex", flexDirection:"row", marginRight:"8px"}}>
           <FormItem name="company_name" label="Company Name" style={{position:"relative", top:"0px",right:"50px"}} required={true}>
@@ -312,13 +313,16 @@ export default function UpdateUser({
       </FormItem>
       <div  style={{display:"flex", flexDirection:"column",}}>
 
-      {/* <Heading text="Status" fontSize="0.875rem" fontWeight={700} /> */}
-    <FormItem name="is_active" label="Status" style={{position:"relative", top:"0px",right:"244px"}}>
-      <CustomSwitch initialStatus={active} onChange={handleSwitchChange} />
+   
+    <FormItem name="is_active" label="Status" style={{ position: "relative", top: "0px", right: "244px" }}>
+      <CustomSwitch value={active} onChange={handleSwitchChange} />
     </FormItem>
+
       </div>
     </div>
     <div style={{display:"flex", flexDirection:"row", alignItems:"center", marginRight:"8px"}}>
+     {!editUserValues && (<>
+     
       <FormItem name="password" label="Password"
         rules={[
           {
@@ -355,9 +359,9 @@ export default function UpdateUser({
         label="Confirm Password" style={{position:"relative", top:"0px",right:"0px"}}>
           <Input.Password placeholder="Confirm Password" style={{width:"260px"}}/>
       </FormItem>
+     </>)}
       <div  style={{display:"flex", flexDirection:"column",}}>
 
-      {/* <Heading text="Address" fontSize="0.875rem" fontWeight={700} margin={"15px 0px 4px 0px"}/> */}
     <span style={{marginRight:"8px"}}>
 
     <LocationSelector
@@ -388,7 +392,7 @@ export default function UpdateUser({
     </div>
 
       </FormWrapper>
-    <Divider style={{borderTop:"1px solid #DEE2E6"}}/>
+    <Divider />
     <SaveContainer className="d-flex justify-content-end">
       <CustomButton
         btnText={"Cancel"}
@@ -400,126 +404,9 @@ export default function UpdateUser({
       <CustomButton btnText={"Save Changes"} color={"white"} type="submit" hideIcon={true} />
     </SaveContainer>
   </Form>
-</CustomModal>)
-:
-(<CustomModal  
-  open={isModalOpen}
-  title={title}
-  width="600px"
-  heigth="614px"
-  onCancel={() => {
-    setModalOpen(false);
-    form.resetFields();
-  }}
-  
-  footer={null}
-  maskClosable={false}
-  // isScrollable={true}
->
-  <Divider style={{width:"100%", borderTop:"1px solid #DEE2E6"}}/>
-  <Form name="updateUserForm" onFinish={onFinish} form={form} layout="vertical" >
-    <FormWrapper>
-    <div style={{display:"flex", flexDirection:"row", marginRight:"4px"}}>
+</CustomModal>
 
-    <FormItem name="role" label="User Role">
-      <Select placeholder="Select" options={roles} style={{width:"260px"}} onChange={handleRoleChange}/>
-    </FormItem>
-    <FormItem name="position" label="Position Name">
-      <PaginatedSelect fetchData={fetchData} placeholder="Select" options={positionList} onChange={handlePositionChange} style={{width:"280px"}}/>
-    </FormItem>
-    </div>
 
-    {positionType === "Prime Contractor" ? (
-      <div style={{display:"flex", flexDirection:"row", marginRight:"8px"}}>
-        <FormItem name="company_name" label="Company Name" required={true}>
-            <Input placeholder="Enter Company Name" style={{width:"260px"}}/>
-        </FormItem>
-        <FormItem name="prefix" label="Prefix">
-            <Input placeholder="Enter Prefix" style={{width:"280px"}}/>
-        </FormItem>
-      </div>
-    ) :
-    positionType === "Sub Contractor" ? (
-      <>
-      
-      <FormItem name="prime_contractor" label="Prime Contractor" >
-        <Select placeholder="Select" options={roles} style={{width:"565px", marginRight:"8px"}} />
-      </FormItem>
-      <div style={{display:"flex", flexDirection:"row", marginRight:"8px"}}>
-        <FormItem name="company_name" label="Company Name">
-            <Input placeholder="Enter Company Name" style={{width:"260px"}}/>
-        </FormItem>
-        <FormItem name="prefix" label="Prefix">
-            <Input placeholder="Enter Prefix" style={{width:"280px"}}/>
-        </FormItem>
-      </div>
-      </>
-    ) : null
-  }
-    <FormItem name="telephone_number" label="Telephone Number">
-      <Input placeholder='Enter Telephone Number' style={{width:"565px"}}/>
-    </FormItem>
-    <div style={{display:"flex", flexDirection:"row", marginRight:"8px"}}>
-      <FormItem name="name" label="Name">
-          <Input placeholder="Enter Name" autoComplete='new-password' style={{width:"260px"}}/>
-      </FormItem>
-      <FormItem name="email" label="Email">
-          <Input placeholder="Enter Email" style={{width:"280px"}}/>
-      </FormItem>
-    </div>
-    <div style={{display:"flex", flexDirection:"row", marginRight:"8px"}}>
-      <FormItem name="password" label="Password">
-          <Input.Password placeholder="Enter Password"  style={{width:"260px"}}/>
-      </FormItem>
-      <FormItem name="confirm_password" label="Confirm Password">
-          <Input.Password placeholder="Confirm Password" style={{width:"280px"}}/>
-      </FormItem>
-    </div>
-
-    <Heading text="Status" fontSize="0.875rem" fontWeight={700} />
-    <FormItem name="is_active">
-      <CustomSwitch initialStatus={active} onChange={handleSwitchChange} />
-    </FormItem>
-    
-    <Heading text="Address" fontSize="0.875rem" fontWeight={700} margin={"15px 0px 4px 0px"}/>
-    <span style={{marginRight:"8px"}}>
-
-    <LocationSelector
-        address={address}
-        setAddress={setAddress}
-        setAddressLatAndLong={setAddressLatAndLong}
-        form={form}
-        checked={false}
-        style={{width:"552px"}}
-      />
-    </span>
-
-    <div style={{display:"flex", flexDirection:"row", marginRight:"8px"}}>
-      <FormItem name="latitude" label="Latitude">
-          <Input disabled={true} style={{width:"260px"}}/>
-      </FormItem>
-      <FormItem name="longitude" label="Longitude">
-          <Input disabled={true} style={{width:"280px"}}/>
-      </FormItem>
-    </div>
-
-      </FormWrapper>
-    <Divider style={{borderTop:"1px solid #DEE2E6"}}/>
-    <SaveContainer className="d-flex justify-content-end">
-      <CustomButton
-        btnText={"Cancel"}
-        margin="0px 5px"
-        noBackground
-        hideIcon={true}
-        onClick={() => setModalOpen(false)}
-      />
-      <CustomButton btnText={"Save Changes"} color={"white"} type="submit" hideIcon={true} />
-    </SaveContainer>
-  </Form>
-</CustomModal>)
-
-}
-    </>
   )
 }
 
@@ -531,21 +418,21 @@ const FormItem = styled(Form.Item)`
   width: 100%;
 `;
 
-const FormWrapper = styled.div`
-  height: 585px;
-  width: ${(props) => props?.windowSize?.width >= 1200 ?  "955px" : "575px"};
-  overflow: auto;
+// const FormWrapper = styled.div`
+//   height: 585px;
+//   width: ${(props) => props?.windowSize?.width >= 1200 ?  "955px" : "575px"};
+//   overflow: auto;
 
-  ::-webkit-scrollbar {
-    width: 0px;
-  }
-`;
+//   ::-webkit-scrollbar {
+//     width: 0px;
+//   }
+// `;
 
 const SaveContainer = styled.div`
   position: absolute;
   bottom: 4px;
   right: 4px;
-  width: 593px;
+  width: 995px;
   border-top: 1px solid #E0E0E0;
   background-color: white;
   padding: 10px 20px;
@@ -554,3 +441,364 @@ const SaveContainer = styled.div`
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//////////////////////////////////////////////
+
+
+//     <>
+    
+//  {windowSize?.width >= 1200 ?
+ 
+//  (<CustomModal  
+//   open={isModalOpen}
+//   title={title}
+//   width="1000px"
+//   heigth="600px"
+//   onCancel={() => {
+//     setModalOpen(false);
+//     form.resetFields();
+//   }}
+  
+//   footer={null}
+//   maskClosable={false}
+//   // isScrollable={true}
+// >
+//   <Divider style={{width:"100%", borderTop:"1px solid #DEE2E6"}}/>
+//   <Form name="updateUserForm" onFinish={updateData} form={form} layout="vertical" >
+//     <FormWrapper windowSize={windowSize}>
+//     <div style={{display:"flex", flexDirection:"row", marginRight:"4px"}}>
+
+//     <FormItem 
+//       name="role" 
+//       label="User Role" 
+//       rules={[
+//         {
+//           required: true,
+//           message: "Please select a user role",
+//         },
+//       ]}
+//     >
+//       <Select placeholder="Select" options={roles} style={{width:"260px"}} onChange={handleRoleChange}/>
+//     </FormItem>
+//     <FormItem 
+//       name="position" 
+//       label="Position Name"
+//       rules={[
+//         {
+//           required: true,
+//           message: "Please select a position name",
+//         },
+//       ]} 
+//       style={{position:"relative", top:"0px",right:positionType !== "Sub Contractor" ? "167px" : "6px"}}
+//     >
+//       <PaginatedSelect fetchData={fetchData} placeholder="Select" options={positionList} onChange={handlePositionChange} style={{width:"260px"}}/>
+//     </FormItem>
+//     {
+//       positionType === "Sub Contractor" ? 
+    
+//       (
+//         <>
+//         <FormItem 
+//           name="prime_contractor" 
+//           label="Prime Contractor"
+//           rules={[
+//             {
+//               required: true,
+//               message: "Please select your prime contractor",
+//             },
+//           ]} 
+//           style={{position:"relative", top:"0px",right:"14px"}} 
+//         >
+//         <PaginatedSelect fetchData={fetchPrimeContractor} placeholder="Select" options={primeContractorList} onChange={handlePrimeContractorChange} style={{width:"260px"}}/>
+
+//           {/* <Select placeholder="Select" options={roles} style={{width:"320px", marginRight:"4px"}} /> */}
+//         </FormItem>
+//         </>
+//       )
+//       :
+//       null
+//     }
+//     </div>
+
+
+// <div style={{display:"flex", flexDirection:"row", marginRight:"8px"}}>
+//     <FormItem 
+//       name="telephone_number"
+//       label="Telephone Number"
+//       rules={[
+//         {
+//           required: false,
+//           message: "Please enter your phone number",
+//         },
+//       ]}
+//     >
+//       <Input placeholder='Enter Telephone Number' style={{width:"260px"}}/>
+//     </FormItem>
+//     {
+//       positionType === "Prime Contractor" || "Sub Contractor" && roleType === "Contractor" ? 
+//       (
+//         <div style={{display:"flex", flexDirection:"row", marginRight:"8px"}}>
+//           <FormItem name="company_name" label="Company Name" style={{position:"relative", top:"0px",right:"50px"}} required={true}>
+//               <Input placeholder="Enter Company Name" style={{width:"260px"}}/>
+//           </FormItem>
+//           <FormItem name="prefix" label="Prefix" style={{position:"relative", top:"0px",right:"5px"}}>
+//               <Input placeholder="Enter Prefix" style={{width:"320px"}}/>
+//           </FormItem>
+//         </div>
+//       )
+      
+//       : null
+//     }
+// </div>
+//     <div style={{display:"flex", flexDirection:"row", alignItems:"center", marginRight:"8px"}}>
+//       <FormItem name="name" label="Name"
+//         rules={[
+//           {
+//             required: true,
+//             message: "Please enter your name",
+//           },
+//         ]} 
+//       >
+//           <Input placeholder="Enter Name" autoComplete='new-password' style={{width:"260px"}}/>
+//       </FormItem>
+//       <FormItem name="email" label="Email"
+//        rules={[
+//         {
+//           required: true,
+//           type: "email",
+//           message: "Please enter a valid email address",
+//         },
+//       ]}
+//       style={{position:"relative", top:"0px",right:"122px"}}>
+//           <Input placeholder="Enter Email" style={{width:"260px"}}/>
+//       </FormItem>
+//       <div  style={{display:"flex", flexDirection:"column",}}>
+
+//       {/* <Heading text="Status" fontSize="0.875rem" fontWeight={700} /> */}
+//     {/* <FormItem name="is_active" label="Status" style={{position:"relative", top:"0px",right:"244px"}}>
+//       <CustomSwitch initialStatus={active} onChange={handleSwitchChange} />
+//     </FormItem> */}
+//     {/* <FormItem name="is_active" label="Status" style={{ position: "relative", top: "0px", right: "244px" }}>
+//       <CustomSwitch value={form.getFieldValue('is_active')} onChange={checked => form.setFieldsValue({ is_active: checked })} />
+//     </FormItem> */}
+//     <CustomSwitch label='Status' form={form} value={active} onChange={handleSwitchChange} style={{ position: "relative", top: "0px", right: "244px" }} />
+
+//       </div>
+//     </div>
+//     <div style={{display:"flex", flexDirection:"row", alignItems:"center", marginRight:"8px"}}>
+//       <FormItem name="password" label="Password"
+//         rules={[
+//           {
+//             required: true,
+//             message: "Please enter your password",
+//           },
+//           {
+//             min: 8,
+//             message: "Password must be at least 8 characters long",
+//           },
+//           {
+//             pattern: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[A-Za-z\d@$!%*?&]{8,}$/,
+//             message: "Password must contain uppercase, lowercase, and a number",
+//           },
+//         ]}
+//       >
+//           <Input.Password placeholder="Enter Password"  style={{width:"260px"}}/>
+//       </FormItem>
+//       <FormItem name="confirm_password" 
+//         rules={[
+//           {
+//             required: true,
+//             message: "Please confirm your password",
+//           },
+//           ({ getFieldValue }) => ({
+//             validator(_, value) {
+//               if (!value || getFieldValue('password') === value) {
+//                 return Promise.resolve();
+//               }
+//               return Promise.reject(new Error("Passwords do not match"));
+//             },
+//           }),
+//         ]}
+//         label="Confirm Password" style={{position:"relative", top:"0px",right:"0px"}}>
+//           <Input.Password placeholder="Confirm Password" style={{width:"260px"}}/>
+//       </FormItem>
+//       <div  style={{display:"flex", flexDirection:"column",}}>
+
+//       {/* <Heading text="Address" fontSize="0.875rem" fontWeight={700} margin={"15px 0px 4px 0px"}/> */}
+//     <span style={{marginRight:"8px"}}>
+
+//     <LocationSelector
+//         address={address}
+//         setAddress={setAddress}
+//         setAddressLatAndLong={setAddressLatAndLong}
+//         form={form}
+//         checked={false}
+//         label='Address'
+//         style={{width:"320px"}}
+//         formItemStyles={{position:"relative", top:"0px",right:"5px"}}
+//       />
+//     </span>
+//       </div>
+//     </div>
+
+    
+    
+    
+
+//     <div style={{display:"flex", flexDirection:"row", marginRight:"8px"}}>
+//       <FormItem name="latitude" label="Latitude">
+//           <Input disabled={true} style={{width:"450px"}}/>
+//       </FormItem>
+//       <FormItem name="longitude" label="Longitude">
+//           <Input disabled={true} style={{width:"460px"}}/>
+//       </FormItem>
+//     </div>
+
+//       </FormWrapper>
+//     <Divider style={{borderTop:"1px solid #DEE2E6"}}/>
+//     <SaveContainer className="d-flex justify-content-end">
+//       <CustomButton
+//         btnText={"Cancel"}
+//         margin="0px 5px"
+//         noBackground
+//         hideIcon={true}
+//         onClick={() => setModalOpen(false)}
+//       />
+//       <CustomButton btnText={"Save Changes"} color={"white"} type="submit" hideIcon={true} />
+//     </SaveContainer>
+//   </Form>
+// </CustomModal>)
+// :
+// (<CustomModal  
+//   open={isModalOpen}
+//   title={title}
+//   width="600px"
+//   heigth="614px"
+//   onCancel={() => {
+//     setModalOpen(false);
+//     form.resetFields();
+//   }}
+  
+//   footer={null}
+//   maskClosable={false}
+//   // isScrollable={true}
+// >
+//   <Divider style={{width:"100%", borderTop:"1px solid #DEE2E6"}}/>
+//   <Form name="updateUserForm" onFinish={onFinish} form={form} layout="vertical" >
+//     <FormWrapper>
+//     <div style={{display:"flex", flexDirection:"row", marginRight:"4px"}}>
+
+//     <FormItem name="role" label="User Role">
+//       <Select placeholder="Select" options={roles} style={{width:"260px"}} onChange={handleRoleChange}/>
+//     </FormItem>
+//     <FormItem name="position" label="Position Name">
+//       <PaginatedSelect fetchData={fetchData} placeholder="Select" options={positionList} onChange={handlePositionChange} style={{width:"280px"}}/>
+//     </FormItem>
+//     </div>
+
+//     {positionType === "Prime Contractor" ? (
+//       <div style={{display:"flex", flexDirection:"row", marginRight:"8px"}}>
+//         <FormItem name="company_name" label="Company Name" required={true}>
+//             <Input placeholder="Enter Company Name" style={{width:"260px"}}/>
+//         </FormItem>
+//         <FormItem name="prefix" label="Prefix">
+//             <Input placeholder="Enter Prefix" style={{width:"280px"}}/>
+//         </FormItem>
+//       </div>
+//     ) :
+//     positionType === "Sub Contractor" ? (
+//       <>
+      
+//       <FormItem name="prime_contractor" label="Prime Contractor" >
+//         <Select placeholder="Select" options={roles} style={{width:"565px", marginRight:"8px"}} />
+//       </FormItem>
+//       <div style={{display:"flex", flexDirection:"row", marginRight:"8px"}}>
+//         <FormItem name="company_name" label="Company Name">
+//             <Input placeholder="Enter Company Name" style={{width:"260px"}}/>
+//         </FormItem>
+//         <FormItem name="prefix" label="Prefix">
+//             <Input placeholder="Enter Prefix" style={{width:"280px"}}/>
+//         </FormItem>
+//       </div>
+//       </>
+//     ) : null
+//   }
+//     <FormItem name="telephone_number" label="Telephone Number">
+//       <Input placeholder='Enter Telephone Number' style={{width:"565px"}}/>
+//     </FormItem>
+//     <div style={{display:"flex", flexDirection:"row", marginRight:"8px"}}>
+//       <FormItem name="name" label="Name">
+//           <Input placeholder="Enter Name" autoComplete='new-password' style={{width:"260px"}}/>
+//       </FormItem>
+//       <FormItem name="email" label="Email">
+//           <Input placeholder="Enter Email" style={{width:"280px"}}/>
+//       </FormItem>
+//     </div>
+//     <div style={{display:"flex", flexDirection:"row", marginRight:"8px"}}>
+//       <FormItem name="password" label="Password">
+//           <Input.Password placeholder="Enter Password"  style={{width:"260px"}}/>
+//       </FormItem>
+//       <FormItem name="confirm_password" label="Confirm Password">
+//           <Input.Password placeholder="Confirm Password" style={{width:"280px"}}/>
+//       </FormItem>
+//     </div>
+
+//     <Heading text="Status" fontSize="0.875rem" fontWeight={700} />
+//     <FormItem name="is_active">
+//       <CustomSwitch initialStatus={active} onChange={handleSwitchChange} />
+//     </FormItem>
+    
+//     <Heading text="Address" fontSize="0.875rem" fontWeight={700} margin={"15px 0px 4px 0px"}/>
+//     <span style={{marginRight:"8px"}}>
+
+//     <LocationSelector
+//         address={address}
+//         setAddress={setAddress}
+//         setAddressLatAndLong={setAddressLatAndLong}
+//         form={form}
+//         checked={false}
+//         style={{width:"552px"}}
+//       />
+//     </span>
+
+//     <div style={{display:"flex", flexDirection:"row", marginRight:"8px"}}>
+//       <FormItem name="latitude" label="Latitude">
+//           <Input disabled={true} style={{width:"260px"}}/>
+//       </FormItem>
+//       <FormItem name="longitude" label="Longitude">
+//           <Input disabled={true} style={{width:"280px"}}/>
+//       </FormItem>
+//     </div>
+
+//       </FormWrapper>
+//     <Divider style={{borderTop:"1px solid #DEE2E6"}}/>
+//     <SaveContainer className="d-flex justify-content-end">
+//       <CustomButton
+//         btnText={"Cancel"}
+//         margin="0px 5px"
+//         noBackground
+//         hideIcon={true}
+//         onClick={() => setModalOpen(false)}
+//       />
+//       <CustomButton btnText={"Save Changes"} color={"white"} type="submit" hideIcon={true} />
+//     </SaveContainer>
+//   </Form>
+// </CustomModal>)
+
+// }
+//     </>

@@ -40,9 +40,10 @@ export const userRolesColumns =  [
 
 //-------------------- User Positions Table Columns --------------------//
 
-export const userPositionsColumns = ({handleEditRow}) => {
+export const userPositionsColumns = ({roleState,handleEditRow}) => {
+  
   let columns = [
-      { title: 'User Type', dataIndex: 'userType', key: 'userType' },
+      { title: 'User Role', dataIndex: 'userType', key: 'userType' },
       { title: 'Position Name', dataIndex: 'name', key: 'name' },
       { title: 'Access Permission', dataIndex: 'platform_type', key: 'platform_type' },
       {
@@ -50,14 +51,17 @@ export const userPositionsColumns = ({handleEditRow}) => {
           key: "action",
           render: (_, record) => (
             <Space size="middle" className="d-flex">
-              <Button
+              
+              {record.role.can_add_positions ? (<Button
                 onClick={(event) => {
                   event.stopPropagation();
                   handleEditRow(record);
                 }}
               >
                 <EditIcon />
-              </Button>
+              </Button>)
+              : null}
+              
             </Space>
           ),
         },
@@ -173,6 +177,180 @@ export const userManagementColumns = ({handleEditRow,handleChangePassword}) => {
   return columns;
 };
   
+
+//-------------------- Debris Type Table Columns --------------------//
+
+//-------------------- User Positions Table Columns --------------------//
+
+export const debrisTypeColumns = ({handleEditRow}) => {
+  let columns = [
+      { title: 'Debris Name', dataIndex: 'name', key: 'name' },
+      {
+        title: "Status",
+        dataIndex: "is_active",
+        key: "is_active",
+        render: (_, record) =>
+          record.is_active === true ? (
+            <Tag bordered={false} color="green" style={{borderRadius:"12px"}}>
+              Active
+            </Tag>
+          ) : (
+            <Tag bordered={false} color="red" style={{borderRadius:"12px"}}>
+              InActive
+            </Tag>
+          ),
+      },
+      {
+          title: "Actions",
+          key: "action",
+          render: (_, record) => (
+            <Space size="middle" className="d-flex">
+              <Button
+                onClick={(event) => {
+                  event.stopPropagation();
+                  handleEditRow(record);
+                }}
+              >
+                <EditIcon />
+              </Button>
+            </Space>
+          ),
+      },
+    ];
+
+  return columns;
+};
+
+
+//-------------------- Truck Description Table Columns --------------------//
+
+export const truckDescriptionColumns = ({handleEditRow}) => {
+  let columns = [
+      { title: 'Truck Type', dataIndex: 'truckType', key: 'truckType' },
+      { title: 'Description', dataIndex: 'description', key: 'description' },
+      {
+        title: "Status",
+        dataIndex: "status",
+        key: "status",
+        render: (_, record) =>
+          record.status === true ? (
+            <Tag bordered={false} color="green" style={{borderRadius:"12px"}}>
+              Active
+            </Tag>
+          ) : (
+            <Tag bordered={false} color="red" style={{borderRadius:"12px"}}>
+              InActive
+            </Tag>
+          ),
+      },
+      {
+          title: "Actions",
+          key: "action",
+          render: (_, record) => (
+            <Space size="middle" className="d-flex">
+              <Button
+                onClick={(event) => {
+                  event.stopPropagation();
+                  handleEditRow(record);
+                }}
+              >
+                <EditIcon />
+              </Button>
+            </Space>
+          ),
+      },
+    ];
+
+  return columns;
+};
+
+
+//-------------------- Sub Activity Table Columns --------------------//
+
+
+export const subActivityColumns = ({handleEditRow}) => {
+  let columns = [
+      { title: 'Sub-Activity Name', dataIndex: 'subActivityName', key: 'subActivityName' },
+      {
+        title: "Status",
+        dataIndex: "status",
+        key: "status",
+        render: (_, record) =>
+          record.status === true ? (
+            <Tag bordered={false} color="green" style={{borderRadius:"12px"}}>
+              Active
+            </Tag>
+          ) : (
+            <Tag bordered={false} color="red" style={{borderRadius:"12px"}}>
+              InActive
+            </Tag>
+          ),
+      },
+      {
+          title: "Actions",
+          key: "action",
+          render: (_, record) => (
+            <Space size="middle" className="d-flex">
+              <Button
+                onClick={(event) => {
+                  event.stopPropagation();
+                  handleEditRow(record);
+                }}
+              >
+                <EditIcon />
+              </Button>
+            </Space>
+          ),
+      },
+    ];
+
+  return columns;
+};
+
+
+//-------------------- Hazard Management Table Columns --------------------//
+
+
+export const hazardManagementColumns = ({isHazardNameTable,handleEditRow}) => {
+  let columns = [
+      { title: 'Hazard Type', dataIndex: 'hazardType', key: 'hazardType' },
+      isHazardNameTable && { title: 'Hazard Name', dataIndex: 'hazardName', key: 'hazardName' },
+      {
+        title: "Status",
+        dataIndex: "status",
+        key: "status",
+        render: (_, record) =>
+          record.status === true ? (
+            <Tag bordered={false} color="green" style={{borderRadius:"12px"}}>
+              Active
+            </Tag>
+          ) : (
+            <Tag bordered={false} color="red" style={{borderRadius:"12px"}}>
+              InActive
+            </Tag>
+          ),
+      },
+      {
+          title: "Actions",
+          key: "action",
+          render: (_, record) => (
+            <Space size="middle" className="d-flex">
+              <Button
+                onClick={(event) => {
+                  event.stopPropagation();
+                  handleEditRow(record);
+                }}
+              >
+                <EditIcon />
+              </Button>
+            </Space>
+          ),
+      },
+    ];
+
+  return columns;
+};
+
 
 
 //-------------------- Styled Button Component --------------------//

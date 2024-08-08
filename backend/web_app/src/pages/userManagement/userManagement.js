@@ -15,6 +15,7 @@ import { main_api } from '../../api/axiosHelper';
 import { adminAPIsEndPoints } from '../../constants/apiEndPoints';
 import { status } from '../../util/dropdownData';
 import ResetPassword from '../../components/auth/resetPassword';
+import CustomFilter from '../../components/customFilterWithSearchBar/customFilter';
 
 export default function UserManagement() {
 
@@ -34,6 +35,7 @@ export default function UserManagement() {
       label: role.name,
       value: role.id,
     }));
+    
   //------------------ Function to Fetch Data ---------------------//
 
   
@@ -47,7 +49,8 @@ export default function UserManagement() {
       if (result) {
         const transformedData = result.map(item => ({
           key: item?.id, 
-          name: item?.name || '---', 
+          name: item?.name || '---',
+          phone_number: item?.phone_number || '---', 
           role: item?.role?.name || '---',
           roleData: item?.role,
           position: item?.position?.name || '---',
@@ -123,67 +126,81 @@ export default function UserManagement() {
 
   //------------------ Functions to Handle Add and Edit User ---------------------//
 
-  const handleEditUser = (values, selectedRoleType, selectedPositionName) => {
-    const payload = {
+  const handleEditUser = async (values, selectedRoleType, selectedPositionName) => {
+    
+    let payload = {
       name: values?.name || '',
       email: values?.email || '',
       phone_number: values?.telephone_number || '',
-      is_active: values?.is_active || '',
-      password: values?.password || '',
-      confirm_password: values?.confirm_password || '',
-      role: values?.role || '',
-      position: values?.position || '',
-    }
-
-    if(selectedRoleType === "Contractor" && selectedPositionName === "Sub Contractor"){
-      payload = {
-        ...payload, 
-        prime_contractor: values?.prime_contractor || '',
-        additional_data:{
-          company_name: values?.company_name || '',
-          prefix: values?.prefix || '',
-        },
-      };
-    }
-    const id = selectedUser.key;
-    try {
-      updateUser(id, payload);
-      fetchData();
-    } catch (error) {
-      pushNotification('Error updating user', "error");
-    }
-    setUpdateUserModal(false);
-  }
-
-  const handleAddUser = async (values, selectedRoleType, selectedPositionName) => {
-    const payload = {
-      name: values?.name || '',
-      email: values?.email || '',
-      phone_number: values?.telephone_number || '',
-      is_active: values?.is_active || '',
+      is_active: values?.is_active || false,
       password: values?.password || '',
       confirm_password: values?.confirm_password || '',
       role: values?.role || '',
       position: values?.position || '',
     }
     
-    if(selectedRoleType === "Contractor" && selectedPositionName === "Sub Contractor"){
-      payload = {
-        ...payload, 
-        prime_contractor: values?.prime_contractor || '',
-        additional_data:{
-          company_name: values?.company_name || '',
-          prefix: values?.prefix || '',
-        },
-      };
+    payload = {
+      ...payload,
+      additional_data: {}
+    };
+
+    if (selectedRoleType === "contractor") {
+      payload.additional_data.company_name = values?.company_name || '';
+      payload.additional_data.prefix = values?.prefix || '';
+
+      if (selectedPositionName === "Sub Contractor") {
+        payload.prime_contractor = values?.prime_contractor || '';
+      }
+    }
+    const id = selectedUser.key;
+    try {
+      const response = await main_api.put(adminAPIsEndPoints.UPDATE_USER(id), payload);
+      if (response.status === 200) {
+          pushNotification("User updated successfully", "success");
+          fetchData();
+          setUpdateUserModal(false);
+      }
+    } catch (error) {
+        pushNotification(error.response.data.detail, "error");
+    }
+  }
+
+  const handleAddUser = async (values, selectedRoleType, selectedPositionName) => {
+    let payload = {
+      name: values?.name || '',
+      email: values?.email || '',
+      phone_number: values?.telephone_number || '',
+      is_active: values?.is_active || true,
+      password: values?.password || '',
+      confirm_password: values?.confirm_password || '',
+      role: values?.role || '',
+      position: values?.position || '',
+    }
+    
+    payload = {
+      ...payload,
+      additional_data: {}
+    };
+
+    if (selectedRoleType === "contractor") {
+      payload.additional_data.company_name = values?.company_name || '';
+      payload.additional_data.prefix = values?.prefix || '';
+
+      if (selectedPositionName === "Sub Contractor") {
+        payload.prime_contractor = values?.prime_contractor || '';
+      }
     }
     try {
-      await addUser(payload);
-      fetchData(); 
+      const response = await main_api.post(adminAPIsEndPoints.CREATE_USER, payload);
+      if (response.status === 201) {
+          pushNotification("User added successfully", "success");
+          fetchData();
+          setUpdateUserModal(false);
+
+      }
     } catch (error) {
-      pushNotification('Error adding user', "error");
+        pushNotification(error.response.data.detail, "error");
     }
-    setUpdateUserModal(false);
   }
 
 
@@ -191,53 +208,41 @@ export default function UserManagement() {
     <div style={{ marginTop: '10px' }}>
     <CustomCard style={{ boxShadow: '0px 4px 12px rgba(0, 0, 0, 0.1)' }}>
         <div style={{display:"flex", flexDirection:"row", justifyContent:"space-between"}}>
-          <Heading text="Manage Users" margin="0px 0px 0px 20px" fontSize="1.3rem" color="#3B3B3B" />
+          <Heading text="Manage Users" margin="0px 0px 0px 5px" fontSize="1.3rem" color="#3B3B3B" />
           <CustomButton btnText={"Add User"} color={"white"} onClick={handleAddRow} />
         </div>
-        <div style={{display:"flex", flexDirection:"row"}}>
-
-        <SearchInputWrapper>
-            <SearchInput onBlur={(e) => handleSearch(e.target.value)} placeholder="Search By Name..." />
-        </SearchInputWrapper>
-        <Select 
-          placeholder="Select" 
-          options={roles}
-          onChange={(e)=>{ 
-            setRoleSelected(e);
-          }} 
-          style={{marginLeft:"20px",position:"relative", top:"12px", left:"6px", width:"260px", height:"40px"}}
-        />
-        <Select 
-          placeholder="Select" 
-          options={status} 
-          onChange={(e)=>{
-            setStatusSelected(e); 
-          }} 
-          style={{marginLeft:"8px",position:"relative", top:"12px", left:"6px", width:"260px", height:"40px"}}
-        />
-        <div style={{marginLeft:"8px",position:"relative", top:"12px", left:"6px", width:"260px", height:"40px"}}>
-
-        <CustomButton
-          btnText={"Reset Filter"}
-          color={"red"}
-          margin="0px 5px"
-          noBackground
-          hideIcon={true}
-          onClick={() => {
+        <CustomFilter 
+          searchBar={true}
+          filter1={true}
+          filter2={true}
+          resetFilters={true}
+          searchBarPlaceholder="Search By Name..."
+          filter1Placeholder="Select Role"
+          filter2Placeholder="Select Status"
+          resetFiltersText="Reset Filter"
+          filter1Options={roles}
+          filter2Options={status}
+          onSearchBarBlur={(e) => setSearchedValue(e)}
+          onFilter1Change={(e) => setRoleSelected(e)}
+          onFilter2Change={(e) => setStatusSelected(e)}
+          onResetFiltersClick={() => {
             setRoleSelected(null);
             setStatusSelected(null);
             setSearchedValue('');
             fetchData();
           }}
+          filter1Style={{marginLeft:"20px", marginBottom: "20px", position:"relative", top:"12px", left:"6px", width:"260px", height:"40px"}}
+          filter2Style={{marginLeft:"8px", marginBottom: "20px", position:"relative", top:"12px", left:"6px", width:"260px", height:"40px"}}
+          resetFiltersStyle={{cursor:"pointer",color:"#EE3E41",marginLeft:"15px", marginBottom: "20px", position:"relative", top:"20px", left:"6px", width:"260px", height:"40px"}}
         />
-        </div>
-        </div>
         <AntdesignTablePagination 
           columns={userManagementColumns({handleEditRow,handleChangePassword})} 
           data={data}
           totalCount={count}
           loadPaginatedData={fetchData} 
-          allowRowSelection={false} 
+          allowRowSelection={false}
+          tableHeight={500}
+          tableWidth={1200} 
         />
     </CustomCard>
     {updateUserModal && <UpdateUser isModalOpen={updateUserModal} title={selectedUser ? "Edit User" : "Add User"} onFinish={selectedUser ? handleEditUser : handleAddUser  } setModalOpen={setUpdateUserModal} editUserValues={selectedUser}/>}
@@ -252,10 +257,11 @@ const Heading = ({ text = "", margin, fontSize = "0.75rem", color = "#3B3B3B" })
 
 const CustomCard = styled(Card)`
   width: calc(100vw - 40px);
-  max-width: 1605px;
+  max-width: 1570px;
   height: calc(100vh - 40px);
-  max-height: 912px;
-  margin: 20px;
+  max-height: 750px;
+  margin-top: 40px;
+  margin-left: 40px;
   background-color: white;
   
   @media (max-width: 768px) {
