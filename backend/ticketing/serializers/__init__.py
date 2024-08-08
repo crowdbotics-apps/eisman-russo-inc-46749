@@ -5,6 +5,8 @@ from .project import (
     TruckTypeSerializer,
     ProjectResponseSerialzer,
     ProjectCreateUpdateSerializer,
+    ContractorRateMatrixSerializer,
+    ContractorRateMatrixModifySerializer,
 )
 
 
@@ -19,4 +21,6 @@ __all__ = [
     "TruckTypeSerializer",
     "ProjectResponseSerialzer",
     "ProjectCreateUpdateSerializer",
+    "ContractorRateMatrixSerializer",
+    "ContractorRateMatrixModifySerializer",
 ]

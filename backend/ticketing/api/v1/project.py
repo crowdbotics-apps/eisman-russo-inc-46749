@@ -9,12 +9,14 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
 
-from ticketing.models import SubActivity, TruckType, Project
+from ticketing.models import SubActivity, TruckType, Project, ContractorRateMatrix
 from ticketing.serializers import (
     SubActivitySerializer,
     TruckTypeSerializer,
     ProjectCreateUpdateSerializer,
     ProjectResponseSerialzer,
+    ContractorRateMatrixSerializer,
+    ContractorRateMatrixModifySerializer,
 )
 from ticketing.filters import ProjectFilters
 from ticketing.services import ProjectService
@@ -295,4 +297,55 @@ class ProjectViewSet(viewsets.ModelViewSet):
         project.delete()
         return Response(
             {"detail": "Project Deleted Successfully"}, status=status.HTTP_200_OK
+        )
+
+
+class ContractorRateMatrixViewSet(viewsets.ModelViewSet):
+    permission_classes = [IsAuthenticated]
+    queryset = ContractorRateMatrix.objects.all()
+    serializer_class = ContractorRateMatrixSerializer
+    filterset_fields = ["project"]
+    pagination_class = ListPagination
+    ordering = ["-created_at"]
+
+    def list(self, request, *args, **kwargs):
+        queryset = self.filter_queryset(self.get_queryset())
+        page = self.paginate_queryset(queryset)
+        serializer = self.serializer_class(page, many=True)
+        paginated_response = self.get_paginated_response(serializer.data)
+        return paginated_response
+
+    def create(self, request, *args, **kwargs):
+        serializer = ContractorRateMatrixModifySerializer(data=request.data)
+        if serializer.is_valid():
+            matrix = serializer.save()
+            matrix_serializer = self.serializer_class(matrix)
+            return Response(
+                {"result": matrix_serializer.data}, status=status.HTTP_201_CREATED
+            )
+
+        message = error_handler(serializer.errors)
+        return Response({"detail": message}, status=status.HTTP_400_BAD_REQUEST)
+
+    def update(self, request, *args, **kwargs):
+        matrix = self.get_object()
+        serializer = ContractorRateMatrixModifySerializer(
+            instance=matrix, data=request.data, partial=True
+        )
+        if serializer.is_valid():
+            matrix = serializer.save()
+            matrix_serializer = self.serializer_class(matrix)
+            return Response(
+                {"result": matrix_serializer.data}, status=status.HTTP_200_OK
+            )
+
+        message = error_handler(serializer.errors)
+        return Response({"detail": message}, status=status.HTTP_400_BAD_REQUEST)
+
+    def destroy(self, request, *args, **kwargs):
+        matrix = self.get_object()
+        matrix.delete()
+        return Response(
+            {"detail": "Contractor Rate Matrix Deleted Successfully"},
+            status=status.HTTP_200_OK,
         )
