@@ -11,6 +11,9 @@ function api_docs_schema_retrieve(payload) {
 function api_v1_signup_create(payload) {
   return eismanrussoincAPI.post(`/api/v1/signup/`, payload)
 }
+function file_create(payload) {
+  return eismanrussoincAPI.post(`/file/`)
+}
 function rest_auth_login_create(payload) {
   return eismanrussoincAPI.post(`/rest-auth/login/`, payload)
 }
@@ -162,6 +165,35 @@ function ticketing_hazard_type_partial_update(payload) {
 function ticketing_hazard_type_destroy(payload) {
   return eismanrussoincAPI.delete(`/ticketing/hazard-type/${payload.id}/`)
 }
+function ticketing_rate_matrix_list(payload) {
+  return eismanrussoincAPI.get(`/ticketing/rate-matrix/`, {
+    params: {
+      ordering: payload.ordering,
+      page: payload.page,
+      page_size: payload.page_size,
+      project: payload.project,
+      search: payload.search
+    }
+  })
+}
+function ticketing_rate_matrix_create(payload) {
+  return eismanrussoincAPI.post(`/ticketing/rate-matrix/`, payload)
+}
+function ticketing_rate_matrix_retrieve(payload) {
+  return eismanrussoincAPI.get(`/ticketing/rate-matrix/${payload.id}/`)
+}
+function ticketing_rate_matrix_update(payload) {
+  return eismanrussoincAPI.put(`/ticketing/rate-matrix/${payload.id}/`, payload)
+}
+function ticketing_rate_matrix_partial_update(payload) {
+  return eismanrussoincAPI.patch(
+    `/ticketing/rate-matrix/${payload.id}/`,
+    payload
+  )
+}
+function ticketing_rate_matrix_destroy(payload) {
+  return eismanrussoincAPI.delete(`/ticketing/rate-matrix/${payload.id}/`)
+}
 function ticketing_sub_activity_list(payload) {
   return eismanrussoincAPI.get(`/ticketing/sub-activity/`, {
     params: {
@@ -222,6 +254,20 @@ function ticketing_truck_type_partial_update(payload) {
 }
 function ticketing_truck_type_destroy(payload) {
   return eismanrussoincAPI.delete(`/ticketing/truck-type/${payload.id}/`)
+}
+function users_attachments_list(payload) {
+  return eismanrussoincAPI.get(`/users/attachments/`, {
+    params: {
+      ordering: payload.ordering,
+      page: payload.page,
+      page_size: payload.page_size,
+      search: payload.search,
+      user: payload.user
+    }
+  })
+}
+function users_attachments_retrieve(payload) {
+  return eismanrussoincAPI.get(`/users/attachments/${payload.id}/`)
 }
 function users_login_create(payload) {
   return eismanrussoincAPI.post(`/users/login/`, payload)
@@ -287,6 +333,9 @@ function users_profile_change_password_create(payload) {
 function users_profile_details_retrieve(payload) {
   return eismanrussoincAPI.get(`/users/profile/details/`)
 }
+function users_profile_reset_password_create(payload) {
+  return eismanrussoincAPI.post(`/users/profile/reset_password/`, payload)
+}
 function users_role_list(payload) {
   return eismanrussoincAPI.get(`/users/role/`, {
     params: {
@@ -302,6 +351,7 @@ function users_role_retrieve(payload) {
 export const apiService = {
   api_docs_schema_retrieve,
   api_v1_signup_create,
+  file_create,
   rest_auth_login_create,
   rest_auth_logout_create,
   rest_auth_password_change_create,
@@ -337,6 +387,12 @@ export const apiService = {
   ticketing_hazard_type_update,
   ticketing_hazard_type_partial_update,
   ticketing_hazard_type_destroy,
+  ticketing_rate_matrix_list,
+  ticketing_rate_matrix_create,
+  ticketing_rate_matrix_retrieve,
+  ticketing_rate_matrix_update,
+  ticketing_rate_matrix_partial_update,
+  ticketing_rate_matrix_destroy,
   ticketing_sub_activity_list,
   ticketing_sub_activity_create,
   ticketing_sub_activity_retrieve,
@@ -349,6 +405,8 @@ export const apiService = {
   ticketing_truck_type_update,
   ticketing_truck_type_partial_update,
   ticketing_truck_type_destroy,
+  users_attachments_list,
+  users_attachments_retrieve,
   users_login_create,
   users_position_list,
   users_position_create,
@@ -364,6 +422,7 @@ export const apiService = {
   users_profile_destroy,
   users_profile_change_password_create,
   users_profile_details_retrieve,
+  users_profile_reset_password_create,
   users_role_list,
   users_role_retrieve
 }

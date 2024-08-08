@@ -2,7 +2,15 @@ from django.db import transaction
 from rest_framework import viewsets, status
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
-from .models import DebrisType, Event, HazardName, HazardType, SubActivity, TruckType
+from .models import (
+    DebrisType,
+    Event,
+    HazardName,
+    HazardType,
+    SubActivity,
+    TruckType,
+    ContractorRateMatrix,
+)
 from .serializers import (
     DebrisSerializer,
     EventSerializer,
@@ -11,6 +19,8 @@ from .serializers import (
     HazardTypeSerializer,
     SubActivitySerializer,
     TruckTypeSerializer,
+    ContractorRateMatrixSerializer,
+    ContractorRateMatrixModifySerializer,
 )
 from base.pagination import ListPagination
 from base.utils import error_handler
@@ -62,7 +72,8 @@ class DebrisViewSet(viewsets.ModelViewSet):
         debris = self.get_object()
         debris.delete()
         return Response(
-            {"detail": "Debris Type Deleted Successfully"}, status=status.HTTP_200_OK
+            {"detail": "Debris Type Deleted Successfully"},
+            status=status.HTTP_204_NO_CONTENT,
         )
 
 
@@ -120,7 +131,7 @@ class EventViewSet(viewsets.ModelViewSet):
         evnet = self.get_object()
         evnet.delete()
         return Response(
-            {"detail": "Event Deleted Successfully"}, status=status.HTTP_200_OK
+            {"detail": "Event Deleted Successfully"}, status=status.HTTP_204_NO_CONTENT
         )
 
 
@@ -170,7 +181,8 @@ class HazardTypeViewSet(viewsets.ModelViewSet):
         hazard = self.get_object()
         hazard.delete()
         return Response(
-            {"detail": "Hazard Type Deleted Successfully"}, status=status.HTTP_200_OK
+            {"detail": "Hazard Type Deleted Successfully"},
+            status=status.HTTP_204_NO_CONTENT,
         )
 
 
@@ -220,7 +232,8 @@ class HazardNameViewSet(viewsets.ModelViewSet):
         hazard = self.get_object()
         hazard.delete()
         return Response(
-            {"detail": "Hazard Name Deleted Successfully"}, status=status.HTTP_200_OK
+            {"detail": "Hazard Name Deleted Successfully"},
+            status=status.HTTP_204_NO_CONTENT,
         )
 
 
@@ -270,7 +283,8 @@ class SubActivityViewSet(viewsets.ModelViewSet):
         subactivity = self.get_object()
         subactivity.delete()
         return Response(
-            {"detail": "SubActivity Deleted Successfully"}, status=status.HTTP_200_OK
+            {"detail": "SubActivity Deleted Successfully"},
+            status=status.HTTP_204_NO_CONTENT,
         )
 
 
@@ -320,5 +334,57 @@ class TruckTypeViewSet(viewsets.ModelViewSet):
         truck = self.get_object()
         truck.delete()
         return Response(
-            {"detail": "Truck Type Deleted Successfully"}, status=status.HTTP_200_OK
+            {"detail": "Truck Type Deleted Successfully"},
+            status=status.HTTP_204_NO_CONTENT,
+        )
+
+
+class ContractorRateMatrixViewSet(viewsets.ModelViewSet):
+    permission_classes = [IsAuthenticated]
+    queryset = ContractorRateMatrix.objects.all()
+    serializer_class = ContractorRateMatrixSerializer
+    filterset_fields = ["project"]
+    pagination_class = ListPagination
+    ordering = ["-created_at"]
+
+    def list(self, request, *args, **kwargs):
+        queryset = self.filter_queryset(self.get_queryset())
+        page = self.paginate_queryset(queryset)
+        serializer = self.serializer_class(page, many=True)
+        paginated_response = self.get_paginated_response(serializer.data)
+        return paginated_response
+
+    def create(self, request, *args, **kwargs):
+        serializer = ContractorRateMatrixModifySerializer(data=request.data)
+        if serializer.is_valid():
+            matrix = serializer.save()
+            matrix_serializer = self.serializer_class(matrix)
+            return Response(
+                {"result": matrix_serializer.data}, status=status.HTTP_201_CREATED
+            )
+
+        message = error_handler(serializer.errors)
+        return Response({"detail": message}, status=status.HTTP_400_BAD_REQUEST)
+
+    def update(self, request, *args, **kwargs):
+        matrix = self.get_object()
+        serializer = ContractorRateMatrixModifySerializer(
+            instance=matrix, data=request.data, partial=True
+        )
+        if serializer.is_valid():
+            matrix = serializer.save()
+            matrix_serializer = self.serializer_class(matrix)
+            return Response(
+                {"result": matrix_serializer.data}, status=status.HTTP_200_OK
+            )
+
+        message = error_handler(serializer.errors)
+        return Response({"detail": message}, status=status.HTTP_400_BAD_REQUEST)
+
+    def destroy(self, request, *args, **kwargs):
+        matrix = self.get_object()
+        matrix.delete()
+        return Response(
+            {"detail": "Contractor Rate Matrix Deleted Successfully"},
+            status=status.HTTP_200_OK,
         )
