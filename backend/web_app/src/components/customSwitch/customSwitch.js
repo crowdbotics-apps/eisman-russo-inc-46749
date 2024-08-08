@@ -17,7 +17,7 @@ export default function CustomSwitch({ value = true, onChange }) {
 
   return (
     <Switch
-      style={{ backgroundColor: status ? "#3669AE" : "#BAC4CF", width: "80px", height: "25px", borderRadius: "15px", marginTop: "8px" }}
+      style={{ backgroundColor: status ? "#3669AE" : "#BAC4CF", width: "80px", height: "22.5px", borderRadius: "15px", marginTop: "8px" }}
       checkedChildren={
         <span>
           {status && <CheckIcon style={{ position: "relative", bottom: "1px", left: "36px" }} />}

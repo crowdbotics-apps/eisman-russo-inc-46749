@@ -12,7 +12,7 @@ from django.contrib.auth.models import Permission
 from base.decorators import check_permissions
 from base.pagination import ListPagination
 from base.utils import error_handler
-from users.models import Role, Position
+from users.models import Role, Position, UserAttachments
 from users.serializers import (
     RoleSerializer,
     UserCreateSerializer,
@@ -23,6 +23,8 @@ from users.serializers import (
     UserUpdateSerializer,
     UserProfileSerializer,
     ChangePasswordSerializer,
+    UserAttachmentsReadSerializer,
+    ResetPasswordSerializer,
 )
 from users.utils import validate_platform
 
@@ -107,7 +109,7 @@ class UserViewSet(ModelViewSet):
         instance = self.get_object()
         instance.delete()
         return Response(
-            {"detail": "User Deleted Successfully"}, status=status.HTTP_200_OK
+            {"detail": "User Deleted Successfully"}, status=status.HTTP_204_NO_CONTENT
         )
 
     @action(detail=False, methods=["get"])
@@ -117,19 +119,32 @@ class UserViewSet(ModelViewSet):
         return Response({"result": serializer.data}, status=status.HTTP_200_OK)
 
     @action(detail=False, methods=["post"])
-    def change_password(self, request, *args, **kwargs):
-        serializer = ChangePasswordSerializer(data=request.data)
+    def reset_password(self, request, *args, **kwargs):
+        serializer = ResetPasswordSerializer(data=request.data)
         if serializer.is_valid():
-            user_id = request.data.get("user_id", None)
-            if user_id:
-                user = User.objects.filter(id=user_id).first()
-                if not user:
-                    return Response(
-                        {"detail": "User does not exist"},
-                        status=status.HTTP_400_BAD_REQUEST,
-                    )
-            else:
-                user = request.user
+            user = request.user
+            new_password = serializer.validated_data["new_password"]
+
+            # Set the new password
+            user.set_password(new_password)
+            user.save()
+            return Response(
+                {"detail": "Password has been changed successfully."},
+                status=status.HTTP_200_OK,
+            )
+
+        message = error_handler(serializer.errors)
+
+        return Response({"detail": message}, status=status.HTTP_400_BAD_REQUEST)
+
+    @action(detail=False, methods=["post"])
+    def change_password(self, request, *args, **kwargs):
+        user = request.user
+        serializer = ChangePasswordSerializer(
+            data=request.data,
+            context={"user": user},
+        )
+        if serializer.is_valid():
             new_password = serializer.validated_data["new_password"]
 
             # Set the new password
@@ -236,7 +251,8 @@ class PositionViewSet(ModelViewSet):
         position.delete()
 
         return Response(
-            {"detail": "Position Deleted Successfully"}, status=status.HTTP_200_OK
+            {"detail": "Position Deleted Successfully"},
+            status=status.HTTP_204_NO_CONTENT,
         )
 
 
@@ -252,3 +268,22 @@ class RoleViewSet(ModelViewSet):
         roles = self.filter_queryset(roles)
         serializer = RoleSerializer(roles, many=True)
         return Response({"results": serializer.data}, status=status.HTTP_200_OK)
+
+
+class UserAttachmentsViewSet(ModelViewSet):
+    permission_classes = [IsAuthenticated]
+    queryset = UserAttachments.objects.all()
+    serializer_class = UserAttachmentsReadSerializer
+    http_method_names = ["get"]
+    filterset_fields = ["user"]
+    ordering = ["-created_at"]
+    pagination_class = ListPagination
+
+    def list(self, request, *args, **kwargs):
+        queryset = self.get_queryset()
+        queryset = self.filter_queryset(queryset)
+        page = self.paginate_queryset(queryset)
+        serializer = self.serializer_class(page, many=True)
+        paginated_response = self.get_paginated_response(serializer.data)
+        return paginated_response
+

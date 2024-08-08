@@ -40,7 +40,8 @@ export const userRolesColumns =  [
 
 //-------------------- User Positions Table Columns --------------------//
 
-export const userPositionsColumns = ({handleEditRow}) => {
+export const userPositionsColumns = ({roleState,handleEditRow}) => {
+  
   let columns = [
       { title: 'User Role', dataIndex: 'userType', key: 'userType' },
       { title: 'Position Name', dataIndex: 'name', key: 'name' },
@@ -50,14 +51,17 @@ export const userPositionsColumns = ({handleEditRow}) => {
           key: "action",
           render: (_, record) => (
             <Space size="middle" className="d-flex">
-              <Button
+              
+              {record.role.can_add_positions ? (<Button
                 onClick={(event) => {
                   event.stopPropagation();
                   handleEditRow(record);
                 }}
               >
                 <EditIcon />
-              </Button>
+              </Button>)
+              : null}
+              
             </Space>
           ),
         },

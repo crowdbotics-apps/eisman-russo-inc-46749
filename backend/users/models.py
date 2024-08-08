@@ -1,4 +1,3 @@
-from django.contrib.auth.base_user import BaseUserManager
 from django.contrib.auth.models import AbstractUser
 from django.contrib.auth.validators import UnicodeUsernameValidator
 from django.contrib.postgres.fields import ArrayField
@@ -45,6 +44,14 @@ class Position(BaseFieldModel):
         permissions = [
             ("can_manage_position", "Can manage position"),
         ]
+
+
+class UserAttachments(BaseFieldModel):
+    key = models.TextField()
+    type = models.CharField(max_length=255)
+    user = models.ForeignKey(
+        "User", on_delete=models.CASCADE, related_name="attachments"
+    )
 
 
 class User(AbstractUser):
@@ -117,6 +124,20 @@ class User(AbstractUser):
     def get_absolute_url(self):
         return reverse("users:detail", kwargs={"username": self.username})
 
+    def create_attachments(self, attachments_data):
+        if attachments_data:
+            attachments = [
+                UserAttachments(user=self, **attachment_data)
+                for attachment_data in attachments_data
+            ]
+            UserAttachments.objects.bulk_create(attachments)
+
+    def delete_attachments(self, attachments_data):
+        if attachments_data:
+            UserAttachments.objects.filter(
+                user=self,
+                id__in=[attachment_data for attachment_data in attachments_data],
+            ).delete()
 
     class Meta:
         constraints = [

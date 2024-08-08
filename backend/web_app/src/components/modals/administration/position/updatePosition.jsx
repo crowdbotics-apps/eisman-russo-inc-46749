@@ -20,7 +20,7 @@ export default function UpdatePosition({
 
   const rolesState = useSelector((state) => state.roles.roles);
 
-  const roles = rolesState.map((role) => {
+  const roles = rolesState.filter((role)=> role.can_add_positions === true).map((role) => {
     return {
       label: role.name,
       value: role.id,
@@ -32,10 +32,10 @@ export default function UpdatePosition({
   useEffect(() => {
     if (editPositionValues) {
       form.setFieldsValue({
-        role: editPositionValues.role.id,
-        name: editPositionValues.name,
-        platform_type: editPositionValues.platform_type,
-        is_project_specific_position: editPositionValues.is_project_specific_position,
+        role: editPositionValues?.role?.id,
+        name: editPositionValues?.name,
+        platform_type: editPositionValues?.platform_type.charAt(0).toLowerCase() + editPositionValues?.platform_type.slice(1),
+        is_project_specific_position: editPositionValues?.is_project_specific_position,
       });
     }
   }, [editPositionValues]);

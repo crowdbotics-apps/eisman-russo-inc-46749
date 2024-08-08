@@ -21,6 +21,8 @@ from allauth.account.views import confirm_email
 from rest_framework import permissions
 from drf_spectacular.views import SpectacularJSONAPIView, SpectacularSwaggerView
 
+from base.views import FileUploadView
+
 urlpatterns = [
     path("accounts/", include("allauth.urls")),
     path("modules/", include("modules.urls")),
@@ -28,6 +30,7 @@ urlpatterns = [
     path("admin/", admin.site.urls),
     path("users/", include("users.urls", namespace="users")),
     path("ticketing/", include("ticketing.urls", namespace="ticketing")),
+    path("file/", FileUploadView.as_view(), name="file"),
     path("rest-auth/", include("dj_rest_auth.urls")),
     # Override email confirm to use allauth's HTML view instead of rest_auth's API view
     path("rest-auth/registration/account-confirm-email/<str:key>/", confirm_email),

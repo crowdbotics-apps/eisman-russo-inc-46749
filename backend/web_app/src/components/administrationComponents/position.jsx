@@ -101,6 +101,8 @@ export default function Position({}) {
 
   const handleEditPosition = async (values) => {
     const id = editPositionValues.id;
+    console.log("values", values);
+    
    
     try {
       const response = await main_api.put(adminAPIsEndPoints.UPDATE_POSITION(id), values);
@@ -120,6 +122,8 @@ export default function Position({}) {
 
 
   const handleAddPosition = async (values) => {
+    console.log("values", values);
+    
     try {
       const response = await main_api.post(adminAPIsEndPoints.ADD_POSITION, values);
       if (response.status === 201) {
@@ -168,7 +172,7 @@ export default function Position({}) {
           resetFiltersStyle={{cursor:"pointer",color:"#EE3E41",marginLeft:"15px", marginBottom: "20px", position:"relative", top:"20px", left:"6px", width:"260px", height:"40px"}}
         />
         <AntdesignTablePagination 
-          columns={userPositionsColumns({handleEditRow})} 
+          columns={userPositionsColumns({rolesState,handleEditRow})} 
           data={data}
           totalCount={count}
           loadPaginatedData={fetchData} 

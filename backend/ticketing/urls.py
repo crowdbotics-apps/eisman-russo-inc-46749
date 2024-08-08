@@ -8,11 +8,11 @@ from .viewsets import (
     HazardTypeViewSet,
     TruckTypeViewSet,
     SubActivityViewSet,
+    ContractorRateMatrixViewSet,
+    PermissionViewSet,
+
 )
-from rest_framework_simplejwt.views import (
-    TokenObtainPairView,
-    TokenRefreshView,
-)
+
 
 
 router = DefaultRouter()
@@ -22,6 +22,10 @@ router.register("hazard-name", HazardNameViewSet, basename="hazard-name")
 router.register("hazard-type", HazardTypeViewSet, basename="hazard-type")
 router.register("truck-type", TruckTypeViewSet, basename="truck-type")
 router.register("sub-activity", SubActivityViewSet, basename="sub-activity")
+router.register("rate-matrix", ContractorRateMatrixViewSet, basename="rate-matrix")
+router.register("permissions", PermissionViewSet, basename="permissions")
+
+
 
 
 
@@ -29,6 +33,5 @@ app_name = "ticketing"
 
 urlpatterns = [
     path("", include(router.urls)),
-    path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
-    path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
+
 ]

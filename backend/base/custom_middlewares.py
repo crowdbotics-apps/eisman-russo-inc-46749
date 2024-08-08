@@ -1,6 +1,5 @@
-from django.http import HttpResponseForbidden, HttpResponse, JsonResponse
+from django.http import JsonResponse
 from django.utils.deprecation import MiddlewareMixin
-from requests import Response
 from rest_framework_simplejwt.authentication import JWTAuthentication
 from rest_framework_simplejwt.exceptions import InvalidToken, TokenError
 from rest_framework import status

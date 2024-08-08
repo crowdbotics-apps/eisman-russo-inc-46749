@@ -12,15 +12,36 @@ from .models import (
     HazardName,
     TruckType,
     SubActivity,
+    ContractorRateMatrix,
 )
+from .utils import rate_matrix_custom_fields, get_rate_matrix_custom_fields
+
+from django.contrib.auth.models import Permission
+from django.contrib.auth import get_user_model
+
+User = get_user_model()
 
 
-class UserPermissionSerializer(serializers.ModelSerializer):
+
+import django_filters
+
+class UserFilter(django_filters.FilterSet):
+    role = django_filters.CharFilter(field_name="role__id")
+
+    class Meta:
+        model = User
+        fields = ['role']
+
+class PermissionSerializer(serializers.ModelSerializer):
     class Meta:
         model = Permission
-        fields = "__all__"
+        fields = ['id', 'codename']
 
-
+class UserPermissionSerializer(serializers.ModelSerializer):
+    user_permissions = PermissionSerializer(many=True) 
+    class Meta:
+        model = User
+        fields = ["id","name","role","position","email","user_permissions"]
 
 class SubActivitySerializer(serializers.ModelSerializer):
     class Meta:
@@ -238,4 +259,80 @@ class EventCreateSerializer(serializers.ModelSerializer):
         ):
             instance.fema_dates.all().delete()
 
+        return instance
+
+
+class ContractorRateMatrixSerializer(serializers.ModelSerializer):
+    debris_type = DebrisSerializer()
+
+    class Meta:
+        model = ContractorRateMatrix
+        fields = "__all__"
+
+
+class ContractorRateMatrixModifySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ContractorRateMatrix
+        fields = "__all__"
+
+    def validate(self, data):
+        rate_matrix_fields = (
+            data.get("debris_type", None)
+            or (self.instance.debris_type if self.instance else None)
+        ).rate_matrix_fields
+        for field in rate_matrix_custom_fields:
+            value = (
+                rate_matrix_fields.get(field, False) if rate_matrix_fields else False
+            )
+            if value == True:
+                if not hasattr(self, "instance"):
+                    require_fields = get_rate_matrix_custom_fields(field)
+                    for field in require_fields:
+                        if not field in data:
+                            raise serializers.ValidationError(
+                                {
+                                    field: [
+                                        "This field is required for the selected debris type."
+                                    ]
+                                }
+                            )
+                require_fields = get_rate_matrix_custom_fields(field)
+                for field in require_fields:
+                    if not field in data:
+                        raise serializers.ValidationError(
+                            {
+                                field: [
+                                    "This field is required for the selected debris type."
+                                ]
+                            }
+                        )
+            elif value == False:
+                require_fields = get_rate_matrix_custom_fields(field)
+                for field in require_fields:
+                    if field in data:
+                        raise serializers.ValidationError(
+                            {
+                                field: [
+                                    "This field is not required for the selected debris type."
+                                ]
+                            }
+                        )
+        return data
+
+    def create(self, validated_data):
+        instance = ContractorRateMatrix(**validated_data)
+        instance.clean()
+        instance.save()
+        return instance
+
+    def update(self, instance, validated_data):
+        # Update the instance with validated data
+        for attr, value in validated_data.items():
+            setattr(instance, attr, value)
+
+        # Validate instance using model's clean method
+        instance.clean()
+
+        # Save the instance and return it
+        instance.save()
         return instance

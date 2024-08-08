@@ -4,11 +4,14 @@ from django.db import IntegrityError
 from rest_framework import serializers
 from django.contrib.auth.models import Permission
 
-from users.models import Role, Position, UserAdditionalData
-from users.utils import CONTRACTOR, PRIME_CONTRACTOR, SUB_CONTRACTOR
+from base.utils import generate_pre_signed_url
+from users.models import Role, Position, UserAdditionalData, UserAttachments
+from users.utils import CONTRACTOR, SUB_CONTRACTOR, PRIME_CONTRACTOR
+
+
 from users.utils import grant_permissions
 from rest_framework import status
-from rest_framework.response import Response
+
 
 User = get_user_model()
 
@@ -100,6 +103,7 @@ class UserReadSerializer(serializers.ModelSerializer):
             "name",
             "email",
             "role",
+            "device_id",
             "position",
             "phone_number",
             "address",
@@ -132,6 +136,27 @@ class UserProfileSerializer(serializers.ModelSerializer):
         ]
 
 
+class UserAttachmentsCreateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = UserAttachments
+        fields = [
+            "key",
+            "type",
+        ]
+
+
+class UserAttachmentsReadSerializer(serializers.ModelSerializer):
+    url = serializers.SerializerMethodField()
+
+    class Meta:
+        model = UserAttachments
+        fields = "__all__"
+
+    def get_url(self, obj):
+        if obj.key:
+            return generate_pre_signed_url(obj.key)
+
+
 class UserCreateSerializer(serializers.ModelSerializer):
     name = serializers.CharField(required=True)
     password = serializers.CharField(write_only=True)
@@ -149,6 +174,7 @@ class UserCreateSerializer(serializers.ModelSerializer):
         required=False,
     )
     additional_data = UserAdditionalDataModifySerializer(required=False)
+    attachments = UserAttachmentsCreateSerializer(many=True, required=False)
 
     class Meta:
         model = User
@@ -166,6 +192,7 @@ class UserCreateSerializer(serializers.ModelSerializer):
             "longitude",
             "prime_contractor",
             "additional_data",
+            "attachments",
         ]
 
     def validate(self, data):
@@ -241,9 +268,7 @@ class UserCreateSerializer(serializers.ModelSerializer):
                         {"prefix": ["Prefix already exists"]}
                     )
         user = grant_permissions(user, user.role)
-        if (user):
-            return user
-        return Response("Something went wrong", status=status.HTTP_400_BAD_REQUEST)
+        return user
 
 
 class UserUpdateSerializer(serializers.ModelSerializer):
@@ -261,6 +286,11 @@ class UserUpdateSerializer(serializers.ModelSerializer):
         ),
         required=False,
     )
+    attachments = UserAttachmentsCreateSerializer(many=True, required=False)
+    remove_attachments = serializers.ListField(
+        child=serializers.UUIDField(),
+        required=False,
+    )
 
     class Meta:
         model = User
@@ -268,6 +298,7 @@ class UserUpdateSerializer(serializers.ModelSerializer):
             "name",
             "phone_number",
             "address",
+            "device_id",
             "latitude",
             "longitude",
             "role",
@@ -275,6 +306,8 @@ class UserUpdateSerializer(serializers.ModelSerializer):
             "is_active",
             "prime_contractor",
             "additional_data",
+            "attachments",
+            "remove_attachments",
         ]
 
     def validate(self, data):
@@ -329,6 +362,8 @@ class UserUpdateSerializer(serializers.ModelSerializer):
 
     def update(self, instance, validated_data):
         additional_data = validated_data.pop("additional_data", None)
+        attachments = validated_data.pop("attachments", None)
+        remove_attachments = validated_data.pop("remove_attachments", None)
         user = super().update(instance, validated_data)
 
         if additional_data:
@@ -354,17 +389,45 @@ class UserUpdateSerializer(serializers.ModelSerializer):
                     raise serializers.ValidationError(
                         {"prefix": ["Prefix already exists"]}
                     )
+        if attachments:
+            user.create_attachments(attachments)
+        if remove_attachments:
+            user.delete_attachments(remove_attachments)
 
         return user
 
 
-class ChangePasswordSerializer(serializers.Serializer):
+class ResetPasswordSerializer(serializers.Serializer):
+    user = serializers.PrimaryKeyRelatedField(queryset=User.objects.all())
     new_password = serializers.CharField(required=True, write_only=True)
     confirm_new_password = serializers.CharField(required=True, write_only=True)
 
     def validate(self, data):
         new_password = data.get("new_password")
         confirm_new_password = data.get("confirm_new_password")
+
+        # Check if new password and confirm new password match
+        if new_password != confirm_new_password:
+            raise serializers.ValidationError({"password": ["Passwords do not match."]})
+
+        return data
+
+
+class ChangePasswordSerializer(serializers.Serializer):
+    old_password = serializers.CharField(required=True, write_only=True)
+    new_password = serializers.CharField(required=True, write_only=True)
+    confirm_new_password = serializers.CharField(required=True, write_only=True)
+
+    def validate(self, data):
+        user = self.context.get("user")
+        new_password = data.get("new_password")
+        confirm_new_password = data.get("confirm_new_password")
+        old_password = data.get("old_password")
+
+        if old_password and not user.check_password(old_password):
+            raise serializers.ValidationError(
+                {"old_password": ["Old password is not correct."]}
+            )
 
         # Check if new password and confirm new password match
         if new_password != confirm_new_password:
