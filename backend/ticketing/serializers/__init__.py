@@ -1,4 +1,8 @@
-from .event import EventSerializer, FemaDatesSerializer, EventCreateSerializer
+from .event import (
+    EventSerializer,
+    FemaDatesSerializer,
+    EventCreateSerializer,
+)
 from .hazard import HazardNameSerializer, HazardTypeSerializer, DebrisSerializer
 from .project import (
     SubActivitySerializer,

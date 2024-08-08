@@ -30,6 +30,6 @@ class EventAdmin(admin.ModelAdmin):
     list_display = ["id", "name"]
 
 
-@admin.site.register(DebrisType)
+@admin.register(DebrisType)
 class DebrisTypeAdmin(admin.ModelAdmin):
     list_display = ["id", "name"]

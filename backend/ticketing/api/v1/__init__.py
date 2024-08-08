@@ -1,6 +1,11 @@
 from .event import EventViewSet
 from .hazard import DebrisViewSet, HazardNameViewSet, HazardTypeViewSet
-from .project import SubActivityViewSet, TruckTypeViewSet, ProjectViewSet
+from .project import (
+    SubActivityViewSet,
+    TruckTypeViewSet,
+    ProjectViewSet,
+    ContractorRateMatrixViewSet,
+)
 
 __all__ = [
     "EventViewSet",
@@ -10,4 +15,5 @@ __all__ = [
     "TruckTypeViewSet",
     "SubActivityViewSet",
     "ProjectViewSet",
+    "ContractorRateMatrixViewSet",
 ]
