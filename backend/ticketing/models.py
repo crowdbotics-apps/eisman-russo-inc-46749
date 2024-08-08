@@ -25,6 +25,9 @@ class Event(BaseFieldModel):
     is_active = models.BooleanField(default=True)
     notes = models.TextField(null=True, blank=True)
 
+    def __str__(self):
+        return self.name
+
 
 class FemaDates(BaseFieldModel):
     start_date = models.DateField()
@@ -35,6 +38,9 @@ class FemaDates(BaseFieldModel):
     event = models.ForeignKey(
         Event, on_delete=models.CASCADE, related_name="fema_dates"
     )
+
+    def __str__(self):
+        return f"{self.start_date} - {self.end_date}"
 
     class Meta:
         constraints = [
