@@ -1,5 +1,6 @@
 import {
   Keyboard,
+  SafeAreaView,
   StyleSheet,
   Text,
   TouchableOpacity,
@@ -24,35 +25,39 @@ import {
   heightPercentageToDP as hp,
   widthPercentageToDP as wp
 } from "react-native-responsive-screen";
-const ChangePassword = () => {
+import HeaderComponent from "../../components/core/header/HeaderComponent";
+import HeaderRightComponent from "../../components/core/header/HeaderRightComponent";
+import { Constants, ScreenNames } from "../../utils/constants";
+import { END_POINTS } from "../../utils/EndPoints";
+import Toast from "../../components/core/toast/Toast";
+import { POST } from "../../services/interceptor/ApiMethod";
+import { checkInternetConnection } from "../../services/interceptor/Interceptor";
+
+const ChangePassword = ({ navigation }) => {
   const dispatch = useDispatch();
   const [isLoading, setIsLoading] = useState(false);
+  const [isError, setIsError] = useState(false);
 
   const handleChangePassword = async values => {
+    const isConnected = await checkInternetConnection();
+    if (!isConnected) {
+      Toast.errorList("Error", ["Internet is required to change password"]);
+      return
+    }
+    setIsError(false);
     setIsLoading(true);
 
     try {
-      const response = await POST(END_POINTS.LOGIN, values);
-      dispatch(
-        appActions.setAccessToken({ accessToken: response?.data.access })
-      );
-      dispatch(appActions.setUserCredentials({ credentials: values }));
-      navigation.reset({
-        index: 0,
-        routes: [
-          {
-            name: StackNames.AppStack
-          }
-        ]
-      });
+      const response = await POST(END_POINTS.CHANGE_PASSWORD, values);
+      Toast.successor("Success", response?.data?.detail);
+      navigation.goBack();
     } catch (error) {
       console.log(error);
       if (error?.status === Constants.NOT_FOUND_CODE) {
         Toast.errorList("Error", [error?.data?.detail]);
       } else if (error?.status === Constants.NETWORK_ERROR) {
-        console.log("network error");
+        Toast.errorList("Error", ["Your internet is disconnected"]);
       } else {
-        //Toast.successor("Success", "Message")
         Toast.errorList("Error", [
           "A system error occurred. if continues, contact support."
         ]);
@@ -62,97 +67,121 @@ const ChangePassword = () => {
     }
   };
   return (
-    <View style={styles.mainContainer}>
+    <SafeAreaView style={styles.mainContainer}>
+      <HeaderComponent
+        // leftIcon={<MenuIcon />}
+        leftIconPress={() => {
+          navigation.goBack();
+        }}
+        title={"Change Password"}
+        rightView={
+          <HeaderRightComponent
+            onPress={() => {
+              navigation.navigate(ScreenNames.HomeScreen);
+            }}
+          />
+        }
+      />
       <Loader isVisible={isLoading} />
 
-      <TouchableOpacity
-        activeOpacity={1}
-        onPress={Keyboard.dismiss}
-        style={[styles.headingStyle, { flex: 1 }]}
-      >
-        <Text style={[Fonts.h5Bold]}>Sign in to your Account</Text>
-        <Formik
-          onSubmit={handleChangePassword}
-          initialValues={{
-            email: "saad.bukhtiar@crowdbotics.com",
-            password: "botics123"
-          }}
-          validationSchema={changePasswordValidationSchema}
+      <View style={styles.mainContainer}>
+        <TouchableOpacity
+          activeOpacity={1}
+          onPress={Keyboard.dismiss}
+          style={[styles.subHeadingStyle, { flex: 1 }]}
         >
-          {formik => {
-            return (
-              <View style={{ flex: 1, justifyContent: "space-between" }}>
-                <View style={styles.formContainer}>
-                  <InputField
-                    label={"Old Password"}
-                    placeholder={"Enter Old Password"}
-                    password={true}
-                    error={formik.errors.oldPassword}
-                    value={formik.values.oldPassword}
-                    onChangeText={formik.handleChange("oldPassword")}
-                    onBlur={() => formik.handleBlur("oldPassword")}
-                    autoCapitalize="none"
-                    autoCorrect={false}
-                  />
-                  <InputField
-                    label={"New Password"}
-                    placeholder={"Enter New Password"}
-                    password={true}
-                    error={formik.errors.newPassword}
-                    value={formik.values.newPassword}
-                    onChangeText={formik.handleChange("newPassword")}
-                    onBlur={() => formik.handleBlur("newPassword")}
-                    autoCapitalize="none"
-                    autoCorrect={false}
-                  />
-                  <InputField
-                    label={"Confirm New Password"}
-                    placeholder={"Enter Confirm New Password"}
-                    password={true}
-                    error={formik.errors.confirmNewPassword}
-                    value={formik.values.confirmNewPassword}
-                    onChangeText={formik.handleChange("confirmNewPassword")}
-                    onBlur={() => formik.handleBlur("confirmNewPassword")}
-                    autoCapitalize="none"
-                    autoCorrect={false}
-                  />
+          <Formik
+            onSubmit={handleChangePassword}
+            initialValues={{
+              old_password: "",
+              new_password: "",
+              confirm_new_password: ""
+            }}
+            validationSchema={changePasswordValidationSchema}
+          >
+            {formik => {
+              return (
+                <View style={{ flex: 1, justifyContent: "space-between" }}>
+                  <View style={styles.formContainer}>
+                    <InputField
+                      isError={isError}
+                      label={"Old Password"}
+                      placeholder={"Enter Old Password"}
+                      password={true}
+                      error={formik.errors.old_password}
+                      value={formik.values.old_password}
+                      onChangeText={formik.handleChange("old_password")}
+                      onBlur={() => formik.handleBlur("old_password")}
+                      autoCapitalize="none"
+                      autoCorrect={false}
+                    />
+                    <Spacing height={hp(3)} />
+                    <InputField
+                      isError={isError}
+                      label={"New Password"}
+                      placeholder={"Enter New Password"}
+                      password={true}
+                      error={formik.errors.new_password}
+                      value={formik.values.new_password}
+                      onChangeText={formik.handleChange("new_password")}
+                      onBlur={() => formik.handleBlur("new_password")}
+                      autoCapitalize="none"
+                      autoCorrect={false}
+                    />
+                    <Spacing height={hp(3)} />
+
+                    <InputField
+                      isError={isError}
+                      label={"Confirm New Password"}
+                      placeholder={"Enter Confirm New Password"}
+                      password={true}
+                      error={formik.errors.confirm_new_password}
+                      value={formik.values.confirm_new_password}
+                      onChangeText={formik.handleChange("confirm_new_password")}
+                      onBlur={() => formik.handleBlur("confirm_new_password")}
+                      autoCapitalize="none"
+                      autoCorrect={false}
+                    />
+                  </View>
+                  <View
+                    style={[styles.buttonContainer, CommonStyles.spaceBetweenH]}
+                  >
+                    <Button
+                      customStyle={{
+                        backgroundColor: "white",
+                        borderWidth: 1,
+                        borderColor: Colors.greyScale300,
+                        borderRadius: 8
+                      }}
+                      customTextStyle={{
+                        color: Colors.grey700
+                      }}
+                      smallBtn={true}
+                      title={"Cancel"}
+                      onPress={() => {
+                        Keyboard.dismiss();
+                        formik.submitForm();
+                      }}
+                    />
+                    <Button
+                      smallBtn={true}
+                      title={"Save Changes"}
+                      onPress={() => {
+                        Keyboard.dismiss();
+                        setIsError(true);
+
+                        formik.submitForm();
+                      }}
+                    />
+                    <Spacing height={hp(10)} />
+                  </View>
                 </View>
-                <View
-                  style={[styles.buttonContainer, CommonStyles.spaceBetweenH]}
-                >
-                  <Button
-                    customStyle={{
-                      backgroundColor: "white",
-                      borderWidth: 1,
-                      borderColor: Colors.greyScale300,
-                      borderRadius: 8
-                    }}
-                    customTextStyle={{
-                      color: Colors.grey700
-                    }}
-                    smallBtn={true}
-                    title={"Cancel"}
-                    onPress={() => {
-                      Keyboard.dismiss();
-                      formik.submitForm();
-                    }}
-                  />
-                  <Button
-                    smallBtn={true}
-                    title={"Save Changes"}
-                    onPress={() => {
-                      Keyboard.dismiss();
-                      formik.submitForm();
-                    }}
-                  />
-                  <Spacing height={hp(10)} />
-                </View>
-              </View>
-            );
-          }}
-        </Formik>
-      </TouchableOpacity>
-    </View>
+              );
+            }}
+          </Formik>
+        </TouchableOpacity>
+      </View>
+    </SafeAreaView>
   );
 };
 

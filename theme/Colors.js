@@ -8,13 +8,18 @@ export const Colors = {
   grey700: "#344054",
   grey500: "#667085",
   grey400: "#98A2B3",
+  greyScale50: "#F9FAFB",
   greyScale300: "#D0D5DD",
+  greyScale400: "#868C98",
   grey300: "#E0E0E0",
   secondary200: "#9499A5",
+  red: "#912018",
   red100: "#FEE4E2",
   red200: "#FECDCA",
   red300: "#FDA29B",
   red500: "#F04438",
+  green: "#05603A",
   green100: "#D1FADF",
-  green200: "#A6F4C5"
+  green200: "#A6F4C5",
+  bgWeak100: "#F6F8FA"
 };

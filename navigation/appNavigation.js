@@ -14,6 +14,7 @@ const { createStackNavigator } = require("@react-navigation/stack");
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { Fonts } from "../theme/Typography";
 import { Text } from "react-native";
+import TicketsList from "../screens/FieldMonitor/TicketsList";
 
 const AppStack = createStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -53,8 +54,8 @@ const HomeTabs = () => {
           </Text>
         ),
         tabBarStyle: {
-          paddingTop:10,
-          height:90
+          paddingTop: 10,
+          height: 90
         }
       })}
       tabBarPosition={"bottom"}
@@ -67,11 +68,18 @@ const HomeTabs = () => {
 
 export const AppStackScreen = () => {
   return (
-    <AppStack.Navigator initialRouteName={StackNames.HomeTabs}>
+    <AppStack.Navigator
+      initialRouteName={StackNames.HomeTabs}
+      screenOptions={{ headerShown: false }}
+    >
       <AppStack.Screen
         name={StackNames.HomeTabs}
         component={HomeTabs}
         options={navOptionHandler}
+      />
+      <AppStack.Screen
+        name={ScreenNames.FMTicketList}
+        component={TicketsList}
       />
       <AppStack.Screen
         name={ScreenNames.ChangePassword}

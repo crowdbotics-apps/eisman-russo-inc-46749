@@ -1,7 +1,9 @@
-import { View, Text, Pressable, ActivityIndicator } from "react-native"
-import React from "react"
-import { styles } from "./styles"
-import { Fonts } from "../../../theme/Typography"
+import { View, Text, Pressable, ActivityIndicator } from "react-native";
+import React from "react";
+import { styles } from "./styles";
+import { Fonts } from "../../../theme/Typography";
+import QRIcon from "../../../assets/svgs/QRIcon.svg";
+import Spacing from "../spacing/Spacing";
 
 const Button = ({
   title,
@@ -12,17 +14,19 @@ const Button = ({
   children,
   isLoading,
   smallBtn,
-  unFilled
+  unFilled,
+  leftIcon,
+  leftIconCss
 }) => {
-  const widthStyle = smallBtn ? styles.smallBtn : {}
+  const widthStyle = smallBtn ? styles.smallBtn : {};
   const fillStyle = unFilled
     ? styles.unfilledButtonContainer
-    : styles.filledButtonContainer
+    : styles.filledButtonContainer;
   const disabledStyle = disabled
     ? unFilled
       ? styles.disabledUnFilledButtonContainer
       : styles.disabledFilledButtonContainer
-    : {}
+    : {};
 
   return (
     <Pressable
@@ -37,6 +41,7 @@ const Button = ({
       disabled={disabled || isLoading}
       onPress={onPress}
     >
+      {leftIcon && <View style={{ paddingHorizontal: 5 }}>{leftIcon}</View>}
       <Text
         style={[
           Fonts.dMediumMedium,
@@ -51,7 +56,7 @@ const Button = ({
       {isLoading && <ActivityIndicator style={styles.loaderStyle} />}
       {children ? children : null}
     </Pressable>
-  )
-}
+  );
+};
 
-export default Button
+export default Button;

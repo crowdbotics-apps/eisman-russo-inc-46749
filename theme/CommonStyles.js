@@ -1,5 +1,6 @@
 import { StyleSheet } from "react-native";
 import { Colors } from "./Colors";
+import { widthPercentageToDP as wp } from "react-native-responsive-screen";
 export const CommonStyles = StyleSheet.create({
   container: {
     flex: 1,
@@ -95,5 +96,7 @@ export const CommonStyles = StyleSheet.create({
   p9: { padding: 18 },
   p10: { padding: 20 },
   p11: { padding: 22 },
-  p12: { padding: 24 }
+  p12: { padding: 24 },
+
+  defaultBody: { paddingHorizontal: wp(4) }
 });

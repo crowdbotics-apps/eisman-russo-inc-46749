@@ -2,7 +2,7 @@ import { View, Text, SafeAreaView, ScrollView } from "react-native";
 import React, { useEffect, useState } from "react";
 import { store } from "../../redux/Store";
 import { appActions } from "../../redux/actions/AppAction";
-import { StackNames } from "../../utils/constants";
+import { ScreenNames, StackNames } from "../../utils/constants";
 import { useDispatch } from "react-redux";
 import { GET } from "../../services/interceptor/ApiMethod";
 import { END_POINTS } from "../../utils/EndPoints";
@@ -24,8 +24,6 @@ import AssesmentIcon from "../../assets/svgs/AssesmentIcon.svg";
 import Truck from "../../assets/svgs/Truck.svg";
 import HomeItem from "./HomeItem";
 import Spacing from "../../components/core/spacing/Spacing";
-import { capitalizeFirstLetters } from "../../utils/helperFunctions";
-
 const HomeScreen = ({ navigation }) => {
   const dispatch = useDispatch();
   const insets = useSafeAreaInsets();
@@ -72,6 +70,9 @@ const HomeScreen = ({ navigation }) => {
       </View>
       <ScrollView style={{ paddingHorizontal: 16, marginTop: hp(2) }}>
         <HomeItem
+          onPress={() => {
+            navigation.navigate(ScreenNames.FMTicketList);
+          }}
           title={"Field Monitor"}
           icon={<UserCard height={hp(4)} width={wp(8)} />}
         />

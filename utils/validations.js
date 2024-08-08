@@ -32,21 +32,21 @@ export const resetPasswordValidationSchema = Yup.object().shape({
 
 
 export const changePasswordValidationSchema = Yup.object().shape({
-  oldPassword: Yup.string()
+  old_password: Yup.string()
     .trim()
     .max(30, ({ max }) => `Old password must be less than ${max} characters`)
     .min(8, ({ min }) => `Old password must be at least ${min} characters`)
     .required("Old password is required"),
 
-  newPassword: Yup.string()
+  new_password: Yup.string()
     .trim()
     .max(30, ({ max }) => `New password must be less than ${max} characters`)
     .min(8, ({ min }) => `New password must be at least ${min} characters`)
     .required("New password is required"),
 
-  confirmNewPassword: Yup.string()
+  confirm_new_password: Yup.string()
     .oneOf(
-      [Yup.ref("newPassword"), null],
+      [Yup.ref("new_password"), null],
       "Confirm new password must match new password"
     )
     .required("Confirm new password is required")

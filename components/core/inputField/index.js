@@ -80,7 +80,7 @@ const InputField = ({
                 setShowPassword(!showPassword);
               }}
             >
-              {!showPassword ? <Eye /> : <EyeSlash />}
+              {!showPassword ? <EyeSlash /> : <Eye />}
             </Pressable>
           ) : null}
         </View>

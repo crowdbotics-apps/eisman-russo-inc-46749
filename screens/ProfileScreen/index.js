@@ -1,4 +1,10 @@
-import { StyleSheet, Text, View, SafeAreaView,TouchableOpacity } from "react-native";
+import {
+  StyleSheet,
+  Text,
+  View,
+  SafeAreaView,
+  TouchableOpacity
+} from "react-native";
 import React from "react";
 import { styles } from "./styles";
 import { Fonts } from "../../theme/Typography";
@@ -13,48 +19,66 @@ import { Colors } from "../../theme/Colors";
 import Lock from "../../assets/svgs/Lock.svg";
 import ArrowForward from "../../assets/svgs/ArrowForward.svg";
 import { appActions } from "../../redux/actions/AppAction";
-import { StackNames } from "../../utils/constants";
+import { ScreenNames, StackNames } from "../../utils/constants";
 
-const ProfileScreen = ({navigation}) => {
+const ProfileScreen = ({ navigation }) => {
   return (
     <SafeAreaView
       style={styles.mainContainer}
       keyboardShouldPersistTaps="handled"
     >
-      <View style={CommonStyles.p8}>
-        <Text style={[Fonts.h6SemiBold]}>{"Profile"}</Text>
-        <Spacing height={hp(3)} />
-        <View style={CommonStyles.VerticalCenter}>
-          <Text style={[Fonts.dLargeSemiBold]}>
-            {store.getState().appReducer?.userProfile?.name}
-          </Text>
-          <Text style={[Fonts.dxSmallRegular, { color: Colors.secondary200 }]}>
-            {store.getState().appReducer?.userProfile?.email}
-          </Text>
-        </View>
-        <Spacing height={hp(5)} />
-
-        <View
-          style={[
-            CommonStyles.card,
-            {
-              flexDirection: "row",
-              alignItems: "center",
-              justifyContent: "space-between",
-              padding: hp(2)
-            }
-          ]}
-        >
-          <View style={[CommonStyles.row, { alignItems: "center" }]}>
-            <Lock />
-            <Spacing width={wp(2)} />
-            <Text style={[Fonts.dSmallMedium, { color: Colors.grey700 }]}>
-              Change Password
+     
+      <View
+        style={[CommonStyles.p8, CommonStyles.flex1, CommonStyles.spaceBetween]}
+      >
+        <View>
+          <Text style={[Fonts.h6SemiBold]}>{"Profile"}</Text>
+          <Spacing height={hp(3)} />
+          <View
+            style={[
+              {
+                backgroundColor: Colors.primaryBlue,
+                paddingHorizontal: wp(3),
+                paddingVertical: wp(6),
+                borderRadius: 8
+              }
+            ]}
+          >
+            <Text style={[Fonts.dLargeSemiBold, { color: Colors.white }]}>
+              {store.getState().appReducer?.userProfile?.name}
+            </Text>
+            <Spacing height={hp(1)} />
+            <Text style={[Fonts.dxSmallRegular, { color: Colors.white }]}>
+              {store.getState().appReducer?.userProfile?.email}
             </Text>
           </View>
-          <ArrowForward />
+          <Spacing height={hp(5)} />
+
+          <TouchableOpacity
+            onPress={() => {
+              navigation.navigate(ScreenNames.ChangePassword);
+            }}
+            style={[
+              CommonStyles.card,
+              {
+                flexDirection: "row",
+                alignItems: "center",
+                justifyContent: "space-between",
+                padding: hp(2)
+              }
+            ]}
+          >
+            <View style={[CommonStyles.row, { alignItems: "center" }]}>
+              <Lock />
+              <Spacing width={wp(2)} />
+              <Text style={[Fonts.dSmallMedium, { color: Colors.grey700 }]}>
+                Change Password
+              </Text>
+            </View>
+            <ArrowForward />
+          </TouchableOpacity>
+          <Spacing height={hp(3)} />
         </View>
-        <Spacing height={hp(3)} />
         <TouchableOpacity
           onPress={() => {
             store.dispatch(
@@ -71,7 +95,10 @@ const ProfileScreen = ({navigation}) => {
               ]
             });
           }}
-          style={[styles.logoutItem, { paddingVertical: hp(1.5) }]}
+          style={[
+            styles.logoutItem,
+            { paddingVertical: hp(1.5), marginBottom: hp(3) }
+          ]}
         >
           <Text
             style={[

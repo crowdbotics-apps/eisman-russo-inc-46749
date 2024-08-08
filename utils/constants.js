@@ -4,6 +4,7 @@ export const ScreenNames = {
   LoginScreen: "LoginScreen",
   HomeScreen: "Home",
   ProfileScreen: "Profile",
+  FMTicketList: "FMTicketList",
   ChangePassword: "ChangePassword"
 };
 
