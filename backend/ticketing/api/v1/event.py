@@ -1,7 +1,9 @@
 from base.pagination import ListPagination
 from base.utils import error_handler
 from django.db import transaction
-from rest_framework import status, viewsets
+from django.utils.decorators import method_decorator
+from drf_spectacular.utils import extend_schema, inline_serializer
+from rest_framework import status, viewsets, serializers
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from ticketing.models import Event
@@ -24,6 +26,17 @@ class EventViewSet(viewsets.ModelViewSet):
         paginated_response = self.get_paginated_response(serializer.data)
         return paginated_response
 
+    @method_decorator(
+        name="create",
+        decorator=extend_schema(
+            request=EventCreateSerializer,
+            responses={
+                status.HTTP_201_CREATED: inline_serializer(
+                    name="CreateResponse", fields={"result": EventSerializer()}
+                )
+            },
+        ),
+    )
     @transaction.atomic
     def create(self, request, *args, **kwargs):
         serializer = EventCreateSerializer(data=request.data)
@@ -37,11 +50,33 @@ class EventViewSet(viewsets.ModelViewSet):
         message = error_handler(serializer.errors)
         return Response({"detail": message}, status=status.HTTP_400_BAD_REQUEST)
 
+    @method_decorator(
+        name="update",
+        decorator=extend_schema(
+            request=EventCreateSerializer,
+            responses={
+                status.HTTP_200_OK: inline_serializer(
+                    name="RetrieveResponse", fields={"result": EventSerializer()}
+                )
+            },
+        ),
+    )
     def retrieve(self, request, *args, **kwargs):
         event = self.get_object()
         serializer = self.serializer_class(event)
         return Response({"result": serializer.data}, status=status.HTTP_200_OK)
 
+    @method_decorator(
+        name="update",
+        decorator=extend_schema(
+            request=EventCreateSerializer,
+            responses={
+                status.HTTP_200_OK: inline_serializer(
+                    name="UpdateResponse", fields={"result": EventSerializer()}
+                )
+            },
+        ),
+    )
     @transaction.atomic
     def update(self, request, *args, **kwargs):
         event = self.get_object()
@@ -58,6 +93,16 @@ class EventViewSet(viewsets.ModelViewSet):
         message = error_handler(serializer.errors)
         return Response({"detail": message}, status=status.HTTP_400_BAD_REQUEST)
 
+    @method_decorator(
+        name="delete",
+        decorator=extend_schema(
+            responses={
+                status.HTTP_200_OK: inline_serializer(
+                    name="DeleteResponse", fields={"detail": serializers.CharField()}
+                )
+            },
+        ),
+    )
     def destroy(self, request, *args, **kwargs):
         evnet = self.get_object()
         evnet.delete()

@@ -1,11 +1,23 @@
 from base.pagination import ListPagination
 from base.utils import error_handler
-from django.db import transaction
-from rest_framework import status, viewsets
+
+from django_filters.rest_framework import DjangoFilterBackend
+from django.utils.decorators import method_decorator
+from drf_spectacular.utils import extend_schema, inline_serializer
+from rest_framework import status, viewsets, filters, serializers
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
-from ticketing.models import SubActivity, TruckType
-from ticketing.serializers import SubActivitySerializer, TruckTypeSerializer
+
+
+from ticketing.models import SubActivity, TruckType, Project
+from ticketing.serializers import (
+    SubActivitySerializer,
+    TruckTypeSerializer,
+    ProjectCreateUpdateSerializer,
+    ProjectResponseSerialzer,
+)
+from ticketing.filters import ProjectFilters
+from ticketing.services import ProjectService
 
 
 class SubActivityViewSet(viewsets.ModelViewSet):
@@ -24,6 +36,17 @@ class SubActivityViewSet(viewsets.ModelViewSet):
         paginated_response = self.get_paginated_response(serializer.data)
         return paginated_response
 
+    @method_decorator(
+        name="Create Sub-Activity",
+        decorator=extend_schema(
+            responses={
+                status.HTTP_201_CREATED: inline_serializer(
+                    name="SubActivityResponse",
+                    fields={"detail": SubActivitySerializer()},
+                )
+            },
+        ),
+    )
     def create(self, request, *args, **kwargs):
         serializer = SubActivitySerializer(data=request.data)
         if serializer.is_valid():
@@ -33,11 +56,33 @@ class SubActivityViewSet(viewsets.ModelViewSet):
         message = error_handler(serializer.errors)
         return Response({"detail": message}, status=status.HTTP_400_BAD_REQUEST)
 
+    @method_decorator(
+        name="Retreive Sub-Activity",
+        decorator=extend_schema(
+            responses={
+                status.HTTP_200_OK: inline_serializer(
+                    name="SubActivityResponse",
+                    fields={"result": SubActivitySerializer()},
+                )
+            },
+        ),
+    )
     def retrieve(self, request, *args, **kwargs):
         subactivity = self.get_object()
         serializer = self.serializer_class(subactivity)
         return Response({"result": serializer.data}, status=status.HTTP_200_OK)
 
+    @method_decorator(
+        name="Update Sub-Activity",
+        decorator=extend_schema(
+            responses={
+                status.HTTP_200_OK: inline_serializer(
+                    name="SubActivityResponse",
+                    fields={"detail": SubActivitySerializer()},
+                )
+            },
+        ),
+    )
     def update(self, request, *args, **kwargs):
         subactivity = self.get_object()
         serializer = self.serializer_class(
@@ -50,6 +95,17 @@ class SubActivityViewSet(viewsets.ModelViewSet):
         message = error_handler(serializer.errors)
         return Response({"detail": message}, status=status.HTTP_400_BAD_REQUEST)
 
+    @method_decorator(
+        name="Delete Sub-Activity",
+        decorator=extend_schema(
+            responses={
+                status.HTTP_200_OK: inline_serializer(
+                    name="SubActivityResponse",
+                    fields={"detail": serializers.CharField()},
+                )
+            },
+        ),
+    )
     def destroy(self, request, *args, **kwargs):
         subactivity = self.get_object()
         subactivity.delete()
@@ -74,6 +130,17 @@ class TruckTypeViewSet(viewsets.ModelViewSet):
         paginated_response = self.get_paginated_response(serializer.data)
         return paginated_response
 
+    @method_decorator(
+        name="Create Truck Type",
+        decorator=extend_schema(
+            responses={
+                status.HTTP_201_CREATED: inline_serializer(
+                    name="TruckTypeResponse",
+                    fields={"result": TruckTypeSerializer()},
+                )
+            },
+        ),
+    )
     def create(self, request, *args, **kwargs):
         serializer = TruckTypeSerializer(data=request.data)
         if serializer.is_valid():
@@ -83,11 +150,33 @@ class TruckTypeViewSet(viewsets.ModelViewSet):
         message = error_handler(serializer.errors)
         return Response({"detail": message}, status=status.HTTP_400_BAD_REQUEST)
 
+    @method_decorator(
+        name="Retreive Truck Type",
+        decorator=extend_schema(
+            responses={
+                status.HTTP_200_OK: inline_serializer(
+                    name="TruckTypeResponse",
+                    fields={"result": TruckTypeSerializer()},
+                )
+            },
+        ),
+    )
     def retrieve(self, request, *args, **kwargs):
         truck = self.get_object()
         serializer = self.serializer_class(truck)
         return Response({"result": serializer.data}, status=status.HTTP_200_OK)
 
+    @method_decorator(
+        name="Update Truck Type",
+        decorator=extend_schema(
+            responses={
+                status.HTTP_200_OK: inline_serializer(
+                    name="TruckTypeResponse",
+                    fields={"detail": TruckTypeSerializer()},
+                )
+            },
+        ),
+    )
     def update(self, request, *args, **kwargs):
         truck = self.get_object()
         serializer = self.serializer_class(
@@ -100,9 +189,110 @@ class TruckTypeViewSet(viewsets.ModelViewSet):
         message = error_handler(serializer.errors)
         return Response({"detail": message}, status=status.HTTP_400_BAD_REQUEST)
 
+    @method_decorator(
+        name="Delete Truck Type",
+        decorator=extend_schema(
+            responses={
+                status.HTTP_200_OK: inline_serializer(
+                    name="TruckTypeResponse",
+                    fields={"detail": serializers.CharField()},
+                )
+            },
+        ),
+    )
     def destroy(self, request, *args, **kwargs):
         truck = self.get_object()
         truck.delete()
         return Response(
             {"detail": "Truck Type Deleted Successfully"}, status=status.HTTP_200_OK
+        )
+
+
+class ProjectViewSet(viewsets.ModelViewSet):
+    permission_classes = [IsAuthenticated]
+    serializer_class = ProjectResponseSerialzer
+    queryset = Project.objects.all()
+    search_fields = ["name"]
+    ordering = ["-created_at"]
+    pagination_class = ListPagination
+    filter_backends = (DjangoFilterBackend, filters.SearchFilter)
+    filterset_class = ProjectFilters
+    http_method_names = ["get", "post", "put", "delete"]
+
+    def list(self, request):
+        projects = self.filter_queryset(self.get_queryset())
+        page = self.paginate_queryset(projects)
+        serializer = self.serializer_class(page, many=True)
+        paginated_response = self.get_paginated_response(serializer.data)
+        return paginated_response
+
+    @method_decorator(
+        name="create project",
+        decorator=extend_schema(
+            request=ProjectCreateUpdateSerializer(),
+            responses={
+                status.HTTP_201_CREATED: inline_serializer(
+                    name="ProjectResponseSchema",
+                    fields={"result": ProjectResponseSerialzer()},
+                )
+            },
+        ),
+    )
+    def create(self, request, *args, **kwargs):
+        return ProjectService().create_project(self, request)
+
+    @method_decorator(
+        name="Retreive Project",
+        decorator=extend_schema(
+            responses={
+                status.HTTP_200_OK: inline_serializer(
+                    name="ProjectResponseSchema",
+                    fields={"result": ProjectResponseSerialzer()},
+                )
+            },
+        ),
+    )
+    def retrieve(self, request, pk=None):
+        projects = self.get_object()
+        serializer = self.serializer_class(projects)
+        return Response({"result": serializer.data}, status=status.HTTP_200_OK)
+
+    @method_decorator(
+        name="update project",
+        decorator=extend_schema(
+            request=ProjectCreateUpdateSerializer(),
+            responses={
+                status.HTTP_200_OK: inline_serializer(
+                    name="ProjectResponseSchema",
+                    fields={"result": ProjectResponseSerialzer()},
+                )
+            },
+        ),
+    )
+    def update(self, request, pk=None):
+        projects = self.get_object()
+        serializer = ProjectCreateUpdateSerializer(instance=projects, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response({"detail": serializer.data}, status=status.HTTP_200_OK)
+
+        message = error_handler(serializer.errors)
+        return Response({"detail": message}, status=status.HTTP_400_BAD_REQUEST)
+
+    @method_decorator(
+        name="Destroy Project",
+        decorator=extend_schema(
+            responses={
+                status.HTTP_200_OK: inline_serializer(
+                    name="ProjectResponseSchema",
+                    fields={"result": ProjectResponseSerialzer()},
+                )
+            },
+        ),
+    )
+    def destroy(self, request, pk=None):
+        project = self.get_object()
+        project.delete()
+        return Response(
+            {"detail": "Project Deleted Successfully"}, status=status.HTTP_200_OK
         )

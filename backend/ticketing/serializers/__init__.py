@@ -1,6 +1,11 @@
 from .event import EventSerializer, FemaDatesSerializer, EventCreateSerializer
 from .hazard import HazardNameSerializer, HazardTypeSerializer, DebrisSerializer
-from .project import SubActivitySerializer, TruckTypeSerializer
+from .project import (
+    SubActivitySerializer,
+    TruckTypeSerializer,
+    ProjectResponseSerialzer,
+    ProjectCreateUpdateSerializer,
+)
 
 
 __all__ = [
@@ -12,4 +17,6 @@ __all__ = [
     "DebrisSerializer",
     "SubActivitySerializer",
     "TruckTypeSerializer",
+    "ProjectResponseSerialzer",
+    "ProjectCreateUpdateSerializer",
 ]

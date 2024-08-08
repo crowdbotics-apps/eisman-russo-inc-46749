@@ -24,14 +24,14 @@ from drf_spectacular.views import SpectacularJSONAPIView, SpectacularSwaggerView
 urlpatterns = [
     path("accounts/", include("allauth.urls")),
     path("modules/", include("modules.urls")),
-    path("api/v1/", include("home.api.v1.urls")),
+    # path("api/v1/", include("home.api.v1.urls")),
     path("admin/", admin.site.urls),
     path("users/", include("users.urls", namespace="users")),
     path("ticketing/", include("ticketing.urls", namespace="ticketing")),
-    path("rest-auth/", include("dj_rest_auth.urls")),
+    # path("rest-auth/", include("dj_rest_auth.urls")),
     # Override email confirm to use allauth's HTML view instead of rest_auth's API view
-    path("rest-auth/registration/account-confirm-email/<str:key>/", confirm_email),
-    path("rest-auth/registration/", include("dj_rest_auth.registration.urls")),
+    # path("rest-auth/registration/account-confirm-email/<str:key>/", confirm_email),
+    # path("rest-auth/registration/", include("dj_rest_auth.registration.urls")),
 ]
 
 admin.site.site_header = "Eisman Russo Inc"

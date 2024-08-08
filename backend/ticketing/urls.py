@@ -8,6 +8,7 @@ from ticketing.api.v1 import (
     HazardTypeViewSet,
     TruckTypeViewSet,
     SubActivityViewSet,
+    ProjectViewSet,
 )
 
 
@@ -18,6 +19,7 @@ router.register("hazard-name", HazardNameViewSet, basename="hazard-name")
 router.register("hazard-type", HazardTypeViewSet, basename="hazard-type")
 router.register("truck-type", TruckTypeViewSet, basename="truck-type")
 router.register("sub-activity", SubActivityViewSet, basename="sub-activity")
+router.register("project", ProjectViewSet, basename="project")
 
 app_name = "ticketing"
 

@@ -1,6 +1,6 @@
 from base.pagination import ListPagination
 from base.utils import error_handler
-from rest_framework import status, viewsets
+from rest_framework import status, viewsets, serializers
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from ticketing.models import DebrisType, HazardName, HazardType
@@ -9,6 +9,8 @@ from ticketing.serializers import (
     HazardNameSerializer,
     HazardTypeSerializer,
 )
+from drf_spectacular.utils import extend_schema, inline_serializer
+from django.utils.decorators import method_decorator
 
 
 class DebrisViewSet(viewsets.ModelViewSet):
@@ -27,6 +29,16 @@ class DebrisViewSet(viewsets.ModelViewSet):
         paginated_response = self.get_paginated_response(serializer.data)
         return paginated_response
 
+    @method_decorator(
+        name="create",
+        decorator=extend_schema(
+            responses={
+                status.HTTP_201_CREATED: inline_serializer(
+                    name="DebrisResponse", fields={"result": DebrisSerializer()}
+                )
+            },
+        ),
+    )
     def create(self, request, *args, **kwargs):
         serializer = DebrisSerializer(data=request.data)
         if serializer.is_valid():
@@ -36,11 +48,31 @@ class DebrisViewSet(viewsets.ModelViewSet):
         message = error_handler(serializer.errors)
         return Response({"detail": message}, status=status.HTTP_400_BAD_REQUEST)
 
+    @method_decorator(
+        name="Retrieve",
+        decorator=extend_schema(
+            responses={
+                status.HTTP_200_OK: inline_serializer(
+                    name="DebrisResponse", fields={"result": DebrisSerializer()}
+                )
+            },
+        ),
+    )
     def retrieve(self, request, *args, **kwargs):
         debris = self.get_object()
         serializer = self.serializer_class(debris)
         return Response({"result": serializer.data}, status=status.HTTP_200_OK)
 
+    @method_decorator(
+        name="Update",
+        decorator=extend_schema(
+            responses={
+                status.HTTP_200_OK: inline_serializer(
+                    name="DebrisResponse", fields={"detail": DebrisSerializer()}
+                )
+            },
+        ),
+    )
     def update(self, request, *args, **kwargs):
         debris = self.get_object()
         serializer = self.serializer_class(
@@ -53,6 +85,16 @@ class DebrisViewSet(viewsets.ModelViewSet):
         message = error_handler(serializer.errors)
         return Response({"detail": message}, status=status.HTTP_400_BAD_REQUEST)
 
+    @method_decorator(
+        name="create",
+        decorator=extend_schema(
+            responses={
+                status.HTTP_200_OK: inline_serializer(
+                    name="DebrisResponse", fields={"detail": serializers.CharField()}
+                )
+            },
+        ),
+    )
     def destroy(self, request, *args, **kwargs):
         debris = self.get_object()
         debris.delete()
@@ -77,6 +119,17 @@ class HazardTypeViewSet(viewsets.ModelViewSet):
         paginated_response = self.get_paginated_response(serializer.data)
         return paginated_response
 
+    @method_decorator(
+        name="Create Hazard Type",
+        decorator=extend_schema(
+            responses={
+                status.HTTP_201_CREATED: inline_serializer(
+                    name="HazardTypeResoponse",
+                    fields={"result": HazardTypeSerializer()},
+                )
+            },
+        ),
+    )
     def create(self, request, *args, **kwargs):
         serializer = HazardTypeSerializer(data=request.data)
         if serializer.is_valid():
@@ -86,11 +139,33 @@ class HazardTypeViewSet(viewsets.ModelViewSet):
         message = error_handler(serializer.errors)
         return Response({"detail": message}, status=status.HTTP_400_BAD_REQUEST)
 
+    @method_decorator(
+        name="Retrieve Hazard Type",
+        decorator=extend_schema(
+            responses={
+                status.HTTP_200_OK: inline_serializer(
+                    name="HazardTypeResoponse",
+                    fields={"result": HazardTypeSerializer()},
+                )
+            },
+        ),
+    )
     def retrieve(self, request, *args, **kwargs):
         hazard = self.get_object()
         serializer = self.serializer_class(hazard)
         return Response({"result": serializer.data}, status=status.HTTP_200_OK)
 
+    @method_decorator(
+        name="Update Hazard Type",
+        decorator=extend_schema(
+            responses={
+                status.HTTP_200_OK: inline_serializer(
+                    name="HazardTypeResoponse",
+                    fields={"detail": HazardTypeSerializer()},
+                )
+            },
+        ),
+    )
     def update(self, request, *args, **kwargs):
         hazard = self.get_object()
         serializer = self.serializer_class(
@@ -103,6 +178,17 @@ class HazardTypeViewSet(viewsets.ModelViewSet):
         message = error_handler(serializer.errors)
         return Response({"detail": message}, status=status.HTTP_400_BAD_REQUEST)
 
+    @method_decorator(
+        name="Delete Hazard Type",
+        decorator=extend_schema(
+            responses={
+                status.HTTP_200_OK: inline_serializer(
+                    name="HazardTypeResoponse",
+                    fields={"detail": serializers.CharField()},
+                )
+            },
+        ),
+    )
     def destroy(self, request, *args, **kwargs):
         hazard = self.get_object()
         hazard.delete()
@@ -127,6 +213,17 @@ class HazardNameViewSet(viewsets.ModelViewSet):
         paginated_response = self.get_paginated_response(serializer.data)
         return paginated_response
 
+    @method_decorator(
+        name="Create Hazard Name",
+        decorator=extend_schema(
+            responses={
+                status.HTTP_201_CREATED: inline_serializer(
+                    name="HazardNameResoponse",
+                    fields={"result": HazardNameSerializer()},
+                )
+            },
+        ),
+    )
     def create(self, request, *args, **kwargs):
         serializer = HazardNameSerializer(data=request.data)
         if serializer.is_valid():
@@ -136,11 +233,33 @@ class HazardNameViewSet(viewsets.ModelViewSet):
         message = error_handler(serializer.errors)
         return Response({"detail": message}, status=status.HTTP_400_BAD_REQUEST)
 
+    @method_decorator(
+        name="Retrieve Hazard Name",
+        decorator=extend_schema(
+            responses={
+                status.HTTP_200_OK: inline_serializer(
+                    name="HazardNameResoponse",
+                    fields={"result": HazardNameSerializer()},
+                )
+            },
+        ),
+    )
     def retrieve(self, request, *args, **kwargs):
         hazard = self.get_object()
         serializer = self.serializer_class(hazard)
         return Response({"result": serializer.data}, status=status.HTTP_200_OK)
 
+    @method_decorator(
+        name="Update Hazard Name",
+        decorator=extend_schema(
+            responses={
+                status.HTTP_200_OK: inline_serializer(
+                    name="HazardNameResoponse",
+                    fields={"detail": HazardNameSerializer()},
+                )
+            },
+        ),
+    )
     def update(self, request, *args, **kwargs):
         hazard = self.get_object()
         serializer = self.serializer_class(
@@ -153,6 +272,17 @@ class HazardNameViewSet(viewsets.ModelViewSet):
         message = error_handler(serializer.errors)
         return Response({"detail": message}, status=status.HTTP_400_BAD_REQUEST)
 
+    @method_decorator(
+        name="Delete Hazard Name",
+        decorator=extend_schema(
+            responses={
+                status.HTTP_200_OK: inline_serializer(
+                    name="HazardNameResoponse",
+                    fields={"detail": serializers.CharField()},
+                )
+            },
+        ),
+    )
     def destroy(self, request, *args, **kwargs):
         hazard = self.get_object()
         hazard.delete()
