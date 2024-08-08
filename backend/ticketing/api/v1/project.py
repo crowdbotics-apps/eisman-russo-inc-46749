@@ -1,10 +1,9 @@
 from base.pagination import ListPagination
 from base.utils import error_handler
 
-from django_filters.rest_framework import DjangoFilterBackend
 from django.utils.decorators import method_decorator
 from drf_spectacular.utils import extend_schema, inline_serializer
-from rest_framework import status, viewsets, filters, serializers
+from rest_framework import status, viewsets, serializers
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
@@ -215,10 +214,9 @@ class ProjectViewSet(viewsets.ModelViewSet):
     serializer_class = ProjectResponseSerialzer
     queryset = Project.objects.all()
     search_fields = ["name"]
+    filterset_fields = ["event", "client"]
     ordering = ["-created_at"]
     pagination_class = ListPagination
-    filter_backends = (DjangoFilterBackend, filters.SearchFilter)
-    filterset_class = ProjectFilters
     http_method_names = ["get", "post", "put", "delete"]
 
     def list(self, request):

@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from ticketing.models import Project, City, State, Event, DebrisType
+from ticketing.models import Project, Event, DebrisType
 
 
 @admin.register(Project)
@@ -13,16 +13,6 @@ class ProjectAdmin(admin.ModelAdmin):
         "sub_activity",
         "city",
     ]
-
-
-@admin.register(City)
-class CityAdmin(admin.ModelAdmin):
-    list_display = ["id", "name", "state"]
-
-
-@admin.register(State)
-class StateAdmin(admin.ModelAdmin):
-    list_display = ["id", "name"]
 
 
 @admin.register(Event)

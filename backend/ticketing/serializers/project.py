@@ -1,11 +1,9 @@
 from django.contrib.auth import get_user_model
 from rest_framework import serializers
 from ticketing.models import (
-    City,
     ContractorRateMatrix,
     Event,
     Project,
-    State,
     SubActivity,
     TruckType,
 )
@@ -51,8 +49,6 @@ class ProjectCreateUpdateSerializer(serializers.ModelSerializer):
     sub_activity = serializers.PrimaryKeyRelatedField(
         queryset=SubActivity.objects.all()
     )
-    city = serializers.PrimaryKeyRelatedField(queryset=City.objects.all())
-    state = serializers.PrimaryKeyRelatedField(queryset=State.objects.all())
     po_number = serializers.CharField(required=False)
     project_identfication_number = serializers.CharField(required=False)
 

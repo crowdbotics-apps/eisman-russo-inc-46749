@@ -87,24 +87,6 @@ class SubActivity(BaseFieldModel):
         return self.name
 
 
-class State(BaseFieldModel):
-    name = models.CharField(max_length=255, unique=True)
-
-    def __str__(self):
-        return self.name
-
-
-class City(BaseFieldModel):
-    name = models.CharField(max_length=255, unique=True)
-    state = models.ForeignKey(State, on_delete=models.CASCADE, related_name="cities")
-
-    def __str__(self):
-        return self.name
-
-    class Meta:
-        verbose_name_plural = "Cities"
-
-
 class Project(BaseFieldModel):
     event = models.ForeignKey(Event, on_delete=models.CASCADE, related_name="projects")
     name = models.CharField(max_length=500)
@@ -120,8 +102,8 @@ class Project(BaseFieldModel):
     project_identfication_number = models.CharField(
         max_length=255, null=True, blank=True
     )
-    state = models.ForeignKey(State, on_delete=models.CASCADE, related_name="projects")
-    city = models.ForeignKey(City, on_delete=models.CASCADE, related_name="projects")
+    state = models.CharField(max_length=255, null=True, blank=True)
+    city = models.CharField(max_length=255, null=True, blank=True)
     sub_activity = models.ForeignKey(
         SubActivity, on_delete=models.CASCADE, related_name="projects"
     )
