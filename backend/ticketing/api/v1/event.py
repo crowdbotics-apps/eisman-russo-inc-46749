@@ -1,4 +1,6 @@
+from base.decorators import check_permissions
 from base.pagination import ListPagination
+from base.permissions import ADD_EVENT, CHANGE_EVENT
 from base.utils import error_handler
 from django.db import transaction
 from django.utils.decorators import method_decorator
@@ -37,6 +39,7 @@ class EventViewSet(viewsets.ModelViewSet):
             },
         ),
     )
+    @check_permissions([ADD_EVENT])
     @transaction.atomic
     def create(self, request, *args, **kwargs):
         serializer = EventCreateSerializer(data=request.data)
@@ -77,6 +80,7 @@ class EventViewSet(viewsets.ModelViewSet):
             },
         ),
     )
+    @check_permissions([CHANGE_EVENT])
     @transaction.atomic
     def update(self, request, *args, **kwargs):
         event = self.get_object()

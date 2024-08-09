@@ -12,6 +12,7 @@ from users.viewsets import (
     PositionViewSet,
     UserViewSet,
     UserAttachmentsViewSet,
+    PermissionViewSet,
 )
 
 app_name = "users"
@@ -23,6 +24,7 @@ router.register("login", LoginViewSet, basename="login")
 router.register("position", PositionViewSet, basename="position")
 router.register("role", RoleViewSet, basename="role")
 router.register("attachments", UserAttachmentsViewSet, basename="attachments")
+router.register("permissions", PermissionViewSet, basename="permissions")
 
 urlpatterns = [
     path("", include(router.urls)),

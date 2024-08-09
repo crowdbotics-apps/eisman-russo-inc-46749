@@ -1,4 +1,6 @@
+from base.decorators import check_permissions
 from base.pagination import ListPagination
+from base.permissions import MANAGE_SUBACTIVITY, MANAGE_TRUCK_TYPE
 from base.utils import error_handler
 
 from django.utils.decorators import method_decorator
@@ -21,6 +23,7 @@ from ticketing.filters import ProjectFilters
 from ticketing.services import ProjectService
 
 
+@check_permissions([MANAGE_SUBACTIVITY])
 class SubActivityViewSet(viewsets.ModelViewSet):
     permission_classes = [IsAuthenticated]
     serializer_class = SubActivitySerializer
@@ -115,6 +118,7 @@ class SubActivityViewSet(viewsets.ModelViewSet):
         )
 
 
+@check_permissions([MANAGE_TRUCK_TYPE])
 class TruckTypeViewSet(viewsets.ModelViewSet):
     permission_classes = [IsAuthenticated]
     queryset = TruckType.objects.all()

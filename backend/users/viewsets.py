@@ -1,4 +1,5 @@
 from django.contrib.auth import get_user_model
+from django.contrib.auth.models import Permission
 from django.db import IntegrityError, transaction
 from rest_framework import status
 from rest_framework.decorators import action
@@ -10,8 +11,9 @@ from rest_framework_simplejwt.views import TokenObtainPairView
 
 from base.decorators import check_permissions
 from base.pagination import ListPagination
+from base.permissions import MANAGE_POSITION, MANAGE_ROLE
 from base.utils import error_handler
-from users.models import Role, Position, UserAttachments
+from users.models import Role, Position, UserAttachments, CustomUserPermission
 from users.serializers import (
     RoleSerializer,
     UserCreateSerializer,
@@ -24,6 +26,16 @@ from users.serializers import (
     ChangePasswordSerializer,
     UserAttachmentsReadSerializer,
     ResetPasswordSerializer,
+    GroupedPermissionsSerializer,
+)
+from users.utils import (
+    WEB,
+    MOBILE,
+    validate_platform,
+    get_group_permissions,
+    get_assigned_permissions,
+    remove_user_permissions,
+    add_user_permissions,
 )
 from users.utils import WEB, MOBILE, validate_platform
 from drf_spectacular.utils import extend_schema
@@ -235,6 +247,7 @@ class UserViewSet(ModelViewSet):
         return Response({"detail": message}, status=status.HTTP_400_BAD_REQUEST)
 
 
+@check_permissions([MANAGE_POSITION])
 class PositionViewSet(ModelViewSet):
     permission_classes = [IsAuthenticated]
     serializer_class = PositionSerializer
@@ -354,6 +367,7 @@ class PositionViewSet(ModelViewSet):
         )
 
 
+@check_permissions([MANAGE_ROLE])
 class RoleViewSet(ModelViewSet):
     permission_classes = [IsAuthenticated]
     queryset = Role.objects.all()
@@ -384,3 +398,56 @@ class UserAttachmentsViewSet(ModelViewSet):
         serializer = self.serializer_class(page, many=True)
         paginated_response = self.get_paginated_response(serializer.data)
         return paginated_response
+
+
+class PermissionViewSet(ModelViewSet):
+    queryset = User.objects.all()
+    permission_classes = [IsAuthenticated]
+    filterset_class = ["role"]
+
+    @action(detail=True, methods=["get"])
+    def listing(self, request, pk, *args, **kwargs):
+        user = User.objects.get(id=pk)
+        permissions = CustomUserPermission.objects.filter(
+            platform_type=user.position.platform_type
+        )
+
+        grouped_permissions = get_group_permissions(permissions)
+
+        all_permission_serializer = GroupedPermissionsSerializer(
+            [
+                {"group_name": key, "permissions": value}
+                for key, value in grouped_permissions.items()
+            ],
+            many=True,
+        )
+
+        return Response(
+            {
+                "all_permissions": all_permission_serializer.data,
+                "assigned_permissions": get_assigned_permissions(user),
+            },
+            status=status.HTTP_200_OK,
+        )
+
+    @action(detail=False, methods=["get"])
+    def assigned(self, request, *args, **kwargs):
+        user = request.user
+        return Response(
+            {
+                "assigned_permissions": get_assigned_permissions(user),
+            },
+            status=status.HTTP_200_OK,
+        )
+
+    def update(self, request, pk, *args, **kwargs):
+        user = User.objects.get(id=pk)
+        add_permissions = request.data.get("add_permissions", [])
+        remove_permissions = request.data.get("remove_permissions", [])
+
+        remove_user_permissions(user, remove_permissions)
+        add_user_permissions(user, add_permissions)
+
+        return Response(
+            {"detail": "Permissions Updated Successfully"}, status=status.HTTP_200_OK
+        )

@@ -11,6 +11,8 @@ ACCEPTABLE_DIRECTORIES = [
     "tickets",
 ]
 
+PERMISSION_GROUPS = [("Administration", "Administration"), ("Event", "Event")]
+
 
 def error_handler(errors):
     error_message = ""
