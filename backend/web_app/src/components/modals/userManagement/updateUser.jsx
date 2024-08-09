@@ -29,8 +29,8 @@ export default function UpdateUser({
     const [address, setAddress] = useState("");
     const [addressLatAndLong, setAddressLatAndLong] = useState([null,null]);
     const [active, setActive] = useState(editUserValues?.status || true);
-    const [userRole, setUserRole] = useState();
-    const [positionType, setPositionType] = useState(null);
+    const [userRole, setUserRole] = useState(editUserValues?.roleData?.id || null);
+    const [positionType, setPositionType] = useState(editUserValues?.positionData?.name || null);
     const [roleType, setRoleType] = useState(null);
     const [positionList, setPositionList] = useState([]);
     const [query, setQuery] = useState("");
@@ -50,6 +50,8 @@ export default function UpdateUser({
     const [form] = Form.useForm();
     
     const fetchData = async ( page = 1,) => {
+      console.log("userRole",userRole);
+      
      if (userRole === undefined) {
        return;
      }
@@ -57,6 +59,8 @@ export default function UpdateUser({
       main_api.get(`${adminAPIsEndPoints.LIST_POSITION(query)}&page=${page}`)
       .then((response) => {
         const result = response.data.results;
+        console.log("result",result);
+        
         const positions = result?.map((position) => ({
           label: position.name,
           value: position.id,
@@ -74,7 +78,7 @@ export default function UpdateUser({
         setQuery(fullQuery);
         setPositionList(positions);
       }).catch((error) => {
-        pushNotification(error, "error");
+        pushNotification(error.response.data.detail, "error");
       });
     
     }
@@ -114,7 +118,14 @@ export default function UpdateUser({
 
     useEffect(() => {
       fetchData();
+      console.log("editUserValues",editUserValues);
+      
+      console.log("editUserValues?.positionData?.id", editUserValues?.positionData?.id);
+      console.log("editUserValues?.positionData?.name", editUserValues?.positionData?.name);
+      console.log("positionList",positionList);
+      
     }, [userRole]);
+
 
    
    

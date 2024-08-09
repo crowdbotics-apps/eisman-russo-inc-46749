@@ -47,7 +47,7 @@ export default function Position({}) {
       });
       setData(result);
     }).catch((error) => {
-      pushNotification("error", error);
+      pushNotification(error.response.data.detail,"error");
     });
   };
     

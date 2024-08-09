@@ -52,7 +52,7 @@ export default function Hazard() {
       const result = response.data.results;
       setData(result);
     }).catch((error) => {
-      pushNotification(error, "error");
+      pushNotification(error.response.data.detail, "error");
     });
   };
     
