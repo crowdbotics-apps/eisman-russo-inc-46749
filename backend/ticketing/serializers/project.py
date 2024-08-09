@@ -17,18 +17,6 @@ from users.serializers import UserReadSerializer
 from .event import EventSerializer
 
 
-# class SubActivitySerializer(serializers.ModelSerializer):
-#     class Meta:
-#         model = SubActivity
-#         fields = "__all__"
-#
-#
-# class TruckTypeSerializer(serializers.ModelSerializer):
-#     class Meta:
-#         model = TruckType
-#         fields = "__all__"
-
-
 class ProjectResponseSerialzer(serializers.ModelSerializer):
     client = UserReadSerializer()
     contractor = UserReadSerializer()
