@@ -1,15 +1,25 @@
 from django.contrib import admin
 
-from ticketing.models import Project, DebrisType
+from ticketing.models import Project, Event, DebrisType
 
 
+@admin.register(Project)
 class ProjectAdmin(admin.ModelAdmin):
-    list_display = ["id", "event"]
+    list_display = [
+        "name",
+        "event",
+        "client",
+        "contractor",
+        "sub_activity",
+        "city",
+    ]
 
 
-class DebrisTypeAdmin(admin.ModelAdmin):
+@admin.register(Event)
+class EventAdmin(admin.ModelAdmin):
     list_display = ["id", "name"]
 
 
-admin.site.register(Project, ProjectAdmin)
-admin.site.register(DebrisType, DebrisTypeAdmin)
+@admin.register(DebrisType)
+class DebrisTypeAdmin(admin.ModelAdmin):
+    list_display = ["id", "name"]

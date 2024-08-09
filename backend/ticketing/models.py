@@ -1,20 +1,14 @@
-from django.core.validators import MinValueValidator, MaxValueValidator
+from base.models import BaseFieldModel
+from django.conf import settings
+from django.core.validators import (
+    MaxValueValidator,
+    MinValueValidator,
+    validate_image_file_extension,
+)
 from django.db import models
 from django.db.models import Q
 from rest_framework.exceptions import ValidationError
-
-from base.models import BaseFieldModel
-from ticketing.utils import EACH, TONS, CYDS
-
-
-# Create your models here.
-# "rate_matrix_fields": {
-#         "mileage": false,
-#         "diameter": false,
-#         "unit": false,
-#         "weight": false,
-#         "reduction_rate": false
-# }
+from ticketing.utils import CYDS, EACH, TONS
 
 
 class DebrisType(BaseFieldModel):
@@ -33,9 +27,8 @@ class Event(BaseFieldModel):
     is_active = models.BooleanField(default=True)
     notes = models.TextField(null=True, blank=True)
 
-
-class Project(BaseFieldModel):
-    event = models.ForeignKey(Event, on_delete=models.CASCADE, related_name="projects")
+    def __str__(self):
+        return self.name
 
 
 class FemaDates(BaseFieldModel):
@@ -47,6 +40,9 @@ class FemaDates(BaseFieldModel):
     event = models.ForeignKey(
         Event, on_delete=models.CASCADE, related_name="fema_dates"
     )
+
+    def __str__(self):
+        return f"{self.start_date} - {self.end_date}"
 
     class Meta:
         constraints = [
@@ -85,6 +81,32 @@ class TruckType(BaseFieldModel):
 
 class SubActivity(BaseFieldModel):
     name = models.CharField(max_length=255, unique=True)
+    is_active = models.BooleanField(default=True)
+
+    def __str__(self):
+        return self.name
+
+
+class Project(BaseFieldModel):
+    event = models.ForeignKey(Event, on_delete=models.CASCADE, related_name="projects")
+    name = models.CharField(max_length=500)
+    client = models.ForeignKey(
+        settings.AUTH_USER_MODEL, on_delete=models.DO_NOTHING, related_name="projects"
+    )
+    contractor = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.DO_NOTHING,
+        related_name="contracted_projects",
+    )
+    po_number = models.CharField(max_length=255, null=True, blank=True)
+    project_identfication_number = models.CharField(
+        max_length=255, null=True, blank=True
+    )
+    state = models.CharField(max_length=255, null=True, blank=True)
+    city = models.CharField(max_length=255, null=True, blank=True)
+    sub_activity = models.ForeignKey(
+        SubActivity, on_delete=models.CASCADE, related_name="projects"
+    )
     is_active = models.BooleanField(default=True)
 
     def __str__(self):

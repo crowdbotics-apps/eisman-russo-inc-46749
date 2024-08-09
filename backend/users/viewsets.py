@@ -26,6 +26,11 @@ from users.serializers import (
     ResetPasswordSerializer,
 )
 from users.utils import WEB, MOBILE, validate_platform
+from drf_spectacular.utils import extend_schema
+from django.utils.decorators import method_decorator
+from drf_spectacular.types import OpenApiTypes
+from drf_spectacular.utils import inline_serializer
+from rest_framework import serializers
 
 User = get_user_model()
 
@@ -35,6 +40,17 @@ class LoginViewSet(ViewSet, TokenObtainPairView):
 
     serializer_class = TokenObtainPairSerializer
 
+    @method_decorator(
+        name="login",
+        decorator=extend_schema(
+            request=TokenObtainPairSerializer,
+            responses={
+                status.HTTP_200_OK: inline_serializer(
+                    name="Token", fields={"access": serializers.CharField()}
+                )
+            },
+        ),
+    )
     def create(self, request, *args, **kwargs):
         # Use the serializer to validate and get the token
         serializer = self.get_serializer(data=request.data)
@@ -76,6 +92,21 @@ class UserViewSet(ModelViewSet):
         paginated_response = self.get_paginated_response(serializer.data)
         return paginated_response
 
+    @method_decorator(
+        name="Create user",
+        decorator=extend_schema(
+            request=UserCreateSerializer,
+            responses={
+                status.HTTP_200_OK: inline_serializer(
+                    name="Create User",
+                    fields={
+                        "result": UserReadSerializer(),
+                        "detail": serializers.CharField(),
+                    },
+                )
+            },
+        ),
+    )
     @transaction.atomic
     def create(self, request, *args, **kwargs):
         serializer = UserCreateSerializer(data=request.data)
@@ -91,6 +122,21 @@ class UserViewSet(ModelViewSet):
 
         return Response({"detail": message}, status=status.HTTP_400_BAD_REQUEST)
 
+    @method_decorator(
+        name="Update user",
+        decorator=extend_schema(
+            request=UserUpdateSerializer,
+            responses={
+                status.HTTP_200_OK: inline_serializer(
+                    name="Update User",
+                    fields={
+                        "result": UserReadSerializer(),
+                        "detail": serializers.CharField(),
+                    },
+                )
+            },
+        ),
+    )
     def update(self, request, *args, **kwargs):
         instance = self.get_object()
         serializer = UserUpdateSerializer(instance, data=request.data, partial=True)
@@ -106,6 +152,16 @@ class UserViewSet(ModelViewSet):
 
         return Response({"detail": message}, status=status.HTTP_400_BAD_REQUEST)
 
+    @method_decorator(
+        name="Delete User",
+        decorator=extend_schema(
+            responses={
+                status.HTTP_200_OK: inline_serializer(
+                    name="Delete User", fields={"detail": serializers.CharField()}
+                )
+            },
+        ),
+    )
     def destroy(self, request, *args, **kwargs):
         instance = self.get_object()
         instance.delete()
@@ -113,12 +169,30 @@ class UserViewSet(ModelViewSet):
             {"detail": "User Deleted Successfully"}, status=status.HTTP_204_NO_CONTENT
         )
 
+    @method_decorator(
+        name="Detail User",
+        decorator=extend_schema(
+            request=TokenObtainPairSerializer,
+            responses={status.HTTP_200_OK: UserProfileSerializer},
+        ),
+    )
     @action(detail=False, methods=["get"])
     def details(self, request, *args, **kwargs):
         user = request.user
         serializer = UserProfileSerializer(user)
         return Response({"result": serializer.data}, status=status.HTTP_200_OK)
 
+    @method_decorator(
+        name="Change password",
+        decorator=extend_schema(
+            request=TokenObtainPairSerializer,
+            responses={
+                status.HTTP_200_OK: inline_serializer(
+                    name="Change Password", fields={"detail": serializers.CharField()}
+                )
+            },
+        ),
+    )
     @action(detail=False, methods=["post"])
     def reset_password(self, request, *args, **kwargs):
         serializer = ResetPasswordSerializer(data=request.data)
@@ -178,6 +252,13 @@ class PositionViewSet(ModelViewSet):
         paginated_response = self.get_paginated_response(serializer.data)
         return paginated_response
 
+    @method_decorator(
+        name="Create Position",
+        decorator=extend_schema(
+            request=PositionCreateSerializer,
+            responses={status.HTTP_200_OK: PositionSerializer},
+        ),
+    )
     def create(self, request, *args, **kwargs):
         serializer = PositionCreateSerializer(data=request.data)
 
@@ -209,6 +290,13 @@ class PositionViewSet(ModelViewSet):
 
         return Response({"detail": message}, status=status.HTTP_400_BAD_REQUEST)
 
+    @method_decorator(
+        name="Update Position",
+        decorator=extend_schema(
+            request=PositionUpdateSerializer,
+            responses={status.HTTP_200_OK: PositionSerializer},
+        ),
+    )
     def update(self, request, *args, **kwargs):
         position = self.get_object()
         serializer = PositionUpdateSerializer(position, data=request.data, partial=True)
@@ -240,6 +328,16 @@ class PositionViewSet(ModelViewSet):
         message = error_handler(serializer.errors)
         return Response({"detail": message}, status=status.HTTP_400_BAD_REQUEST)
 
+    @method_decorator(
+        name="Delete Position",
+        decorator=extend_schema(
+            responses={
+                status.HTTP_200_OK: inline_serializer(
+                    name="Delete Position", fields={"detail": serializers.CharField()}
+                )
+            },
+        ),
+    )
     def destroy(self, request, *args, **kwargs):
         position = self.get_object()
         total_user_position = position.user_position.count()

@@ -15,6 +15,9 @@ class Role(BaseFieldModel):
     type = models.CharField(_("Role Type"), max_length=255, unique=True)
     can_add_positions = models.BooleanField(default=True)
 
+    def __str__(self) -> str:
+        return self.name
+
 
 class Position(BaseFieldModel):
     PLATFORM_TYPES = [
@@ -30,6 +33,9 @@ class Position(BaseFieldModel):
     role = models.ForeignKey(Role, on_delete=models.SET_NULL, null=True)
     platform_type = models.CharField(max_length=50, choices=PLATFORM_TYPES, default=WEB)
     is_project_specific_position = models.BooleanField(default=False)
+
+    def __str__(self) -> str:
+        return self.name
 
     class Meta:
         unique_together = ("role_id", "name")
