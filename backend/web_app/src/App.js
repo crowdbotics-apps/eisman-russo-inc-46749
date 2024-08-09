@@ -46,8 +46,11 @@ function App() {
             <Route index element={<ProtectedRoute Page={EventManagement} />} />
         </Route>
 
-        {/* Project Management Route */}
+        {/* Project Management Routes */}
         <Route path="project-management/manage-project">
+            <Route index element={<ProtectedRoute Page={ProjectManagement} />} />
+        </Route>
+        <Route path="project-management/map-user">
             <Route index element={<ProtectedRoute Page={ProjectManagement} />} />
         </Route>
 
@@ -69,7 +72,10 @@ function App() {
 
 
         {/* Contractor Management Route */}
-        <Route path="contractor-management">
+        <Route path="contractor-management/manage-contractors">
+            <Route index element={<ProtectedRoute Page={ContractorManagement} />} />
+        </Route>
+        <Route path="contractor-management/manage-rate-matrix">
             <Route index element={<ProtectedRoute Page={ContractorManagement} />} />
         </Route>
 

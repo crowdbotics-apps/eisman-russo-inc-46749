@@ -43,17 +43,17 @@ export const adminAPIsEndPoints = {
 
   //----------------------- Hazard Type APIs -----------------------//
 
-  ADD_HAZARD_TYPE: "/ticketing/hazard-type/",
-  LIST_HAZARD_TYPE: (query) => `/ticketing/hazard-type/?${query}`,
-  UPDATE_HAZARD_TYPE: (id) => `/ticketing/hazard-type/${id}/`,
-  DELETE_HAZARD_TYPE: (id) => `/ticketing/hazard-type/${id}/`,
+  ADD_HAZARD_TYPE: "/administration/hazard-type/",
+  LIST_HAZARD_TYPE: (query) => `/administration/hazard-type/?${query}`,
+  UPDATE_HAZARD_TYPE: (id) => `/administration/hazard-type/${id}/`,
+  DELETE_HAZARD_TYPE: (id) => `/administration/hazard-type/${id}/`,
 
   //----------------------- Hazard Name APIs -----------------------//
 
-  ADD_HAZARD_NAME: "/ticketing/hazard-name/",
-  LIST_HAZARD_NAME: (query) => `/ticketing/hazard-name/?${query}`,
-  UPDATE_HAZARD_NAME: (id) => `/ticketing/hazard-name/${id}/`,
-  DELETE_HAZARD_NAME: (id) => `/ticketing/hazard-name/${id}/`,
+  ADD_HAZARD_NAME: "/administration/hazard-name/",
+  LIST_HAZARD_NAME: (query) => `/administration/hazard-name/?${query}`,
+  UPDATE_HAZARD_NAME: (id) => `/administration/hazard-name/${id}/`,
+  DELETE_HAZARD_NAME: (id) => `/administration/hazard-name/${id}/`,
 
   //----------------------- Menu Setup APIs -----------------------//
 
@@ -68,6 +68,13 @@ export const adminAPIsEndPoints = {
   LIST_EVENT: (query) => `/ticketing/event/?${query}`,
   UPDATE_EVENT: (id) => `/ticketing/event/${id}/`,
   DELETE_EVENT: (id) => `/ticketing/event/${id}/`,
+
+  //----------------------- Project Management APIs -----------------------//
+
+  ADD_PROJECT: "/ticketing/project/",
+  LIST_PROJECT: (query) => `/ticketing/project/?${query}`,
+  UPDATE_PROJECT: (id) => `/ticketing/project/${id}/`,
+  DELETE_PROJECT: (id) => `/ticketing/project/${id}/`,
 
 };
 

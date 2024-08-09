@@ -6,7 +6,7 @@ import Dropdown from "react-bootstrap/Dropdown";
 import { ReactComponent as HeaderBellIcon } from "../../../assets/rawSvg/headerNavIcons/headerBellIcon.svg";
 import { ReactComponent as LogoutIcon } from "../../../assets/rawSvg/logouticon.svg";
 import { ReactComponent as SettingsIcon } from "../../../assets/rawSvg/sidebarNavIcons/settingsIcon.svg";
-import { ReactComponent as LegalAgreeIcon } from "../../../assets/rawSvg/legalAgreIcon.svg";
+import { ReactComponent as GreaterIcon } from "../../../assets/rawSvg/greaterIcon.svg";
 
 import { Badge } from "antd";
 import Avatar from "react-avatar";
@@ -95,19 +95,42 @@ export default function HeaderNav({expanded}) {
     };
   }, []);
 
-
   const convertToTitle = (path) => {
-    const segments = path.split('/').filter(Boolean); 
-    const lastSegment = segments.pop(); 
+    const segments = path.split('/').filter(Boolean);
+  
+    if (segments.length < 1) return '';
+  
+    const lastSegment = segments.pop();
+    const middleSegment = segments.pop();
+   
+    let formattedMiddleSegment = '';
+    let formattedLastSegment = '';
+    if (middleSegment){
 
-    if (!lastSegment) return '';
+      formattedMiddleSegment = middleSegment
+       .split('-')
+       .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+       .join(' ');
+    };
 
-    return lastSegment
-      .split('-') 
-      .map(word => word.charAt(0).toUpperCase() + word.slice(1)) 
-      .join(' '); 
+    if (lastSegment){
+
+      formattedLastSegment = lastSegment
+       .split('-')
+       .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+       .join(' ');
+    };
+  
+    return (
+      <>
+        {middleSegment && <span>{formattedMiddleSegment}</span>}
+        {middleSegment && lastSegment ? <span> {<GreaterIcon />} </span>: null}
+        {lastSegment && <span style={{ color: middleSegment ? '#667085' : '#3669AE' }}>{formattedLastSegment}</span>}
+      </>
+    );
   };
- 
+  
+
   const currentUser = localStorage.getItem('username');
 
   return (

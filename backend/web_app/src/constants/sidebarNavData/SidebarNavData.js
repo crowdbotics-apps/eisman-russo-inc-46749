@@ -41,7 +41,7 @@ export const adminSidebarNavData = [
           },
           {
             itemName: "Map User",
-            navigateTo: "/project-management/manage-project",
+            navigateTo: "/project-management/map-user",
           },
         ],
       },
@@ -64,6 +64,16 @@ export const adminSidebarNavData = [
         itemName: "Contractor Management",
         itemIcon: <ContractorManagementIcon/>,
         navigateTo: "/contractor-management",
+        children: [
+          {
+            itemName: "Manage Contractors",
+            navigateTo: "/contractor-management/manage-contractors",
+          },
+          {
+            itemName: "Manage Rate Matrix",
+            navigateTo: "/contractor-management/manage-rate-matrix",
+          },
+        ],
       },
       {
         itemName: "Truck Management",
