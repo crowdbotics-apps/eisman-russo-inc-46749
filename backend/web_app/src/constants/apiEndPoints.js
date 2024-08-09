@@ -22,23 +22,23 @@ export const adminAPIsEndPoints = {
 
   //----------------------- Debris Type APIs -----------------------//
 
-  ADD_DEBRIS: "/ticketing/debris/",
-  LIST_DEBRIS: (query) => `/ticketing/debris/?${query}`,
-  UPDATE_DEBRIS: (id) => `/ticketing/debris/${id}/`,
-  DELETE_DEBRIS: (id) => `/ticketing/debris/${id}/`,
+  ADD_DEBRIS: "/administration/debris/",
+  LIST_DEBRIS: (query) => `/administration/debris/?${query}`,
+  UPDATE_DEBRIS: (id) => `/administration/debris/${id}/`,
+  DELETE_DEBRIS: (id) => `/administration/debris/${id}/`,
 
   //----------------------- Truck Type APIs -----------------------//
 
-  ADD_TRUCK_TYPE: "/ticketing/truck-type/",
-  LIST_TRUCK_TYPE: (query) => `/ticketing/truck-type/?${query}`,
-  UPDATE_TRUCK_TYPE: (id) => `/ticketing/truck-type/${id}/`,
-  DELETE_TRUCK_TYPE: (id) => `/ticketing/truck-type/${id}/`,
+  ADD_TRUCK_TYPE: "/administration/truck-type/",
+  LIST_TRUCK_TYPE: (query) => `/administration/truck-type/?${query}`,
+  UPDATE_TRUCK_TYPE: (id) => `/administration/truck-type/${id}/`,
+  DELETE_TRUCK_TYPE: (id) => `/administration/truck-type/${id}/`,
 
   //----------------------- Sub-Activity APIs -----------------------//
 
-  ADD_SUB_ACTIVITY: "/ticketing/sub-activity/",
-  LIST_SUB_ACTIVITY: (query) => `/ticketing/sub-activity/?${query}`,
-  UPDATE_SUB_ACTIVITY: (id) => `/ticketing/sub-activity/${id}/`,
-  DELETE_SUB_ACTIVITY: (id) => `/ticketing/sub-activity/${id}/`,
+  ADD_SUB_ACTIVITY: "/administration/sub-activity/",
+  LIST_SUB_ACTIVITY: (query) => `/administration/sub-activity/?${query}`,
+  UPDATE_SUB_ACTIVITY: (id) => `/administration/sub-activity/${id}/`,
+  DELETE_SUB_ACTIVITY: (id) => `/administration/sub-activity/${id}/`,
 };
 
