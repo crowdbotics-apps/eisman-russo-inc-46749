@@ -1,5 +1,4 @@
-from django.contrib.auth.base_user import BaseUserManager
-from django.contrib.auth.models import AbstractUser
+from django.contrib.auth.models import AbstractUser, Permission
 from django.contrib.auth.validators import UnicodeUsernameValidator
 from django.contrib.postgres.fields import ArrayField
 from django.db import models
@@ -7,22 +6,30 @@ from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 
 from base.models import BaseFieldModel
+from base.permissions import MANAGE_ROLE, ALL_PERMISSIONS, MANAGE_POSITION
+from base.utils import PERMISSION_GROUPS
 from users.managers import CustomUserManager
-from users.utils import WEB, BOTH, MOBILE
+from users.utils import WEB, BOTH, MOBILE, PLATFORM_TYPES
 
 
 class Role(BaseFieldModel):
     name = models.CharField(_("Role Name"), max_length=255, unique=True)
     type = models.CharField(_("Role Type"), max_length=255, unique=True)
     can_add_positions = models.BooleanField(default=True)
+    role_permissions = ArrayField(
+        models.CharField(max_length=255), blank=True, null=True
+    )
+
+    class Meta:
+        permissions = [
+            (MANAGE_ROLE, ALL_PERMISSIONS[MANAGE_ROLE]["name"]),
+        ]
+
+    def __str__(self) -> str:
+        return self.name
 
 
 class Position(BaseFieldModel):
-    PLATFORM_TYPES = [
-        (MOBILE, "Mobile"),
-        (WEB, "Web"),
-        (BOTH, "Both"),
-    ]
 
     name = models.CharField(
         _("Position Name"),
@@ -32,8 +39,22 @@ class Position(BaseFieldModel):
     platform_type = models.CharField(max_length=50, choices=PLATFORM_TYPES, default=WEB)
     is_project_specific_position = models.BooleanField(default=False)
 
+    def __str__(self) -> str:
+        return self.name
+
     class Meta:
         unique_together = ("role_id", "name")
+        permissions = [
+            (MANAGE_POSITION, ALL_PERMISSIONS[MANAGE_POSITION]["name"]),
+        ]
+
+
+class UserAttachments(BaseFieldModel):
+    key = models.TextField()
+    type = models.CharField(max_length=255)
+    user = models.ForeignKey(
+        "User", on_delete=models.CASCADE, related_name="attachments"
+    )
 
 
 class User(AbstractUser):
@@ -105,6 +126,21 @@ class User(AbstractUser):
     def get_absolute_url(self):
         return reverse("users:detail", kwargs={"username": self.username})
 
+    def create_attachments(self, attachments_data):
+        if attachments_data:
+            attachments = [
+                UserAttachments(user=self, **attachment_data)
+                for attachment_data in attachments_data
+            ]
+            UserAttachments.objects.bulk_create(attachments)
+
+    def delete_attachments(self, attachments_data):
+        if attachments_data:
+            UserAttachments.objects.filter(
+                user=self,
+                id__in=[attachment_data for attachment_data in attachments_data],
+            ).delete()
+
     class Meta:
         constraints = [
             models.UniqueConstraint(fields=["device_id"], name="unique_device_id"),
@@ -127,3 +163,9 @@ class UserAdditionalData(BaseFieldModel):
             ),
             models.UniqueConstraint(fields=["prefix"], name="unique_prefix"),
         ]
+
+
+class CustomUserPermission(models.Model):
+    permission = models.OneToOneField(Permission, on_delete=models.CASCADE)
+    platform_type = models.CharField(max_length=50, choices=PLATFORM_TYPES, default=WEB)
+    group_name = models.CharField(max_length=255, choices=PERMISSION_GROUPS)

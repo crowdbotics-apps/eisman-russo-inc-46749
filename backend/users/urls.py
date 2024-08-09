@@ -6,7 +6,14 @@ from users.views import (
     user_update_view,
     user_detail_view,
 )
-from users.viewsets import LoginViewSet, RoleViewSet, PositionViewSet, UserViewSet
+from users.viewsets import (
+    LoginViewSet,
+    RoleViewSet,
+    PositionViewSet,
+    UserViewSet,
+    UserAttachmentsViewSet,
+    PermissionViewSet,
+)
 
 app_name = "users"
 
@@ -16,7 +23,8 @@ router.register("profile", UserViewSet, basename="profile")
 router.register("login", LoginViewSet, basename="login")
 router.register("position", PositionViewSet, basename="position")
 router.register("role", RoleViewSet, basename="role")
-
+router.register("attachments", UserAttachmentsViewSet, basename="attachments")
+router.register("permissions", PermissionViewSet, basename="permissions")
 
 urlpatterns = [
     path("", include(router.urls)),

@@ -1,10 +1,11 @@
 from django.contrib import admin, messages
 from django.contrib.auth import admin as auth_admin
 from django.contrib.auth import get_user_model
+from django.contrib.auth.models import Permission
 from django.http import HttpResponseRedirect
 
 from users.forms import UserChangeForm, UserCreationForm
-from users.models import Role, Position
+from users.models import Role, Position, CustomUserPermission
 from django.urls import path
 
 from users.utils import (
@@ -29,7 +30,7 @@ class UserAdmin(auth_admin.UserAdmin):
             {"fields": ("name", "role", "position", "device_id")},
         ),
     ) + auth_admin.UserAdmin.fieldsets
-    list_display = ["email", "name", "is_superuser"]
+    list_display = ["id", "email", "name", "is_superuser"]
     search_fields = ["name"]
     add_fieldsets = (
         (None, {"classes": ("wide",), "fields": ("email", "password1", "password2")}),
@@ -112,3 +113,6 @@ class PositionAdmin(admin.ModelAdmin):
             request, "Default Position created successfully.", messages.SUCCESS
         )
         return HttpResponseRedirect("../")
+
+
+admin.site.register(CustomUserPermission)
