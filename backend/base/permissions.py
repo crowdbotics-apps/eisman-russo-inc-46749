@@ -1,5 +1,6 @@
 users_app = "users"
 ticketing_app = "ticketing"
+administration_app = "administration"
 
 MANAGE_POSITION = "manage_position"
 MANAGE_ROLE = "manage_role"
@@ -18,23 +19,23 @@ ALL_PERMISSIONS = {
     },
     MANAGE_ROLE: {"app_name": users_app, "name": "Manage Role"},
     MANAGE_DEBRIS_TYPE: {
-        "app_name": ticketing_app,
+        "app_name": administration_app,
         "name": "Manage Debris Type",
     },
     MANAGE_HAZARD_TYPE: {
-        "app_name": ticketing_app,
+        "app_name": administration_app,
         "name": "Manage Hazard Type",
     },
     MANAGE_HAZARD_NAME: {
-        "app_name": ticketing_app,
+        "app_name": administration_app,
         "name": "Manage Hazard Name",
     },
     MANAGE_SUBACTIVITY: {
-        "app_name": ticketing_app,
+        "app_name": administration_app,
         "name": "Manage SubActivity",
     },
     MANAGE_TRUCK_TYPE: {
-        "app_name": ticketing_app,
+        "app_name": administration_app,
         "name": "Manage Truck Type",
     },
     ADD_EVENT: {
