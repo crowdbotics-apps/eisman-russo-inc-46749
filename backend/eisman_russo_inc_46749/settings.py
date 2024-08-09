@@ -80,6 +80,7 @@ LOCAL_APPS = [
     "users.apps.UsersConfig",
     "base",
     "ticketing",
+    "administration",
 ]
 THIRD_PARTY_APPS = [
     "rest_framework",

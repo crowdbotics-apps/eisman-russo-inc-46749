@@ -1,29 +1,32 @@
 from django.contrib.auth import get_user_model
 from rest_framework import serializers
+
+from administration.models import SubActivity
+from administration.serializers.serializer import (
+    SubActivitySerializer,
+    DebrisSerializer,
+)
 from ticketing.models import (
     ContractorRateMatrix,
     Event,
     Project,
-    SubActivity,
-    TruckType,
 )
 from ticketing.utils import get_rate_matrix_custom_fields, rate_matrix_custom_fields
 from users.serializers import UserReadSerializer
 
 from .event import EventSerializer
-from .hazard import DebrisSerializer
 
 
-class SubActivitySerializer(serializers.ModelSerializer):
-    class Meta:
-        model = SubActivity
-        fields = "__all__"
-
-
-class TruckTypeSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = TruckType
-        fields = "__all__"
+# class SubActivitySerializer(serializers.ModelSerializer):
+#     class Meta:
+#         model = SubActivity
+#         fields = "__all__"
+#
+#
+# class TruckTypeSerializer(serializers.ModelSerializer):
+#     class Meta:
+#         model = TruckType
+#         fields = "__all__"
 
 
 class ProjectResponseSerialzer(serializers.ModelSerializer):

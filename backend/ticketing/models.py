@@ -150,7 +150,7 @@ class Project(BaseFieldModel):
     state = models.CharField(max_length=255, null=True, blank=True)
     city = models.CharField(max_length=255, null=True, blank=True)
     sub_activity = models.ForeignKey(
-        SubActivity, on_delete=models.CASCADE, related_name="projects"
+        "administration.SubActivity", on_delete=models.CASCADE, related_name="projects"
     )
     is_active = models.BooleanField(default=True)
 
@@ -169,7 +169,9 @@ class ContractorRateMatrix(BaseFieldModel):
         Project, on_delete=models.CASCADE, related_name="project_rate_matrix"
     )
     debris_type = models.ForeignKey(
-        DebrisType, on_delete=models.CASCADE, related_name="debris_rate_matrix"
+        "administration.DebrisType",
+        on_delete=models.CASCADE,
+        related_name="debris_rate_matrix",
     )
     mileage_from = models.FloatField(null=True, blank=True, default=0)
     mileage_to = models.FloatField(null=True, blank=True, default=0)

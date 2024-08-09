@@ -28,6 +28,7 @@ urlpatterns = [
     path("modules/", include("modules.urls")),
     path("admin/", admin.site.urls),
     path("users/", include("users.urls", namespace="users")),
+    path("administration/", include("administration.urls", namespace="administration")),
     path("ticketing/", include("ticketing.urls", namespace="ticketing")),
     path("file/", FileUploadView.as_view(), name="file"),
 ]

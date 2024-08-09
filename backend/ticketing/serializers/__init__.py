@@ -3,10 +3,8 @@ from .event import (
     FemaDatesSerializer,
     EventCreateSerializer,
 )
-from .hazard import HazardNameSerializer, HazardTypeSerializer, DebrisSerializer
 from .project import (
     SubActivitySerializer,
-    TruckTypeSerializer,
     ProjectResponseSerialzer,
     ProjectCreateUpdateSerializer,
     ContractorRateMatrixSerializer,
@@ -18,11 +16,7 @@ __all__ = [
     "EventSerializer",
     "FemaDatesSerializer",
     "EventCreateSerializer",
-    "HazardNameSerializer",
-    "HazardTypeSerializer",
-    "DebrisSerializer",
     "SubActivitySerializer",
-    "TruckTypeSerializer",
     "ProjectResponseSerialzer",
     "ProjectCreateUpdateSerializer",
     "ContractorRateMatrixSerializer",
