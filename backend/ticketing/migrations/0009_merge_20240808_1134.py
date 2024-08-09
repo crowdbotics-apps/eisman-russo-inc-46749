@@ -6,9 +6,8 @@ from django.db import migrations
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('ticketing', '0007_auto_20240808_1103'),
-        ('ticketing', '0008_alter_contractorratematrix_reduction_rate'),
+        ("ticketing", "0007_auto_20240808_1103"),
+        ("ticketing", "0008_alter_contractorratematrix_reduction_rate"),
     ]
 
-    operations = [
-    ]
+    operations = []

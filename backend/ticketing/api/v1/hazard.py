@@ -1,4 +1,6 @@
+from base.decorators import check_permissions
 from base.pagination import ListPagination
+from base.permissions import MANAGE_HAZARD_TYPE, MANAGE_HAZARD_NAME, MANAGE_DEBRIS_TYPE
 from base.utils import error_handler
 from rest_framework import status, viewsets, serializers
 from rest_framework.permissions import IsAuthenticated
@@ -13,6 +15,7 @@ from drf_spectacular.utils import extend_schema, inline_serializer
 from django.utils.decorators import method_decorator
 
 
+@check_permissions([MANAGE_DEBRIS_TYPE])
 class DebrisViewSet(viewsets.ModelViewSet):
     permission_classes = [IsAuthenticated]
     queryset = DebrisType.objects.all()
@@ -103,6 +106,7 @@ class DebrisViewSet(viewsets.ModelViewSet):
         )
 
 
+@check_permissions([MANAGE_HAZARD_TYPE])
 class HazardTypeViewSet(viewsets.ModelViewSet):
     permission_classes = [IsAuthenticated]
     queryset = HazardType.objects.all()
@@ -197,6 +201,7 @@ class HazardTypeViewSet(viewsets.ModelViewSet):
         )
 
 
+@check_permissions([MANAGE_HAZARD_NAME])
 class HazardNameViewSet(viewsets.ModelViewSet):
     permission_classes = [IsAuthenticated]
     queryset = HazardName.objects.all()

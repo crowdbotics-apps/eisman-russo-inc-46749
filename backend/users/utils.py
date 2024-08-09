@@ -1,3 +1,4 @@
+from django.contrib.auth.models import Permission
 from django.db import IntegrityError
 
 CONTRACTOR = "contractor"
@@ -8,9 +9,12 @@ ER_SUB_CONSULTANT = "er_sub_consultant"
 PRIME_CONTRACTOR = "Prime Contractor"
 SUB_CONTRACTOR = "Sub Contractor"
 
+
 WEB = "web"
 MOBILE = "mobile"
 BOTH = "both"
+
+PLATFORM_TYPES = [(MOBILE, "Mobile"), (WEB, "Web"), (BOTH, "Both")]
 
 ROLE_CHOICES = [
     (ER_USER, "E&R User", True),
@@ -51,3 +55,38 @@ def validate_platform(is_mobile, device_id, user):
             )
 
     return True, None
+
+
+def grant_default_permissions(user):
+    permissions_to_add = user.role.role_permissions
+    filtered_permissions = Permission.objects.filter(codename__in=permissions_to_add)
+    user.user_permissions.set(filtered_permissions)
+
+
+def get_group_permissions(permissions):
+    grouped_permissions = {}
+
+    for perm in permissions:
+        group_name = perm.group_name
+        if group_name not in grouped_permissions:
+            grouped_permissions[group_name] = []
+        grouped_permissions[group_name].append(perm)
+    return grouped_permissions
+
+
+def get_assigned_permissions(user):
+    assigned_permissions = user.user_permissions.all()
+    assigned_permissions = list(assigned_permissions.values_list("codename", flat=True))
+    return assigned_permissions
+
+
+def remove_user_permissions(user, remove_permissions):
+    if remove_permissions:
+        permissions = Permission.objects.filter(codename__in=remove_permissions)
+        user.user_permissions.remove(*permissions)
+
+
+def add_user_permissions(user, add_permissions):
+    if add_permissions:
+        permissions = Permission.objects.filter(codename__in=add_permissions)
+        user.user_permissions.add(*permissions)

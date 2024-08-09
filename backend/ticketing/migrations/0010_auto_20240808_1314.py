@@ -6,24 +6,24 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('ticketing', '0009_merge_20240808_1134'),
+        ("ticketing", "0009_merge_20240808_1134"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='project',
-            name='city',
+            model_name="project",
+            name="city",
             field=models.CharField(blank=True, max_length=255, null=True),
         ),
         migrations.AlterField(
-            model_name='project',
-            name='state',
+            model_name="project",
+            name="state",
             field=models.CharField(blank=True, max_length=255, null=True),
         ),
         migrations.DeleteModel(
-            name='City',
+            name="City",
         ),
         migrations.DeleteModel(
-            name='State',
+            name="State",
         ),
     ]

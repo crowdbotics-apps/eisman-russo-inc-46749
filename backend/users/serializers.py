@@ -1,11 +1,23 @@
 from django.contrib.auth import get_user_model
+from django.contrib.auth.models import Permission
 from django.core.exceptions import ValidationError
 from django.db import IntegrityError
 from rest_framework import serializers
 
 from base.utils import generate_pre_signed_url
-from users.models import Role, Position, UserAdditionalData, UserAttachments
-from users.utils import CONTRACTOR, SUB_CONTRACTOR, PRIME_CONTRACTOR
+from users.models import (
+    Role,
+    Position,
+    UserAdditionalData,
+    UserAttachments,
+    CustomUserPermission,
+)
+from users.utils import (
+    CONTRACTOR,
+    SUB_CONTRACTOR,
+    PRIME_CONTRACTOR,
+    grant_default_permissions,
+)
 
 User = get_user_model()
 
@@ -264,6 +276,8 @@ class UserCreateSerializer(serializers.ModelSerializer):
         attachments = validated_data.get("attachments", None)
         if attachments:
             user.create_attachments(attachments)
+
+        grant_default_permissions(user)
         return user
 
 
@@ -430,3 +444,19 @@ class ChangePasswordSerializer(serializers.Serializer):
             raise serializers.ValidationError({"password": ["Passwords do not match."]})
 
         return data
+
+
+class CustomUserPermissionSerializer(serializers.ModelSerializer):
+    codename = serializers.SerializerMethodField()
+
+    class Meta:
+        model = CustomUserPermission
+        fields = ["codename"]
+
+    def get_codename(self, obj):
+        return obj.permission.codename
+
+
+class GroupedPermissionsSerializer(serializers.Serializer):
+    group_name = serializers.CharField()
+    permissions = CustomUserPermissionSerializer(many=True)
